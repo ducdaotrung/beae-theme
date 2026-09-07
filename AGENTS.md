@@ -12,7 +12,7 @@
 | Git branch | Shopify theme | Theme ID | Role |
 |---|---|---:|---|
 | `main` | `beae-theme/main` | `156415033536` | Unpublished |
-| `dev`  | `beae-theme/dev`  | `156468314304` | Development |
+| `dev`  | `Development (2a30b9-Duc)` | `156415066304` | Development |
 
 Never use the production store or publish a live theme during development.
 
@@ -48,11 +48,11 @@ Start the Shopify development server:
 ```bash
 shopify theme dev \
   --store beae-duc-k4mqivfe.myshopify.com \
-  --theme 156468314304 \
+  --theme 156415066304 \
   --open
 ```
 
-Use `beae-theme/dev` (`156468314304`) for local preview, Shopify Theme Editor preview, and testing. Never use or publish the `main` theme during normal development.
+Use `Development (2a30b9-Duc)` (`156415066304`) for local preview, Shopify Theme Editor preview, and testing. Never use or publish the `main` theme during normal development.
 
 Before review, verify all three preview outputs:
 
@@ -101,7 +101,7 @@ shopify theme check
 git diff --check
 shopify theme dev \
   --store beae-duc-k4mqivfe.myshopify.com \
-  --theme 156468314304 \
+  --theme 156415066304 \
   --open
 ```
 
