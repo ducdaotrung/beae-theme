@@ -23,6 +23,10 @@
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
+    {% if settings.favicon != blank %}
+      {{ settings.favicon | image_url: width: 48 | image_tag: rel: 'icon' }}
+    {% endif %}
+
     {{ content_for_header }}
   </head>
 

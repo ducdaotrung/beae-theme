@@ -1,6 +1,21 @@
-<header>
+<header class="{% if section.settings.overlay %}header--overlay{% endif %}">
   <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
+    <a href="{{ routes.root_url }}" class="header__logo-link">
+      {% assign active_logo = settings.logo %}
+      {% if section.settings.overlay and settings.logo_transparent != blank %}
+        {% assign active_logo = settings.logo_transparent %}
+      {% endif %}
+
+      {% if active_logo != blank %}
+        {{ active_logo | image_url: width: 800 | image_tag: class: 'header__logo', widths: '80, 120, 160, 240, 320, 480, 640, 800', sizes: 'var(--logo-width)' }}
+      {% else %}
+        {% if settings.logo_fallback == 'shop.name' or settings.logo_fallback == blank %}
+          {{ shop.name }}
+        {% else %}
+          {{ settings.logo_fallback }}
+        {% endif %}
+      {% endif %}
+    </a>
   </h2>
 
   <div class="header__menu">
@@ -32,6 +47,16 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .header__logo {
+    display: block;
+    width: min(var(--logo-width), 100%);
+    height: auto;
+  }
+  @media screen and (max-width: 749px) {
+    .header__logo {
+      width: min(var(--logo-width-mobile), 100%);
+    }
   }
   header a {
     position: relative;
@@ -71,6 +96,12 @@
       "id": "customer_account_menu",
       "label": "t:labels.customer_account_menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay",
+      "label": "Enable header overlay",
+      "default": false
     }
   ]
 }

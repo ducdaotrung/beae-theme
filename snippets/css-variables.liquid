@@ -14,5 +14,7 @@
     --color-background: {{ settings.background_color }};
     --color-foreground: {{ settings.foreground_color }};
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    --logo-width: {{ settings.logo_width | default: 140 }}px;
+    --logo-width-mobile: {{ settings.logo_width_mobile | default: 120 }}px;
   }
 {% endstyle %}
