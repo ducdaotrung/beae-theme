@@ -8,35 +8,90 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "t:general.typography",
+    "name": "Logo & Favicons",
     "settings": [
       {
-        "type": "header",
-        "content": "t:general.fonts"
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
       },
       {
-        "type": "font_picker",
-        "id": "type_primary_font",
-        "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "type": "image_picker",
+        "id": "logo_transparent",
+        "label": "Transparent logo"
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 20,
+        "max": 400,
+        "step": 4,
+        "unit": "px",
+        "label": "Logo width (desktop)",
+        "default": 140
+      },
+      {
+        "type": "range",
+        "id": "logo_width_mobile",
+        "min": 20,
+        "max": 240,
+        "step": 4,
+        "unit": "px",
+        "label": "Logo width (mobile)",
+        "default": 120
+      },
+      {
+        "type": "text",
+        "id": "logo_fallback",
+        "label": "Fallback",
+        "default": "shop.name",
+        "info": "Used when no logo image is selected."
       }
     ]
   },
   {
-    "name": "t:general.layout",
+    "name": "Colors / Scheme colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "background_color",
+        "default": "#FFFFFF",
+        "label": "Background"
+      },
+      {
+        "type": "color",
+        "id": "foreground_color",
+        "default": "#333333",
+        "label": "Foreground"
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#000000",
+        "label": "Accent"
+      }
+    ]
+  },
+  {
+    "name": "Layout",
     "settings": [
       {
         "type": "select",
         "id": "max_page_width",
-        "label": "t:labels.page_width",
+        "label": "Page width",
         "options": [
           {
             "value": "90rem",
-            "label": "t:options.page_width.narrow"
+            "label": "Narrow"
           },
           {
             "value": "110rem",
-            "label": "t:options.page_width.wide"
+            "label": "Wide"
           }
         ],
         "default": "90rem"
@@ -48,35 +103,249 @@
         "max": 100,
         "step": 1,
         "unit": "px",
-        "label": "t:labels.page_margin",
+        "label": "Page margin",
         "default": 20
       }
     ]
   },
   {
-    "name": "t:general.colors",
+    "name": "Typography",
     "settings": [
       {
-        "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "type": "font_picker",
+        "id": "type_primary_font",
+        "default": "work_sans_n4",
+        "label": "Primary font"
       },
       {
-        "type": "color",
-        "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
+        "type": "select",
+        "id": "type_scale",
+        "label": "Type scale",
+        "options": [
+          { "value": "compact", "label": "Compact" },
+          { "value": "default", "label": "Default" },
+          { "value": "large", "label": "Large" }
+        ],
+        "default": "default"
+      }
+    ]
+  },
+  {
+    "name": "Button",
+    "settings": [
+      {
+        "type": "select",
+        "id": "button_style",
+        "label": "Button style",
+        "options": [
+          { "value": "solid", "label": "Solid" },
+          { "value": "outline", "label": "Outline" },
+          { "value": "text", "label": "Text" }
+        ],
+        "default": "solid"
+      },
+      {
+        "type": "range",
+        "id": "button_corner_radius",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 4
+      }
+    ]
+  },
+  {
+    "name": "Form",
+    "settings": [
+      {
+        "type": "select",
+        "id": "form_input_style",
+        "label": "Input style",
+        "options": [
+          { "value": "outline", "label": "Outline" },
+          { "value": "filled", "label": "Filled" }
+        ],
+        "default": "outline"
       },
       {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,
-        "max": 10,
+        "max": 24,
         "step": 1,
         "unit": "px",
-        "label": "t:labels.input_corner_radius",
+        "label": "Input corner radius",
         "default": 4
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "product_card_show_vendor",
+        "label": "Show vendor",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_secondary_image",
+        "label": "Show secondary image",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Variant pickers",
+    "settings": [
+      {
+        "type": "select",
+        "id": "variant_picker_type",
+        "label": "Picker type",
+        "options": [
+          { "value": "buttons", "label": "Buttons" },
+          { "value": "dropdown", "label": "Dropdown" }
+        ],
+        "default": "buttons"
+      }
+    ]
+  },
+  {
+    "name": "Swatches",
+    "settings": [
+      {
+        "type": "select",
+        "id": "swatch_shape",
+        "label": "Swatch shape",
+        "options": [
+          { "value": "circle", "label": "Circle" },
+          { "value": "square", "label": "Square" }
+        ],
+        "default": "circle"
+      },
+      {
+        "type": "range",
+        "id": "swatch_size",
+        "min": 24,
+        "max": 56,
+        "step": 2,
+        "unit": "px",
+        "label": "Swatch size",
+        "default": 36
+      }
+    ]
+  },
+  {
+    "name": "Badges",
+    "settings": [
+      {
+        "type": "select",
+        "id": "badge_style",
+        "label": "Badge style",
+        "options": [
+          { "value": "solid", "label": "Solid" },
+          { "value": "outline", "label": "Outline" }
+        ],
+        "default": "solid"
+      }
+    ]
+  },
+  {
+    "name": "Prices",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "price_show_compare_at",
+        "label": "Show compare-at price",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "price_show_currency_code",
+        "label": "Show currency code",
+        "default": false
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "social_show_icons",
+        "label": "Show social icons",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Motion & Reduced Motion",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_motion",
+        "label": "Enable motion",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "respect_reduced_motion",
+        "label": "Respect reduced motion preference",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Radius & Shape",
+    "settings": [
+      {
+        "type": "range",
+        "id": "global_corner_radius",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "label": "Global corner radius",
+        "default": 4
+      }
+    ]
+  },
+  {
+    "name": "Icons",
+    "settings": [
+      {
+        "type": "select",
+        "id": "icon_style",
+        "label": "Icon style",
+        "options": [
+          { "value": "outline", "label": "Outline" },
+          { "value": "filled", "label": "Filled" }
+        ],
+        "default": "outline"
+      }
+    ]
+  },
+  {
+    "name": "Overlay & Layering",
+    "settings": [
+      {
+        "type": "color",
+        "id": "overlay_color",
+        "default": "#000000",
+        "label": "Overlay color"
+      },
+      {
+        "type": "range",
+        "id": "overlay_opacity",
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "unit": "%",
+        "label": "Overlay opacity",
+        "default": 50
       }
     ]
   }
