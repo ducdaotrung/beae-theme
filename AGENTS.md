@@ -5,7 +5,7 @@
 - Development store: `beae-duc-k4mqivfe.myshopify.com`
 - Git repository: `https://github.com/ducdaotrung/beae-theme.git`
 - Shopify CLI version: `3.91.1`
-- Shopify MCP: Not yet verified
+- Shopify MCP: Verified
 
 ## Shopify Theme Mapping
 
