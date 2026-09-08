@@ -19,7 +19,7 @@
 %}
 
 <article class="product-card product-card--{{ card_style }} {{ card_scheme }}" data-product-card>
-  <div class="product-card__media{% if card_ratio != 'original' %} product-card__media--{{ card_ratio }}{% endif %}">
+  <div class="product-card__media{% if card_ratio != 'original' %} product-card__media--{{ card_ratio }}{% endif %}{% if settings.enable_image_zoom_on_hover %} motion-image-zoom{% endif %}">
     <a class="product-card__media-link" href="{{ product.url }}" aria-label="{{ product.title | escape }}">
       {% if product.featured_image %}
         {{ product.featured_image | image_url: width: 900 | image_tag: class: 'product-card__image', loading: 'lazy' }}

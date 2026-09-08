@@ -1,8 +1,7 @@
 <!doctype html>
 <html
   lang="{{ request.locale.iso_code }}"
-  data-motion="{% if settings.enable_motion == false %}false{% else %}true{% endif %}"
-  data-respect-reduced-motion="{% if settings.respect_reduced_motion == false %}false{% else %}true{% endif %}"
+  data-block-animations="{% if settings.enable_block_animations == false %}false{% else %}true{% endif %}"
   data-icon-style="{{ settings.icon_style | default: 'outline' }}"
 >
   <head>
@@ -25,6 +24,7 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     <script src="{{ 'variant-picker.js' | asset_url }}" defer></script>
+    <script src="{{ 'motion.js' | asset_url }}" defer></script>
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}

@@ -1762,15 +1762,19 @@
     "settings": [
       {
         "type": "checkbox",
-        "id": "enable_motion",
-        "label": "Enable motion",
+        "id": "enable_image_zoom_on_hover",
+        "label": "Enable image zoom on hover",
         "default": true
       },
       {
         "type": "checkbox",
-        "id": "respect_reduced_motion",
-        "label": "Respect reduced motion preference",
+        "id": "enable_block_animations",
+        "label": "Enable block animations",
         "default": true
+      },
+      {
+        "type": "paragraph",
+        "content": "Motion is reduced automatically when the visitor prefers reduced motion."
       }
     ]
   },
