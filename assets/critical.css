@@ -420,10 +420,10 @@ textarea[aria-invalid='true'] {
   flex-direction: column;
   min-width: 0;
   text-align: var(--pcard-alignment);
+  border-radius: var(--card-radius);
 }
 
 .product-card--card {
-  border-radius: var(--shape-radius);
   padding: var(--pcard-content-spacing);
 }
 
@@ -432,6 +432,7 @@ textarea[aria-invalid='true'] {
   background: var(--background-color);
   overflow: hidden;
   position: relative;
+  border-radius: var(--media-radius);
 }
 
 .product-card__media--1_1 { aspect-ratio: 1 / 1; }
