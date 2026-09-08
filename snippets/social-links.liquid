@@ -7,16 +7,25 @@
 {% liquid
   assign social_links = 'social_facebook|Facebook|facebook,social_instagram|Instagram|instagram,social_youtube|YouTube|youtube,social_tiktok|TikTok|tiktok,social_x_twitter|X (Twitter)|x-twitter,social_threads|Threads|threads,social_linkedin|LinkedIn|linkedin,social_bluesky|Bluesky|bluesky,social_snapchat|Snapchat|snapchat,social_pinterest|Pinterest|pinterest,social_tumblr|Tumblr|tumblr,social_vimeo|Vimeo|vimeo' | split: ','
   assign navigation_class = wrapper_class | default: 'social-links'
+  assign has_social_links = false
+  for social_link in social_links
+    assign social_id = social_link | split: '|' | first
+    if settings[social_id] != blank
+      assign has_social_links = true
+      break
+    endif
+  endfor
 %}
 
-<nav class="social-links {{ navigation_class }}" aria-label="Social media">
-  {% for social_link in social_links %}
-    {% assign social_parts = social_link | split: '|' %}
-    {% assign social_id = social_parts[0] %}
-    {% assign social_label = social_parts[1] %}
-    {% assign icon_key = social_parts[2] %}
-    {% assign social_url = settings[social_id] %}
-    {% if social_url != blank %}
+{% if has_social_links %}
+  <nav class="social-links {{ navigation_class }}" aria-label="Social media">
+    {% for social_link in social_links %}
+      {% assign social_parts = social_link | split: '|' %}
+      {% assign social_id = social_parts[0] %}
+      {% assign social_label = social_parts[1] %}
+      {% assign icon_key = social_parts[2] %}
+      {% assign social_url = settings[social_id] %}
+      {% if social_url != blank %}
       <a class="social-links__item" href="{{ social_url | escape }}" target="_blank" rel="noopener noreferrer" aria-label="{{ social_label | escape }}">
         <span class="social-links__icon" data-icon-key="{{ icon_key }}" aria-hidden="true">
           <svg viewBox="0 0 24 24" focusable="false" role="presentation">
@@ -26,6 +35,7 @@
         </span>
         <span class="social-links__label">{{ social_label }}</span>
       </a>
-    {% endif %}
-  {% endfor %}
-</nav>
+      {% endif %}
+    {% endfor %}
+  </nav>
+{% endif %}
