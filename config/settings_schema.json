@@ -1722,14 +1722,20 @@
     "settings": [
       {
         "type": "checkbox",
-        "id": "price_show_compare_at",
-        "label": "Show compare-at price",
+        "id": "price_sale_first",
+        "label": "Show sale price first",
         "default": true
       },
       {
         "type": "checkbox",
-        "id": "price_show_currency_code",
-        "label": "Show currency code",
+        "id": "price_product_card_currency_code",
+        "label": "Product cards",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "price_product_page_currency_code",
+        "label": "Product pages",
         "default": false
       }
     ]
