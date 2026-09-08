@@ -1,0 +1,17 @@
+{% doc %}
+  Renders a product price using the global Prices settings.
+
+  @param {product} product - Product whose price should be rendered
+{% enddoc %}
+
+{% liquid
+  assign price_format = 'money'
+  if settings.price_show_currency_code
+    assign price_format = 'money_with_currency'
+  endif
+%}
+
+<span>{{ product.price | format: price_format }}</span>
+{% if settings.price_show_compare_at and product.compare_at_price > product.price %}
+  <s>{{ product.compare_at_price | format: price_format }}</s>
+{% endif %}

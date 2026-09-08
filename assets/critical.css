@@ -199,7 +199,7 @@ input[type='button'] {
   position: relative;
   text-align: center;
   text-decoration: none;
-  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, opacity 180ms ease;
+  transition: background-color var(--motion-duration-fast) ease, border-color var(--motion-duration-fast) ease, color var(--motion-duration-fast) ease, opacity var(--motion-duration-fast) ease;
   white-space: nowrap;
 }
 
@@ -296,6 +296,15 @@ input[type='button'] {
   min-height: auto;
   padding: 0;
   white-space: normal;
+}
+
+html[data-icon-style='filled'] svg {
+  stroke-width: var(--icon-stroke-width);
+}
+
+.overlay {
+  background-color: var(--overlay-color);
+  opacity: var(--overlay-opacity);
 }
 
 .form__wrapper,
@@ -401,6 +410,7 @@ textarea[aria-invalid='true'] {
 }
 
 .product-card--card {
+  border-radius: var(--shape-radius);
   padding: var(--pcard-content-spacing);
 }
 
@@ -431,7 +441,7 @@ textarea[aria-invalid='true'] {
   opacity: 0;
   position: absolute;
   top: 0;
-  transition: opacity 180ms ease;
+  transition: opacity var(--motion-duration-fast) ease;
 }
 
 .product-card:hover .product-card__image--secondary,
@@ -538,7 +548,7 @@ textarea[aria-invalid='true'] {
   justify-content: var(--pcard-alignment);
 }
 
-.product-card__price--sale > span { color: var(--sale-price-color); }
+.product-card__price--sale > span { color: var(--badge-sale-price); }
 .product-card__price s { color: var(--body-color); opacity: 0.65; }
 
 .product-card__swatches {
@@ -750,12 +760,34 @@ textarea[aria-invalid='true'] {
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
+  html[data-respect-reduced-motion='true'] *,
+  html[data-respect-reduced-motion='true'] *::before,
+  html[data-respect-reduced-motion='true'] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html[data-respect-reduced-motion='true'] {
+    scroll-behavior: auto;
+  }
+
   .btn,
   .btn.is-loading::after,
   .btn[aria-busy='true']::after {
     animation: none;
     transition: none;
   }
+}
+
+html[data-motion='false'] *,
+html[data-motion='false'] *::before,
+html[data-motion='false'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
 }
 
 /** Section layout utilities */

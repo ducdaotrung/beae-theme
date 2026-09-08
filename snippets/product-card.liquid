@@ -10,6 +10,12 @@
   assign card_ratio = settings.product_card_image_ratio | default: 'original'
   assign selected_variant = product.selected_or_first_available_variant
   assign title_limit = settings.product_card_title_line_limit | default: 'none'
+  assign card_swatch_type = settings.product_card_swatch_type | default: 'inherit'
+  if card_swatch_type == 'inherit'
+    assign card_swatch_type = settings.swatch_style | default: 'color'
+  endif
+  assign quick_add_scheme = settings.product_card_quick_add_color_scheme | default: 'scheme-1'
+  assign quick_add_scheme_number = quick_add_scheme.id | default: quick_add_scheme | remove: 'scheme-' | remove: 'scheme_'
 %}
 
 <article class="product-card product-card--{{ card_style }} {{ card_scheme }}" data-product-card>
@@ -28,7 +34,7 @@
     {% render 'product-badges', product: product %}
 
     {% if settings.product_card_enable_quick_add and selected_variant.available %}
-      <form class="product-card__quick-add" action="{{ routes.cart_add_url }}" method="post" data-quick-add>
+      <form class="product-card__quick-add scheme-{{ quick_add_scheme_number }}" action="{{ routes.cart_add_url }}" method="post" data-quick-add>
         <input type="hidden" name="id" value="{{ selected_variant.id }}">
         <button class="btn btn--primary{% if settings.product_card_quick_add_full_width %} product-card__quick-add-button--full{% endif %}" type="submit">
           {% if settings.product_card_quick_add_desktop_style == 'icon' %}<span aria-hidden="true">+</span><span class="visually-hidden">Add {{ product.title | escape }} to cart</span>{% else %}Add to cart{% endif %}
@@ -49,7 +55,7 @@
           {% for variant in product.variants %}
             {% if variant.option1 == option_value %}{% assign swatch_variant = variant %}{% break %}{% endif %}
           {% endfor %}
-          <a class="product-card__swatch{% if option_value == selected_variant.option1 %} is-selected{% endif %}" href="{{ swatch_variant.url | default: product.url }}" aria-label="{{ option_value | escape }}"{% if settings.product_card_swatch_type == 'variant_image' and swatch_variant.featured_image %} style="background-image: url('{{ swatch_variant.featured_image | image_url: width: 80 }}')"{% else %} style="background-color: {{ option_value | downcase | escape }}"{% endif %}></a>
+          <a class="product-card__swatch{% if option_value == selected_variant.option1 %} is-selected{% endif %}" href="{{ swatch_variant.url | default: product.url }}" aria-label="{{ option_value | escape }}"{% if card_swatch_type == 'variant_image' and swatch_variant.featured_image %} style="background-image: url('{{ swatch_variant.featured_image | image_url: width: 80 }}')"{% else %} style="background-color: {{ option_value | downcase | escape }}"{% endif %}></a>
         {% endfor %}
       </div>
     {% endif %}
@@ -59,8 +65,7 @@
       {% if settings.product_card_show_type and product.type != blank %}<p class="product-card__type">{{ product.type | escape }}</p>{% endif %}
       <h3 class="product-card__title{% if title_limit != 'none' %} product-card__title--limit-{{ title_limit }}{% endif %}"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
       <div class="product-card__price{% if product.compare_at_price > product.price %} product-card__price--sale{% endif %}">
-        <span>{{ product.price | money }}</span>
-        {% if product.compare_at_price > product.price %}<s>{{ product.compare_at_price | money }}</s>{% endif %}
+        {% render 'price', product: product %}
       </div>
     </div>
   </div>

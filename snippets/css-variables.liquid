@@ -31,6 +31,12 @@
     --typography-case-original: none;
     --typography-case-uppercase: uppercase;
     --typography-case-capitalize: capitalize;
+    --motion-duration-fast: {% if settings.enable_motion == false %}0ms{% else %}180ms{% endif %};
+    --motion-duration-slow: {% if settings.enable_motion == false %}0ms{% else %}420ms{% endif %};
+    --icon-stroke-width: {% if settings.icon_style == 'filled' %}2.5{% else %}1.5{% endif %};
+    --shape-radius: {{ settings.global_corner_radius | default: 4 }}px;
+    --overlay-color: {{ settings.overlay_color | default: '#000000' }};
+    --overlay-opacity: {{ settings.overlay_opacity | default: 50 | divided_by: 100.0 }};
     --font-body-base-size: {{ settings.paragraph_base_size | default: 14 }}px;
     --font-body-xs: calc(var(--font-body-base-size) * 0.7142857);
     --font-body-sm: calc(var(--font-body-base-size) * 0.8571428);
@@ -72,7 +78,7 @@
     --button-font-size: {{ settings.button_font_size | default: 12 }}px;
     --button-letter-spacing: var(--typography-letter-spacing-{{ settings.button_letter_spacing | default: 'extra_loose' }});
     --button-radius-square: 0px;
-    --button-radius-rounded: 4px;
+    --button-radius-rounded: var(--shape-radius);
     --button-radius-pill: 999px;
     --button-radius: var(--button-radius-{{ settings.button_radius_style | default: 'square' }});
     --button-border-width: {{ settings.button_primary_border_width | default: 1 }}px;
@@ -130,7 +136,7 @@
     --swatch-width-mobile: {{ settings.swatch_width_mobile | default: 40 }}px;
     --swatch-height-ratio: {% case settings.swatch_height_ratio %}{% when '3_2' %}3 / 2{% when '2_1' %}2 / 1{% when '3_1' %}3 / 1{% else %}1 / 1{% endcase %};
     --swatch-selected-style: {{ settings.swatch_selected_style | default: 'underline' }};
-    --swatch-radius: {{ settings.global_corner_radius | default: 4 }}px;
+    --swatch-radius: var(--shape-radius);
     --badge-radius-square: 0px;
     --badge-radius-rounded: 4px;
     --badge-radius-pill: 999px;
