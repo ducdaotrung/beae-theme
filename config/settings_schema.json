@@ -1397,9 +1397,13 @@
         "default": "dropdown"
       },
       {
+        "type": "header",
+        "content": "Item height"
+      },
+      {
         "type": "range",
         "id": "variant_height_desktop",
-        "label": "Item height (desktop)",
+        "label": "Desktop",
         "min": 36,
         "max": 64,
         "step": 1,
@@ -1409,12 +1413,16 @@
       {
         "type": "range",
         "id": "variant_height_mobile",
-        "label": "Item height (mobile)",
+        "label": "Mobile",
         "min": 36,
         "max": 64,
         "step": 1,
         "unit": "px",
         "default": 44
+      },
+      {
+        "type": "header",
+        "content": "Gap"
       },
       {
         "type": "range",
@@ -1445,6 +1453,10 @@
         "step": 1,
         "unit": "px",
         "default": 8
+      },
+      {
+        "type": "header",
+        "content": "Media"
       },
       {
         "type": "checkbox",
