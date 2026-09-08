@@ -58,22 +58,228 @@
     "name": "Colors / Scheme colors",
     "settings": [
       {
-        "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "Background"
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "header",
+            "content": "Content colors"
+          },
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "heading",
+            "label": "Headings",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "heading_highlight",
+            "label": "Heading highlight",
+            "default": "#A67C52"
+          },
+          {
+            "type": "color",
+            "id": "body",
+            "label": "Text",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "accent",
+            "label": "Accent / Eyebrow text",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "border",
+            "label": "Border",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "shadow",
+            "label": "Shadow",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "sale_price",
+            "label": "Sale price",
+            "default": "#9A3D32"
+          },
+          {
+            "type": "header",
+            "content": "Primary button"
+          },
+          {
+            "type": "color",
+            "id": "button_primary_background",
+            "label": "Background",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "button_primary_text",
+            "label": "Label",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "button_primary_border",
+            "label": "Border",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "button_primary_hover_border",
+            "label": "Hover border",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "button_primary_hover_background",
+            "label": "Hover background",
+            "default": "rgba(0,0,0,0)"
+          },
+          {
+            "type": "color",
+            "id": "button_primary_hover_text",
+            "label": "Hover label",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "header",
+            "content": "Secondary button"
+          },
+          {
+            "type": "color",
+            "id": "button_secondary_background",
+            "label": "Background",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "button_secondary_text",
+            "label": "Label",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "button_secondary_border",
+            "label": "Border",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "button_secondary_hover_border",
+            "label": "Hover border",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "button_secondary_hover_background",
+            "label": "Hover background",
+            "default": "rgba(0,0,0,0)"
+          },
+          {
+            "type": "color",
+            "id": "button_secondary_hover_text",
+            "label": "Hover label",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "header",
+            "content": "Tertiary button"
+          },
+          {
+            "type": "color",
+            "id": "button_tertiary_background",
+            "label": "Background",
+            "default": "rgba(0,0,0,0)"
+          },
+          {
+            "type": "color",
+            "id": "button_tertiary_text",
+            "label": "Label",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "button_tertiary_border",
+            "label": "Border",
+            "default": "rgba(0,0,0,0)"
+          },
+          {
+            "type": "color",
+            "id": "button_tertiary_hover_border",
+            "label": "Hover border",
+            "default": "#1C1B1A"
+          },
+          {
+            "type": "color",
+            "id": "button_tertiary_hover_background",
+            "label": "Hover background",
+            "default": "rgba(0,0,0,0)"
+          },
+          {
+            "type": "color",
+            "id": "button_tertiary_hover_text",
+            "label": "Hover label",
+            "default": "#1C1B1A"
+          }
+        ],
+        "role": {
+          "background": "background",
+          "text": "body",
+          "links": "accent",
+          "icons": "body",
+          "primary_button": "button_primary_background",
+          "on_primary_button": "button_primary_text",
+          "primary_button_border": "button_primary_border",
+          "secondary_button": "button_secondary_background",
+          "on_secondary_button": "button_secondary_text",
+          "secondary_button_border": "button_secondary_border"
+        }
+      },
+      {
+        "type": "header",
+        "content": "Global status colors"
       },
       {
         "type": "color",
-        "id": "foreground_color",
-        "default": "#333333",
-        "label": "Foreground"
+        "id": "status_sale",
+        "label": "Sale",
+        "default": "#9A3D32"
       },
       {
         "type": "color",
-        "id": "accent_color",
-        "default": "#000000",
-        "label": "Accent"
+        "id": "status_sold_out",
+        "label": "Sold out",
+        "default": "#6B6B6B"
+      },
+      {
+        "type": "color",
+        "id": "status_error",
+        "label": "Error",
+        "default": "#B42318"
+      },
+      {
+        "type": "color",
+        "id": "status_success",
+        "label": "Success",
+        "default": "#16794C"
+      },
+      {
+        "type": "color",
+        "id": "status_warning",
+        "label": "Warning",
+        "default": "#A15C00"
       }
     ]
   },

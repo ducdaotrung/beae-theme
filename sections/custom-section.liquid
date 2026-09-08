@@ -1,4 +1,7 @@
-<div class="custom-section full-width">
+{% assign section_scheme = section.settings.color_scheme | default: settings.color_schemes.first %}
+{% assign section_scheme_number = section_scheme.id | remove: 'scheme-' | remove: 'scheme_' %}
+
+<div class="custom-section full-width scheme-{{ section_scheme_number }}">
   {% if section.settings.background_image %}
     <div class="custom-section__background">
       {{ section.settings.background_image | image_url: width: 2000 | image_tag }}
@@ -49,6 +52,12 @@
       "type": "image_picker",
       "id": "background_image",
       "label": "t:labels.background"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme_1"
     }
   ],
   "presets": [

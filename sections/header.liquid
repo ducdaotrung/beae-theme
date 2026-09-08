@@ -1,4 +1,7 @@
-<header class="{% if section.settings.overlay %}header--overlay{% endif %}">
+{% assign header_scheme = section.settings.color_scheme | default: settings.color_schemes.first %}
+{% assign header_scheme_number = header_scheme.id | remove: 'scheme-' | remove: 'scheme_' %}
+
+<header class="scheme-{{ header_scheme_number }}{% if section.settings.overlay %} header--overlay{% endif %}">
   <h2 class="header__title">
     <a href="{{ routes.root_url }}" class="header__logo-link">
       {% assign active_logo = settings.logo %}
@@ -61,7 +64,7 @@
   header a {
     position: relative;
     text-decoration: none;
-    color: var(--color-foreground);
+    color: var(--body-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -102,6 +105,12 @@
       "id": "overlay",
       "label": "Enable header overlay",
       "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme_1"
     }
   ]
 }

@@ -11,10 +11,75 @@
     --font-primary--weight: {{ settings.type_primary_font.weight }};
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
-    --color-background: {{ settings.background_color }};
-    --color-foreground: {{ settings.foreground_color }};
+    --background-color: {{ settings.color_schemes.first.settings.background | default: '#FFFFFF' }};
+    --heading-color: {{ settings.color_schemes.first.settings.heading | default: '#1C1B1A' }};
+    --heading-highlight-color: {{ settings.color_schemes.first.settings.heading_highlight | default: '#A67C52' }};
+    --body-color: {{ settings.color_schemes.first.settings.body | default: '#1C1B1A' }};
+    --accent-color: {{ settings.color_schemes.first.settings.accent | default: '#1C1B1A' }};
+    --border-color: {{ settings.color_schemes.first.settings.border | default: '#1C1B1A' }};
+    --shadow-color: {{ settings.color_schemes.first.settings.shadow | default: '#1C1B1A' }};
+    --sale-price-color: {{ settings.color_schemes.first.settings.sale_price | default: '#9A3D32' }};
+    --button-primary-background: {{ settings.color_schemes.first.settings.button_primary_background | default: '#1C1B1A' }};
+    --button-primary-text: {{ settings.color_schemes.first.settings.button_primary_text | default: '#FFFFFF' }};
+    --button-primary-border: {{ settings.color_schemes.first.settings.button_primary_border | default: '#1C1B1A' }};
+    --button-primary-hover-background: {{ settings.color_schemes.first.settings.button_primary_hover_background | default: 'rgba(0,0,0,0)' }};
+    --button-primary-hover-text: {{ settings.color_schemes.first.settings.button_primary_hover_text | default: '#1C1B1A' }};
+    --button-primary-hover-border: {{ settings.color_schemes.first.settings.button_primary_hover_border | default: '#1C1B1A' }};
+    --button-secondary-background: {{ settings.color_schemes.first.settings.button_secondary_background | default: '#FFFFFF' }};
+    --button-secondary-text: {{ settings.color_schemes.first.settings.button_secondary_text | default: '#1C1B1A' }};
+    --button-secondary-border: {{ settings.color_schemes.first.settings.button_secondary_border | default: '#1C1B1A' }};
+    --button-secondary-hover-background: {{ settings.color_schemes.first.settings.button_secondary_hover_background | default: 'rgba(0,0,0,0)' }};
+    --button-secondary-hover-text: {{ settings.color_schemes.first.settings.button_secondary_hover_text | default: '#1C1B1A' }};
+    --button-secondary-hover-border: {{ settings.color_schemes.first.settings.button_secondary_hover_border | default: '#1C1B1A' }};
+    --button-tertiary-background: {{ settings.color_schemes.first.settings.button_tertiary_background | default: 'rgba(0,0,0,0)' }};
+    --button-tertiary-text: {{ settings.color_schemes.first.settings.button_tertiary_text | default: '#1C1B1A' }};
+    --button-tertiary-border: {{ settings.color_schemes.first.settings.button_tertiary_border | default: 'rgba(0,0,0,0)' }};
+    --button-tertiary-hover-background: {{ settings.color_schemes.first.settings.button_tertiary_hover_background | default: 'rgba(0,0,0,0)' }};
+    --button-tertiary-hover-text: {{ settings.color_schemes.first.settings.button_tertiary_hover_text | default: '#1C1B1A' }};
+    --button-tertiary-hover-border: {{ settings.color_schemes.first.settings.button_tertiary_hover_border | default: '#1C1B1A' }};
+    --status-sale-color: {{ settings.status_sale | default: '#9A3D32' }};
+    --status-sold-out-color: {{ settings.status_sold_out | default: '#6B6B6B' }};
+    --status-error-color: {{ settings.status_error | default: '#B42318' }};
+    --status-success-color: {{ settings.status_success | default: '#16794C' }};
+    --status-warning-color: {{ settings.status_warning | default: '#A15C00' }};
+    --color-background: var(--background-color);
+    --color-foreground: var(--body-color);
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
     --logo-width: {{ settings.logo_width | default: 140 }}px;
     --logo-width-mobile: {{ settings.logo_width_mobile | default: 120 }}px;
   }
+
+  {% for scheme in settings.color_schemes %}
+    {% assign scheme_number = scheme.id | remove: 'scheme-' | remove: 'scheme_' %}
+    .scheme-{{ scheme_number }} {
+      --background-color: {{ scheme.settings.background }};
+      --heading-color: {{ scheme.settings.heading }};
+      --heading-highlight-color: {{ scheme.settings.heading_highlight }};
+      --body-color: {{ scheme.settings.body }};
+      --accent-color: {{ scheme.settings.accent }};
+      --border-color: {{ scheme.settings.border }};
+      --shadow-color: {{ scheme.settings.shadow }};
+      --sale-price-color: {{ scheme.settings.sale_price }};
+      --button-primary-background: {{ scheme.settings.button_primary_background }};
+      --button-primary-text: {{ scheme.settings.button_primary_text }};
+      --button-primary-border: {{ scheme.settings.button_primary_border }};
+      --button-primary-hover-background: {{ scheme.settings.button_primary_hover_background }};
+      --button-primary-hover-text: {{ scheme.settings.button_primary_hover_text }};
+      --button-primary-hover-border: {{ scheme.settings.button_primary_hover_border }};
+      --button-secondary-background: {{ scheme.settings.button_secondary_background }};
+      --button-secondary-text: {{ scheme.settings.button_secondary_text }};
+      --button-secondary-border: {{ scheme.settings.button_secondary_border }};
+      --button-secondary-hover-background: {{ scheme.settings.button_secondary_hover_background }};
+      --button-secondary-hover-text: {{ scheme.settings.button_secondary_hover_text }};
+      --button-secondary-hover-border: {{ scheme.settings.button_secondary_hover_border }};
+      --button-tertiary-background: {{ scheme.settings.button_tertiary_background }};
+      --button-tertiary-text: {{ scheme.settings.button_tertiary_text }};
+      --button-tertiary-border: {{ scheme.settings.button_tertiary_border }};
+      --button-tertiary-hover-background: {{ scheme.settings.button_tertiary_hover_background }};
+      --button-tertiary-hover-text: {{ scheme.settings.button_tertiary_hover_text }};
+      --button-tertiary-hover-border: {{ scheme.settings.button_tertiary_hover_border }};
+      --color-background: var(--background-color);
+      --color-foreground: var(--body-color);
+    }
+  {% endfor %}
 {% endstyle %}
