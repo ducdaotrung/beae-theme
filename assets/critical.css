@@ -298,6 +298,111 @@ input[type='button'] {
   white-space: normal;
 }
 
+.form__wrapper,
+.form__fields {
+  display: grid;
+  gap: 1rem;
+}
+
+.form__field {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.form__label,
+.form__helper,
+.form__error {
+  overflow-wrap: anywhere;
+}
+
+.form__label {
+  color: var(--heading-color);
+  font-family: var(--form-label-font-family);
+  font-size: var(--font-body-md);
+  line-height: var(--font-body-line-height);
+}
+
+.form__helper {
+  color: var(--body-color);
+  font-family: var(--form-helper-font-family);
+  font-size: var(--font-body-sm);
+  line-height: var(--font-body-line-height);
+}
+
+.form__error {
+  color: var(--input-error-color);
+  font-family: var(--form-error-font-family);
+  font-size: var(--font-body-sm);
+  line-height: var(--font-body-line-height);
+}
+
+.form__control,
+input:not([type='submit']):not([type='button']):not([type='checkbox']):not([type='radio']),
+select,
+textarea {
+  background: var(--input-background-color);
+  border: var(--input-border-width) solid var(--input-border-color);
+  border-radius: var(--input-radius);
+  color: var(--input-text-color);
+  font-family: var(--form-input-font-family);
+  font-size: var(--font-body-md);
+  line-height: var(--font-body-line-height);
+  max-width: 100%;
+  min-height: var(--input-height);
+  padding: 0 1rem;
+  width: 100%;
+}
+
+textarea.form__control,
+textarea {
+  min-height: calc(var(--input-height) * 2.5);
+  padding-block: 0.75rem;
+  resize: vertical;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  accent-color: var(--accent-color);
+  min-height: 1rem;
+  min-width: 1rem;
+}
+
+.form__control:focus-visible,
+input:not([type='submit']):not([type='button']):not([type='checkbox']):not([type='radio']):focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  border-color: var(--input-focus-color);
+  outline: 2px solid var(--input-focus-color);
+  outline-offset: 2px;
+}
+
+.form__control[aria-invalid='true'],
+.form__field--error .form__control,
+input[aria-invalid='true'],
+select[aria-invalid='true'],
+textarea[aria-invalid='true'] {
+  border-color: var(--input-error-color);
+}
+
+.form__field--error .form__error {
+  display: block;
+}
+
+@media screen and (max-width: 749px) {
+  .form__control,
+  input:not([type='submit']):not([type='button']):not([type='checkbox']):not([type='radio']),
+  select,
+  textarea {
+    min-height: var(--input-height-mobile);
+  }
+
+  textarea.form__control,
+  textarea {
+    min-height: calc(var(--input-height-mobile) * 2.5);
+  }
+}
+
 @keyframes button-spinner {
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
