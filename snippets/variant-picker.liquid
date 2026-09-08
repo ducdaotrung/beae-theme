@@ -1,0 +1,60 @@
+{% doc %}
+  Renders product variant options and keeps the product form variant id in sync.
+
+  @param {product} product - Product whose variants are selectable
+{% enddoc %}
+
+{% liquid
+  assign variant_type = settings.variant_picker_type | default: 'dropdown'
+  assign current_variant = product.selected_or_first_available_variant
+%}
+
+<variant-picker
+  class="variant-picker variant-picker--{{ variant_type }}"
+  data-variant-picker
+  data-variants='{{ product.variants | json | escape }}'
+  data-selected-variant="{{ current_variant.id }}"
+  data-filter-media="{{ settings.variant_only_selected_media }}"
+>
+  <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
+
+  <div class="variant-picker__options">
+    {% for option in product.options_with_values %}
+      {% assign option_index = forloop.index0 %}
+      {% assign selected_value = current_variant.options[option_index] %}
+      <fieldset class="variant-picker__option" data-option-index="{{ option_index }}">
+        <legend class="variant-picker__label">{{ option.name | escape }}<span class="variant-picker__selected-value">: {{ selected_value | escape }}</span></legend>
+
+        {% if variant_type == 'button' %}
+          <div class="variant-picker__control variant-picker__control--buttons">
+            {% for value in option.values %}
+              {% assign matching_variant = blank %}
+              {% for variant in product.variants %}
+                {% if variant.options[option_index] == value %}{% assign matching_variant = variant %}{% break %}{% endif %}
+              {% endfor %}
+              <button
+                class="variant-picker__button{% if value == selected_value %} is-selected{% endif %}{% unless matching_variant.available %} is-unavailable{% endunless %}"
+                type="button"
+                data-option-value="{{ value | escape }}"
+                {% if value == selected_value %}aria-pressed="true"{% else %}aria-pressed="false"{% endif %}
+                {% unless matching_variant.available %}aria-disabled="true"{% endunless %}
+              >{{ value | escape }}{% unless matching_variant.available %}<span class="visually-hidden">, unavailable</span>{% endunless %}</button>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="variant-picker__control">
+            <select class="variant-picker__select form__control" data-option-value aria-label="{{ option.name | escape }}">
+              {% for value in option.values %}
+                <option value="{{ value | escape }}"{% if value == selected_value %} selected{% endif %}>{{ value | escape }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        {% endif %}
+      </fieldset>
+    {% endfor %}
+  </div>
+
+  {% if settings.variant_only_selected_media %}
+    <p class="variant-picker__helper"><a href="https://help.shopify.com/en/manual/products/variants" target="_blank" rel="noopener">Learn how to set up multiple variant images</a></p>
+  {% endif %}
+</variant-picker>

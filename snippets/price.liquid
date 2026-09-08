@@ -1,0 +1,52 @@
+{% doc %}
+  Renders a product price with server-formatted money and optional variant data.
+
+  @param {product} product - Product whose price should be rendered
+  @param {variant} variant - Optional variant to display
+  @param {string} context - product_card or product_page
+{% enddoc %}
+
+{% liquid
+  assign price_context = context | default: 'product_card'
+  assign price_variant = variant | default: product.selected_or_first_available_variant
+  assign current_price = price_variant.price | default: product.price
+  assign compare_at_price = price_variant.compare_at_price
+  assign is_sale = false
+  if compare_at_price > current_price
+    assign is_sale = true
+  endif
+  assign use_currency_code = false
+  if price_context == 'product_page' and settings.price_product_page_currency_code
+    assign use_currency_code = true
+  elsif price_context == 'product_card' and settings.price_product_card_currency_code
+    assign use_currency_code = true
+  endif
+%}
+
+<div class="price{% if is_sale %} price--sale{% else %} price--regular{% endif %}" data-price data-price-context="{{ price_context }}" data-price-variant-id="{{ price_variant.id }}" data-sale-first="{{ settings.price_sale_first }}" aria-live="polite">
+  <span class="price__current" data-price-current{% if is_sale %} aria-label="Sale price"{% endif %}>{% if use_currency_code %}{{ current_price | money_with_currency }}{% else %}{{ current_price | money }}{% endif %}</span>
+  <s class="price__compare" data-price-compare aria-label="Original price"{% unless is_sale %} hidden{% endunless %}>{% if is_sale %}{% if use_currency_code %}{{ compare_at_price | money_with_currency }}{% else %}{{ compare_at_price | money }}{% endif %}{% endif %}</s>
+
+  <span class="price__unit" data-price-unit{% unless price_variant.unit_price and price_variant.unit_price_measurement %} hidden{% endunless %}>
+    {% if price_variant.unit_price and price_variant.unit_price_measurement %}
+      {% if use_currency_code %}{{ price_variant.unit_price | money_with_currency }}{% else %}{{ price_variant.unit_price | money }}{% endif %} /
+      {% unless price_variant.unit_price_measurement.reference_value == 1 %}{{ price_variant.unit_price_measurement.reference_value }}{% endunless %}{{ price_variant.unit_price_measurement.reference_unit }}
+    {% endif %}
+  </span>
+  <span class="price__status" data-price-status{% if price_variant.available %} hidden{% endif %}>Sold out</span>
+
+  {% if price_context == 'product_page' %}
+    <script type="application/json" data-price-variants>{
+      {% for product_variant in product.variants %}
+        "{{ product_variant.id }}": {
+          "price": {% if use_currency_code %}{{ product_variant.price | money_with_currency | strip_html | json }}{% else %}{{ product_variant.price | money | strip_html | json }}{% endif %},
+          "compare_at_price": {% if product_variant.compare_at_price > product_variant.price %}{% if use_currency_code %}{{ product_variant.compare_at_price | money_with_currency | strip_html | json }}{% else %}{{ product_variant.compare_at_price | money | strip_html | json }}{% endif %}{% else %}""{% endif %},
+          "unit_price": {% if product_variant.unit_price and product_variant.unit_price_measurement %}{% if use_currency_code %}{{ product_variant.unit_price | money_with_currency | strip_html | json }}{% else %}{{ product_variant.unit_price | money | strip_html | json }}{% endif %}{% else %}""{% endif %},
+          "unit_reference": {% if product_variant.unit_price_measurement %}{{ product_variant.unit_price_measurement.reference_value | default: 1 | json }}{% else %}1{% endif %},
+          "unit": {% if product_variant.unit_price_measurement %}{{ product_variant.unit_price_measurement.reference_unit | json }}{% else %}""{% endif %},
+          "available": {{ product_variant.available | json }}
+        }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+    }</script>
+  {% endif %}
+</div>

@@ -1,68 +1,60 @@
 # Theme Development Workflow
 
-## Environment
+## Repository and Environment
 
-- Development store: `beae-duc-k4mqivfe.myshopify.com`
+- This repository is the single source of truth for the base theme.
 - Git repository: `https://github.com/ducdaotrung/beae-theme.git`
+- Development store: `beae-duc-k4mqivfe.myshopify.com`
 - Shopify CLI version: `3.91.1`
 - Shopify MCP: Verified
 
-## Shopify Theme Mapping
+## Shopify Themes
 
-| Git branch | Shopify theme | Theme ID | Role |
-|---|---|---:|---|
-| `main` | `beae-theme/main` | `156415033536` | Unpublished |
-| `dev`  | `Development (2a30b9-Duc)` | `156415066304` | Development |
+| Shopify theme | Theme ID | Role |
+|---|---:|---|
+| `Development (2a30b9-Duc)` | `156468314304` | Development, preview and Theme Editor testing |
+| `beae-theme/main` | `156415033536` | Optional release target, unpublished by default |
 
-Never use the production store or publish a live theme during development.
+Use the development theme for normal work. Never publish a live theme during development.
 
-## Branch Rules
+## Git Rules
 
-- All development must happen on `dev`.
-- Always run `git branch --show-current` before editing or writing to Shopify.
-- Never commit directly to `main`.
-- Never develop directly on `main`.
-- `main` only receives reviewed and verified changes from `dev`.
-- Do not commit credentials, tokens, passwords, API keys, or other secrets.
-- Before any Shopify write, verify the current store, theme, and Git branch.
+- Use `main` as the only Git branch for this base-theme repository; do not create or require a separate `dev` branch.
+- Do not switch branches as part of the normal development workflow; all development happens directly on `main`.
+- Confirm that the current branch is `main` with `git branch --show-current` before editing or writing to Shopify.
+- Keep the working tree reviewable and do not commit credentials, tokens, passwords, API keys or other secrets.
+- Push reviewed changes to the repository's configured remote branch.
 
 ## Daily Workflow
-
-All development must be performed on the `dev` branch. Never develop, commit, or deploy from `main`.
 
 Before starting work:
 
 ```bash
-git checkout dev
-git pull origin dev
 git status
 git branch --show-current
 ```
 
-The current branch must be `dev`.
+Make and review code changes locally in the current repository branch.
 
-During development, make all code changes locally on the `dev` branch.
+Before any Shopify write, verify the current branch, store and target theme. Use the development theme by default:
 
-Start the Shopify development server:
+```bash
+git branch --show-current
+shopify theme info \
+  --store beae-duc-k4mqivfe.myshopify.com \
+  --theme 156468314304
+```
+
+Start the development preview with:
 
 ```bash
 shopify theme dev \
   --store beae-duc-k4mqivfe.myshopify.com \
-  --theme 156415066304 \
+  --theme 156468314304 \
   --open
 ```
 
-Use `Development (2a30b9-Duc)` (`156415066304`) for local preview, Shopify Theme Editor preview, and testing. Never use or publish the `main` theme during normal development.
-
-Before review, verify all three preview outputs:
-
-- Local preview URL
-- Shopify Theme Editor preview
-- Theme preview link
-
-Never run the preview command against the `main` theme during daily development.
-
-Before committing any changes, validate the code:
+Before committing, validate and review:
 
 ```bash
 shopify theme check
@@ -71,63 +63,38 @@ git diff
 git status
 ```
 
-Fix all relevant Theme Check errors and warnings before committing. Review the Git diff carefully and make sure no credentials, tokens, passwords, API keys, or other secrets are included.
-
-After the changes have been tested and verified:
+Stage only reviewed files, then commit and push to the configured remote branch:
 
 ```bash
-git add .
+git add <reviewed-files>
 git commit -m "Describe the change"
-git push origin dev
-```
-
-All development commits must be pushed to `origin/dev`.
-
-Before promoting `dev` to `main`, make sure all changes have been tested and verified on the `dev` branch.
-
-Check whether `main` has received new commits:
-
-```bash
-git fetch origin
-git checkout dev
-git pull origin dev
-git merge origin/main
-```
-
-If conflicts occur, resolve them on `dev`. After resolving conflicts, run the validation and preview again:
-
-```bash
-shopify theme check
-git diff --check
-shopify theme dev \
-  --store beae-duc-k4mqivfe.myshopify.com \
-  --theme 156415066304 \
-  --open
-```
-
-Once `dev` is fully verified, promote it to `main`:
-
-```bash
-git checkout main
-git pull origin main
-git merge dev
 git push origin main
 ```
 
-Do not make additional development changes directly on `main`.
+## Optional Release Sync
 
-After the promotion is complete, verify that both branches point to the same commit:
+The Shopify main theme is not part of the normal development loop. When a reviewed snapshot must be released, verify the store, theme ID and current branch again, then push explicitly to the unpublished release theme:
 
 ```bash
-git fetch origin
-git rev-parse main
-git rev-parse dev
-git rev-parse origin/dev
-git rev-parse origin/main
+git branch --show-current
+shopify theme info \
+  --store beae-duc-k4mqivfe.myshopify.com \
+  --theme 156415033536
+shopify theme push \
+  --store beae-duc-k4mqivfe.myshopify.com \
+  --theme 156415033536
 ```
 
-After a successful `dev` to `main` promotion, `main`, `dev`, `origin/dev`, and `origin/main` must point to the same commit.
+Do not publish the release theme unless live deployment has been explicitly approved.
 
-Before any Shopify operation that writes, uploads, modifies, or publishes theme files, always verify the current Git branch, Shopify store, Shopify theme, and Theme ID.
+## Preview and Release Checks
 
-Normal development must never modify or publish the live storefront. The Shopify `main` theme must remain unpublished unless deployment to the live storefront has been explicitly approved.
+Before considering a change complete:
+
+- Confirm the local preview URL works while checked out on `main`.
+- Confirm the Shopify Theme Editor preview works on the development theme.
+- Confirm the development theme preview link works.
+- Confirm `shopify theme check` and `git diff --check` pass.
+- Review the final diff and verify that no secrets or unrelated files are included.
+
+The repository and development theme are the canonical working state. The optional release theme remains unpublished unless deployment is explicitly approved.

@@ -1,5 +1,8 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+<html
+  lang="{{ request.locale.iso_code }}"
+  data-block-animations="{% if settings.enable_block_animations == false %}false{% else %}true{% endif %}"
+>
   <head>
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
@@ -10,18 +13,25 @@
       2. Preload only the critical font variant (base weight)
       3. Additional variants load on-demand via @font-face
     {% endcomment %}
-    {% unless settings.type_primary_font.system? %}
+    {% unless settings.type_body_font.system? %}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
 
       {% comment %} Preload the base font variant for initial page render {% endcomment %}
-      {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+      {{ settings.type_body_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
+    <script src="{{ 'variant-picker.js' | asset_url }}" defer></script>
+    <script src="{{ 'motion.js' | asset_url }}" defer></script>
+    <script src="{{ 'overlay.js' | asset_url }}" defer></script>
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
+
+    {% if settings.favicon != blank %}
+      {{ settings.favicon | image_url: width: 48 | image_tag: rel: 'icon' }}
+    {% endif %}
 
     {{ content_for_header }}
   </head>

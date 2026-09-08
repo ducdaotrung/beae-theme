@@ -7,36 +7,27 @@
 
 <div class="product-images">
   {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
+    <div class="product-image" data-product-media="{{ image.id }}">
+      {{ image | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+    </div>
   {% endfor %}
 </div>
 
 <div class="product-info">
   <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
+  <div class="product__price{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %} product__price--sale{% endif %}">
+    {% render 'price', product: product, variant: product.selected_or_first_available_variant, context: 'product_page' %}
+  </div>
   <p>{{ product.description }}</p>
 </div>
 
 <div class="product-form">
   {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
+    {% render 'variant-picker', product: product %}
 
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+    <input class="form__control" type="text" name="quantity" min="1" value="1">
 
-    <input type="text" name="quantity" min="1" value="1">
-
-    <input type="submit" value="Add to cart">
+    <input class="btn btn--primary" type="submit" value="Add to cart">
     {{ form | payment_button }}
   {% endform %}
 </div>

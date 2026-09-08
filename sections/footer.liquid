@@ -1,4 +1,7 @@
-<footer>
+{% assign footer_scheme = section.settings.color_scheme | default: settings.color_schemes.first %}
+{% assign footer_scheme_number = footer_scheme.id | remove: 'scheme-' | remove: 'scheme_' %}
+
+<footer class="scheme-{{ footer_scheme_number }}">
   <div class="footer__copyright">
     &copy;
     {{ 'now' | date: '%Y' }}
@@ -18,6 +21,8 @@
       {% endfor %}
     {% endif %}
   </div>
+
+  {% render 'social-links', wrapper_class: 'footer__social' %}
 </footer>
 
 {% stylesheet %}
@@ -28,10 +33,11 @@
   }
   footer a {
     text-decoration: none;
-    color: var(--color-foreground);
+    color: var(--body-color);
   }
   footer .footer__links,
-  footer .footer__payment {
+  footer .footer__payment,
+  footer .footer__social {
     display: flex;
     gap: 1rem;
   }
@@ -51,6 +57,12 @@
       "id": "show_payment_icons",
       "label": "t:labels.show_payment_icons",
       "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
     }
   ]
 }

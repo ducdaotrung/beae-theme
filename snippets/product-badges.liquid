@@ -1,0 +1,76 @@
+{% doc %}
+  Renders product status, collection, and custom tag badges in priority order.
+
+  @param {product} product - Product to inspect
+{% enddoc %}
+
+{% liquid
+  assign has_sale = false
+  if product.compare_at_price > product.price
+    assign has_sale = true
+  endif
+  assign sale_label = 'Sale'
+  if settings.badge_sale_type == 'percentage' or settings.badge_sale_type == 'percentage_only'
+    assign saved_amount = product.compare_at_price | minus: product.price
+    assign sale_percentage = saved_amount | times: 100 | divided_by: product.compare_at_price
+    if settings.badge_sale_type == 'percentage'
+      assign sale_label = sale_percentage | append: '% off'
+    else
+      assign sale_label = '-' | append: sale_percentage | append: '%'
+    endif
+  elsif settings.badge_sale_type == 'amount_saved'
+    assign saved_amount = product.compare_at_price | minus: product.price
+    assign sale_label = 'Save ' | append: saved_amount | money
+  endif
+%}
+
+<div class="product-badges" aria-label="Product badges">
+  {% if settings.product_card_show_sale_badge and has_sale %}
+    <span class="product-badge product-badge--sale" style="--badge-background: var(--badge-sale-background); --badge-color: var(--badge-sale-color);">{{ sale_label }}</span>
+  {% elsif settings.product_card_show_sold_out_badge and product.available == false %}
+    <span class="product-badge product-badge--sold-out" style="--badge-background: var(--badge-sold-out-background); --badge-color: var(--badge-sold-out-color);">Sold out</span>
+  {% endif %}
+
+  {% assign collection_labels = '' %}
+  {% for product_collection in product.collections %}
+    {% for assigned_collection in settings.badge_collection_1_collections %}
+      {% if product_collection.handle == assigned_collection.handle and settings.badge_collection_1_label != blank %}
+        {% unless collection_labels contains settings.badge_collection_1_label %}<span class="product-badge product-badge--collection">{{ settings.badge_collection_1_label | escape }}</span>{% assign collection_labels = collection_labels | append: settings.badge_collection_1_label | append: '|' %}{% endunless %}
+      {% endif %}
+    {% endfor %}
+    {% for assigned_collection in settings.badge_collection_2_collections %}
+      {% if product_collection.handle == assigned_collection.handle and settings.badge_collection_2_label != blank %}
+        {% unless collection_labels contains settings.badge_collection_2_label %}<span class="product-badge product-badge--collection">{{ settings.badge_collection_2_label | escape }}</span>{% assign collection_labels = collection_labels | append: settings.badge_collection_2_label | append: '|' %}{% endunless %}
+      {% endif %}
+    {% endfor %}
+    {% for assigned_collection in settings.badge_collection_3_collections %}
+      {% if product_collection.handle == assigned_collection.handle and settings.badge_collection_3_label != blank %}
+        {% unless collection_labels contains settings.badge_collection_3_label %}<span class="product-badge product-badge--collection">{{ settings.badge_collection_3_label | escape }}</span>{% assign collection_labels = collection_labels | append: settings.badge_collection_3_label | append: '|' %}{% endunless %}
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+
+  {% if settings.badge_enable_custom %}
+    {% assign normalized_tags = '|' %}
+    {% for tag in product.tags %}{% assign normalized_tag = tag | strip | downcase %}{% assign normalized_tags = normalized_tags | append: normalized_tag | append: '|' %}{% endfor %}
+    {% assign rule_1_match = false %}{% assign rule_2_match = false %}
+    {% assign rule_1_tag = settings.badge_tag_1_tag | strip | downcase %}{% assign rule_2_tag = settings.badge_tag_2_tag | strip | downcase %}
+    {% assign rule_1_needle = '|' | append: rule_1_tag | append: '|' %}
+    {% assign rule_2_needle = '|' | append: rule_2_tag | append: '|' %}
+    {% if rule_1_tag != blank and settings.badge_tag_1_label != blank %}{% if normalized_tags contains rule_1_needle %}{% assign rule_1_match = true %}{% endif %}{% endif %}
+    {% if rule_2_tag != blank and settings.badge_tag_2_label != blank %}{% if normalized_tags contains rule_2_needle %}{% assign rule_2_match = true %}{% endif %}{% endif %}
+    {% if rule_1_match and rule_2_match %}
+      {% if settings.badge_tag_1_priority <= settings.badge_tag_2_priority %}
+        <span class="product-badge product-badge--new" style="--badge-background: {{ settings.badge_tag_1_background }}; --badge-color: {{ settings.badge_tag_1_color }};">{{ settings.badge_tag_1_label | escape }}</span>
+        <span class="product-badge product-badge--bestseller" style="--badge-background: {{ settings.badge_tag_2_background }}; --badge-color: {{ settings.badge_tag_2_color }};">{{ settings.badge_tag_2_label | escape }}</span>
+      {% else %}
+        <span class="product-badge product-badge--bestseller" style="--badge-background: {{ settings.badge_tag_2_background }}; --badge-color: {{ settings.badge_tag_2_color }};">{{ settings.badge_tag_2_label | escape }}</span>
+        <span class="product-badge product-badge--new" style="--badge-background: {{ settings.badge_tag_1_background }}; --badge-color: {{ settings.badge_tag_1_color }};">{{ settings.badge_tag_1_label | escape }}</span>
+      {% endif %}
+    {% elsif rule_1_match %}
+      <span class="product-badge product-badge--new" style="--badge-background: {{ settings.badge_tag_1_background }}; --badge-color: {{ settings.badge_tag_1_color }};">{{ settings.badge_tag_1_label | escape }}</span>
+    {% elsif rule_2_match %}
+      <span class="product-badge product-badge--bestseller" style="--badge-background: {{ settings.badge_tag_2_background }}; --badge-color: {{ settings.badge_tag_2_color }};">{{ settings.badge_tag_2_label | escape }}</span>
+    {% endif %}
+  {% endif %}
+</div>

@@ -1,0 +1,41 @@
+{% doc %}
+  Renders configured social links in Theme Editor order.
+
+  @param {string} wrapper_class - Optional class added to the navigation element
+{% enddoc %}
+
+{% liquid
+  assign social_links = 'social_facebook|Facebook|facebook,social_instagram|Instagram|instagram,social_youtube|YouTube|youtube,social_tiktok|TikTok|tiktok,social_x_twitter|X (Twitter)|x-twitter,social_threads|Threads|threads,social_linkedin|LinkedIn|linkedin,social_bluesky|Bluesky|bluesky,social_snapchat|Snapchat|snapchat,social_pinterest|Pinterest|pinterest,social_tumblr|Tumblr|tumblr,social_vimeo|Vimeo|vimeo' | split: ','
+  assign navigation_class = wrapper_class | default: 'social-links'
+  assign has_social_links = false
+  for social_link in social_links
+    assign social_id = social_link | split: '|' | first
+    if settings[social_id] != blank
+      assign has_social_links = true
+      break
+    endif
+  endfor
+%}
+
+{% if has_social_links %}
+  <nav class="social-links {{ navigation_class }}" aria-label="Social media">
+    {% for social_link in social_links %}
+      {% assign social_parts = social_link | split: '|' %}
+      {% assign social_id = social_parts[0] %}
+      {% assign social_label = social_parts[1] %}
+      {% assign icon_key = social_parts[2] %}
+      {% assign social_url = settings[social_id] %}
+      {% if social_url != blank %}
+      <a class="social-links__item" href="{{ social_url | escape }}" target="_blank" rel="noopener noreferrer" aria-label="{{ social_label | escape }}">
+        <span class="icon social-links__icon" data-icon-key="{{ icon_key }}" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false" role="presentation">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="var(--icon-stroke-width)" />
+            <text x="12" y="15" text-anchor="middle" fill="currentColor" font-size="7" font-family="Arial, sans-serif">{{ icon_key | replace: '-', ' ' | truncate: 3, '' }}</text>
+          </svg>
+        </span>
+        <span class="social-links__label">{{ social_label }}</span>
+      </a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+{% endif %}

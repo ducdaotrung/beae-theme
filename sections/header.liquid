@@ -1,6 +1,24 @@
-<header>
+{% assign header_scheme = section.settings.color_scheme | default: settings.color_schemes.first %}
+{% assign header_scheme_number = header_scheme.id | remove: 'scheme-' | remove: 'scheme_' %}
+
+<header class="scheme-{{ header_scheme_number }}{% if section.settings.overlay %} header--overlay{% endif %}">
   <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
+    <a href="{{ routes.root_url }}" class="header__logo-link">
+      {% assign active_logo = settings.logo %}
+      {% if section.settings.overlay and settings.logo_transparent != blank %}
+        {% assign active_logo = settings.logo_transparent %}
+      {% endif %}
+
+      {% if active_logo != blank %}
+        {{ active_logo | image_url: width: 800 | image_tag: class: 'header__logo', widths: '80, 120, 160, 240, 320, 480, 640, 800', sizes: 'var(--logo-width)' }}
+      {% else %}
+        {% if settings.logo_fallback == 'shop.name' or settings.logo_fallback == blank %}
+          {{ shop.name }}
+        {% else %}
+          {{ settings.logo_fallback }}
+        {% endif %}
+      {% endif %}
+    </a>
   </h2>
 
   <div class="header__menu">
@@ -11,19 +29,21 @@
 
   <div class="header__icons">
     {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
+      <shopify-account menu="{{ section.settings.customer_account_menu }}" aria-label="Account">
+        <span class="icon" aria-hidden="true">{{ 'icon-account.svg' | inline_asset_content }}</span>
       </shopify-account>
     {% endif %}
 
-    <a href="{{ routes.cart_url }}">
+    <a href="{{ routes.cart_url }}" aria-label="Cart">
       {% if cart.item_count > 0 %}
         <sup>{{ cart.item_count }}</sup>
       {% endif %}
 
-      {{ 'icon-cart.svg' | inline_asset_content }}
+      <span class="icon" aria-hidden="true">{{ 'icon-cart.svg' | inline_asset_content }}</span>
     </a>
   </div>
+
+  {% render 'social-links', wrapper_class: 'header__social' %}
 </header>
 
 {% stylesheet %}
@@ -33,10 +53,20 @@
     align-items: center;
     justify-content: space-between;
   }
+  .header__logo {
+    display: block;
+    width: min(var(--logo-width), 100%);
+    height: auto;
+  }
+  @media screen and (max-width: 749px) {
+    .header__logo {
+      width: min(var(--logo-width-mobile), 100%);
+    }
+  }
   header a {
     position: relative;
     text-decoration: none;
-    color: var(--color-foreground);
+    color: var(--body-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -47,11 +77,17 @@
     overflow: hidden;
     max-width: var(--page-margin);
   }
+  header a:focus-visible,
+  header shopify-account:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
   header svg {
     width: 2rem;
   }
   header .header__menu,
-  header .header__icons {
+  header .header__icons,
+  header .header__social {
     display: flex;
     gap: 1rem;
   }
@@ -71,6 +107,18 @@
       "id": "customer_account_menu",
       "label": "t:labels.customer_account_menu",
       "default": "customer-account-main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay",
+      "label": "Enable header overlay",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
     }
   ]
 }
