@@ -1530,13 +1530,189 @@
     "settings": [
       {
         "type": "select",
-        "id": "badge_style",
-        "label": "Badge style",
+        "id": "badge_radius_style",
+        "label": "Corner radius",
         "options": [
-          { "value": "solid", "label": "Solid" },
-          { "value": "outline", "label": "Outline" }
+          { "value": "square", "label": "Square" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "pill", "label": "Pill" }
         ],
-        "default": "solid"
+        "default": "square"
+      },
+      {
+        "type": "header",
+        "content": "Product status"
+      },
+      {
+        "type": "color",
+        "id": "badge_sale_price",
+        "label": "Sale price",
+        "default": "#D82727"
+      },
+      {
+        "type": "color",
+        "id": "badge_sale_background",
+        "label": "Sale badge background",
+        "default": "#D82727"
+      },
+      {
+        "type": "color",
+        "id": "badge_sale_color",
+        "label": "Sale badge text",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "badge_sold_out_background",
+        "label": "Sold-out badge background",
+        "default": "#ADADAD"
+      },
+      {
+        "type": "color",
+        "id": "badge_sold_out_color",
+        "label": "Sold-out badge text",
+        "default": "#181818"
+      },
+      {
+        "type": "select",
+        "id": "badge_sale_type",
+        "label": "Sale badge",
+        "options": [
+          { "value": "text", "label": "Text (eg: Sale)" },
+          { "value": "percentage", "label": "Percentage (eg: 25% off)" },
+          { "value": "percentage_only", "label": "Percentage only (eg: -25%)" },
+          { "value": "amount_saved", "label": "Amount saved (eg: Save $10)" }
+        ],
+        "default": "text"
+      },
+      {
+        "type": "header",
+        "content": "Collection badges"
+      },
+      {
+        "type": "text",
+        "id": "badge_collection_1_label",
+        "label": "Collection badge 1 label",
+        "default": "Collection badge 1"
+      },
+      {
+        "type": "collection_list",
+        "id": "badge_collection_1_collections",
+        "label": "Collection badge 1 collections"
+      },
+      {
+        "type": "text",
+        "id": "badge_collection_2_label",
+        "label": "Collection badge 2 label",
+        "default": "Collection badge 2"
+      },
+      {
+        "type": "collection_list",
+        "id": "badge_collection_2_collections",
+        "label": "Collection badge 2 collections"
+      },
+      {
+        "type": "text",
+        "id": "badge_collection_3_label",
+        "label": "Collection badge 3 label",
+        "default": "Collection badge 3"
+      },
+      {
+        "type": "collection_list",
+        "id": "badge_collection_3_collections",
+        "label": "Collection badge 3 collections"
+      },
+      {
+        "type": "header",
+        "content": "Custom badge"
+      },
+      {
+        "type": "checkbox",
+        "id": "badge_enable_custom",
+        "label": "Enable custom badge",
+        "default": false
+      },
+      {
+        "type": "color",
+        "id": "badge_custom_background",
+        "label": "Background color",
+        "default": "#5E6504"
+      },
+      {
+        "type": "color",
+        "id": "badge_custom_color",
+        "label": "Text color",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "header",
+        "content": "Custom product-card tags"
+      },
+      {
+        "type": "text",
+        "id": "badge_tag_1_label",
+        "label": "Rule 1 label",
+        "default": "New"
+      },
+      {
+        "type": "text",
+        "id": "badge_tag_1_tag",
+        "label": "Rule 1 product tag",
+        "default": "new"
+      },
+      {
+        "type": "color",
+        "id": "badge_tag_1_background",
+        "label": "Rule 1 background",
+        "default": "#5E6504"
+      },
+      {
+        "type": "color",
+        "id": "badge_tag_1_color",
+        "label": "Rule 1 text",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "range",
+        "id": "badge_tag_1_priority",
+        "label": "Rule 1 priority",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 1
+      },
+      {
+        "type": "text",
+        "id": "badge_tag_2_label",
+        "label": "Rule 2 label",
+        "default": "Bestseller"
+      },
+      {
+        "type": "text",
+        "id": "badge_tag_2_tag",
+        "label": "Rule 2 product tag",
+        "default": "bestseller"
+      },
+      {
+        "type": "color",
+        "id": "badge_tag_2_background",
+        "label": "Rule 2 background",
+        "default": "#1C1B1A"
+      },
+      {
+        "type": "color",
+        "id": "badge_tag_2_color",
+        "label": "Rule 2 text",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "range",
+        "id": "badge_tag_2_priority",
+        "label": "Rule 2 priority",
+        "min": 1,
+        "max": 10,
+        "step": 1,
+        "default": 2
       }
     ]
   },
