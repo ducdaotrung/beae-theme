@@ -115,6 +115,13 @@
     "product_card_swatch_width_mobile": 30,
     "product_card_swatch_height_ratio": "1_1",
     "product_card_swatch_selected_style": "border",
+    "variant_picker_type": "dropdown",
+    "variant_height_desktop": 44,
+    "variant_height_mobile": 44,
+    "variant_group_gap": 20,
+    "variant_label_spacing": 12,
+    "variant_item_gap": 8,
+    "variant_only_selected_media": false,
     "color_schemes": {
       "scheme-1": {
         "settings": {
