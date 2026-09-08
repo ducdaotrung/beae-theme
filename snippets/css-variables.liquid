@@ -9,8 +9,11 @@
     --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
-    --page-width: {{ settings.max_page_width }};
-    --page-margin: {{ settings.min_page_margin }}px;
+    --page-width: {{ settings.page_width | default: 1600 }}px;
+    --page-margin-min: {{ settings.page_margin_min | default: 16 }}px;
+    --page-margin-desktop: {{ settings.page_margin_desktop | default: 48 }}px;
+    --page-margin-tablet: {{ settings.page_margin_tablet | default: 30 }}px;
+    --page-margin-mobile: {{ settings.page_margin_mobile | default: 16 }}px;
     --background-color: {{ settings.color_schemes.first.settings.background | default: '#FFFFFF' }};
     --heading-color: {{ settings.color_schemes.first.settings.heading | default: '#1C1B1A' }};
     --heading-highlight-color: {{ settings.color_schemes.first.settings.heading_highlight | default: '#A67C52' }};

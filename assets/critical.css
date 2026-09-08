@@ -92,10 +92,7 @@ body {
  * the entire viewport.
  */
 .shopify-section {
-  --content-width: min(
-    calc(var(--page-width) - var(--page-margin) * 2),
-    calc(100% - var(--page-margin) * 2)
-  );
+  --content-width: min(var(--page-width), calc(100% - var(--page-margin) * 2));
   --content-margin: minmax(var(--page-margin), 1fr);
   --content-grid: var(--content-margin) var(--content-width) var(--content-margin);
 
@@ -114,4 +111,29 @@ body {
 /* Child elements that use the full-width utility class span the entire viewport. */
 .shopify-section > .full-width {
   grid-column: 1 / -1;
+}
+
+.page-width {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+@media screen and (min-width: 1200px) {
+  :root {
+    --page-margin: max(var(--page-margin-min), var(--page-margin-desktop));
+  }
+}
+
+@media screen and (min-width: 750px) and (max-width: 1199px) {
+  :root {
+    --page-margin: max(var(--page-margin-min), var(--page-margin-tablet));
+  }
+}
+
+@media screen and (max-width: 749px) {
+  :root {
+    --page-margin: max(var(--page-margin-min), var(--page-margin-mobile));
+  }
 }

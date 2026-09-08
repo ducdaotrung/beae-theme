@@ -287,30 +287,54 @@
     "name": "Layout",
     "settings": [
       {
-        "type": "select",
-        "id": "max_page_width",
+        "type": "range",
+        "id": "page_width",
         "label": "Page width",
-        "options": [
-          {
-            "value": "90rem",
-            "label": "Narrow"
-          },
-          {
-            "value": "110rem",
-            "label": "Wide"
-          }
-        ],
-        "default": "90rem"
+        "min": 800,
+        "max": 1800,
+        "step": 10,
+        "unit": "px",
+        "default": 1600
       },
       {
         "type": "range",
-        "id": "min_page_margin",
-        "min": 10,
-        "max": 100,
+        "id": "page_margin_min",
+        "label": "Minimum page margin",
+        "min": 0,
+        "max": 64,
         "step": 1,
         "unit": "px",
-        "label": "Page margin",
-        "default": 20
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "page_margin_desktop",
+        "label": "Desktop page margin",
+        "min": 0,
+        "max": 96,
+        "step": 2,
+        "unit": "px",
+        "default": 48
+      },
+      {
+        "type": "range",
+        "id": "page_margin_tablet",
+        "label": "Tablet page margin",
+        "min": 0,
+        "max": 64,
+        "step": 2,
+        "unit": "px",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "page_margin_mobile",
+        "label": "Mobile page margin",
+        "min": 0,
+        "max": 48,
+        "step": 2,
+        "unit": "px",
+        "default": 16
       }
     ]
   },
