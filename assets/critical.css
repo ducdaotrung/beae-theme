@@ -164,6 +164,19 @@ button {
 .body-xl { font-size: var(--font-body-xl); }
 .body-xxl { font-size: var(--font-body-xxl); }
 
+.motion-image-zoom .product-card__image:first-child {
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.motion-image-zoom:hover .product-card__image:first-child,
+.motion-image-zoom:focus-within .product-card__image:first-child {
+  transform: scale(1.04);
+}
+
+.motion-block--animated {
+  animation: motion-block-enter var(--motion-duration-slow) var(--motion-ease-emphasized) both;
+}
+
 .accent-text,
 .eyebrow-text {
   font-family: var(--font-accent-family);
@@ -806,34 +819,24 @@ textarea[aria-invalid='true'] {
 }
 
 @media screen and (prefers-reduced-motion: reduce) {
-  html[data-respect-reduced-motion='true'] *,
-  html[data-respect-reduced-motion='true'] *::before,
-  html[data-respect-reduced-motion='true'] *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
 
-  html[data-respect-reduced-motion='true'] {
-    scroll-behavior: auto;
-  }
-
-  html[data-respect-reduced-motion='true'] .btn,
-  html[data-respect-reduced-motion='true'] .btn.is-loading::after,
-  html[data-respect-reduced-motion='true'] .btn[aria-busy='true']::after {
-    animation: none;
-    transition: none;
+  .motion-image-zoom:hover .product-card__image:first-child,
+  .motion-image-zoom:focus-within .product-card__image:first-child {
+    transform: none;
   }
 }
 
-html[data-motion='false'] *,
-html[data-motion='false'] *::before,
-html[data-motion='false'] *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  scroll-behavior: auto !important;
-  transition-duration: 0.01ms !important;
+@keyframes motion-block-enter {
+  from { opacity: 0; transform: translateY(var(--motion-distance-sm)); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /** Section layout utilities */
