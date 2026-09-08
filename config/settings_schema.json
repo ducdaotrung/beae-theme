@@ -978,16 +978,6 @@
       },
       {
         "type": "range",
-        "id": "input_radius",
-        "min": 0,
-        "max": 32,
-        "step": 1,
-        "unit": "px",
-        "label": "Border radius",
-        "default": 8
-      },
-      {
-        "type": "range",
         "id": "input_border_width",
         "min": 0,
         "max": 3,
@@ -1530,17 +1520,6 @@
     "name": "Badges",
     "settings": [
       {
-        "type": "select",
-        "id": "badge_radius_style",
-        "label": "Corner radius",
-        "options": [
-          { "value": "square", "label": "Square" },
-          { "value": "rounded", "label": "Rounded" },
-          { "value": "pill", "label": "Pill" }
-        ],
-        "default": "square"
-      },
-      {
         "type": "header",
         "content": "Product status"
       },
@@ -1782,14 +1761,105 @@
     "name": "Radius & Shape",
     "settings": [
       {
-        "type": "range",
-        "id": "global_corner_radius",
-        "min": 0,
-        "max": 32,
-        "step": 1,
-        "unit": "px",
-        "label": "Global corner radius",
-        "default": 4
+        "type": "select",
+        "id": "shape_badges_subheadings",
+        "label": "Badges and subheadings",
+        "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "slight", "label": "Slightly rounded" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "pill", "label": "Pill" }
+        ],
+        "default": "square"
+      },
+      {
+        "type": "select",
+        "id": "shape_variant_pickers",
+        "label": "Variant pickers",
+        "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "slight", "label": "Slightly rounded" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "pill", "label": "Pill" }
+        ],
+        "default": "square"
+      },
+      {
+        "type": "select",
+        "id": "shape_swatches",
+        "label": "Swatches",
+        "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "slight", "label": "Slightly rounded" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "pill", "label": "Pill" }
+        ],
+        "default": "square"
+      },
+      {
+        "type": "select",
+        "id": "shape_navigation",
+        "label": "Navigation",
+        "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "slight", "label": "Slightly rounded" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "pill", "label": "Pill" }
+        ],
+        "default": "pill"
+      },
+      {
+        "type": "select",
+        "id": "shape_tags",
+        "label": "Tags",
+        "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "slight", "label": "Slightly rounded" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "pill", "label": "Pill" }
+        ],
+        "default": "square"
+      },
+      {
+        "type": "select",
+        "id": "shape_media_containers",
+        "label": "Media and containers",
+        "info": "Used for media, product cards, pop-ups, popovers, and blocks.",
+        "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "slight", "label": "Slightly rounded" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "extra", "label": "Extra rounded" }
+        ],
+        "default": "square"
+      },
+      {
+        "type": "header",
+        "content": "Overlay"
+      },
+      {
+        "type": "select",
+        "id": "shape_overlay_drawers",
+        "label": "Drawers",
+        "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "slight", "label": "Slightly rounded" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "extra", "label": "Extra rounded" }
+        ],
+        "default": "square"
+      },
+      {
+        "type": "select",
+        "id": "shape_overlay_bottom_sheets",
+        "label": "Bottom sheets",
+        "options": [
+          { "value": "square", "label": "Square" },
+          { "value": "slight", "label": "Slightly rounded" },
+          { "value": "rounded", "label": "Rounded" },
+          { "value": "extra", "label": "Extra rounded" }
+        ],
+        "default": "slight"
       }
     ]
   },
