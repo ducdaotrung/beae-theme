@@ -951,20 +951,104 @@
         "id": "form_input_style",
         "label": "Input style",
         "options": [
-          { "value": "outline", "label": "Outline" },
-          { "value": "filled", "label": "Filled" }
+          { "value": "solid", "label": "Solid" },
+          { "value": "outline", "label": "Outline" }
         ],
         "default": "outline"
       },
       {
         "type": "range",
-        "id": "input_corner_radius",
-        "min": 0,
-        "max": 24,
+        "id": "input_height_desktop",
+        "min": 40,
+        "max": 64,
         "step": 1,
         "unit": "px",
-        "label": "Input corner radius",
-        "default": 4
+        "label": "Desktop height",
+        "default": 48
+      },
+      {
+        "type": "range",
+        "id": "input_height_mobile",
+        "min": 40,
+        "max": 56,
+        "step": 1,
+        "unit": "px",
+        "label": "Mobile height",
+        "default": 44
+      },
+      {
+        "type": "range",
+        "id": "input_radius",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "label": "Border radius",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "input_border_width",
+        "min": 0,
+        "max": 3,
+        "step": 1,
+        "unit": "px",
+        "label": "Border width",
+        "default": 1
+      },
+      {
+        "type": "color",
+        "id": "input_background_color",
+        "label": "Background color",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "header",
+        "content": "Typography"
+      },
+      {
+        "type": "select",
+        "id": "form_label_typography",
+        "label": "Label",
+        "options": [
+          { "value": "body", "label": "Body text" },
+          { "value": "accent", "label": "Accent text" },
+          { "value": "heading", "label": "Heading text" }
+        ],
+        "default": "body"
+      },
+      {
+        "type": "select",
+        "id": "form_input_typography",
+        "label": "Input",
+        "options": [
+          { "value": "body", "label": "Body text" },
+          { "value": "accent", "label": "Accent text" },
+          { "value": "heading", "label": "Heading text" }
+        ],
+        "default": "body"
+      },
+      {
+        "type": "select",
+        "id": "form_helper_typography",
+        "label": "Helper text",
+        "options": [
+          { "value": "body", "label": "Body text" },
+          { "value": "accent", "label": "Accent text" },
+          { "value": "heading", "label": "Heading text" }
+        ],
+        "default": "body"
+      },
+      {
+        "type": "select",
+        "id": "form_error_typography",
+        "label": "Error text",
+        "options": [
+          { "value": "body", "label": "Body text" },
+          { "value": "accent", "label": "Accent text" },
+          { "value": "heading", "label": "Heading text" }
+        ],
+        "default": "body"
       }
     ]
   },
