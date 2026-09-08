@@ -64,6 +64,28 @@
     --font-eyebrow-line-height: var(--typography-line-height-{{ settings.eyebrow_line_height | default: 'tight' }});
     --font-eyebrow-letter-spacing: var(--typography-letter-spacing-{{ settings.eyebrow_letter_spacing | default: 'extra_loose' }});
     --font-eyebrow-text-transform: var(--typography-case-{{ settings.eyebrow_text_case | default: 'uppercase' }});
+    --button-height: {{ settings.button_height_desktop | default: 48 }}px;
+    --button-height-mobile: {{ settings.button_height_mobile | default: 44 }}px;
+    --button-padding-inline-desktop: {{ settings.button_padding_inline_desktop | default: 28 }}px;
+    --button-padding-inline-mobile: {{ settings.button_padding_inline_mobile | default: 24 }}px;
+    --button-disabled-opacity: {{ settings.button_disabled_opacity | default: 60 | divided_by: 100.0 }};
+    --button-font-size: {{ settings.button_font_size | default: 12 }}px;
+    --button-letter-spacing: var(--typography-letter-spacing-{{ settings.button_letter_spacing | default: 'extra_loose' }});
+    --button-radius-square: 0px;
+    --button-radius-rounded: 4px;
+    --button-radius-pill: 999px;
+    --button-radius: var(--button-radius-{{ settings.button_radius_style | default: 'square' }});
+    --button-border-width: {{ settings.button_primary_border_width | default: 1 }}px;
+    --button-primary-font-family: var(--font-{{ settings.button_primary_font | default: 'body' }}-family);
+    --button-primary-text-transform: var(--typography-case-{{ settings.button_primary_text_case | default: 'uppercase' }});
+    --button-primary-border-width: {{ settings.button_primary_border_width | default: 1 }}px;
+    --button-secondary-font-family: var(--font-{{ settings.button_secondary_font | default: 'body' }}-family);
+    --button-secondary-text-transform: var(--typography-case-{{ settings.button_secondary_text_case | default: 'uppercase' }});
+    --button-secondary-border-width: {{ settings.button_secondary_border_width | default: 1 }}px;
+    --button-tertiary-font-family: var(--font-{{ settings.button_tertiary_font | default: 'body' }}-family);
+    --button-tertiary-text-transform: var(--typography-case-{{ settings.button_tertiary_text_case | default: 'uppercase' }});
+    --button-tertiary-underline-offset: {{ settings.button_tertiary_underline_offset | default: 3 }}px;
+    --button-tertiary-show-underline: {% if settings.button_tertiary_show_underline == false %}none{% else %}underline{% endif %};
     --page-width: {{ settings.page_width | default: 1600 }}px;
     --page-margin-min: {{ settings.page_margin_min | default: 16 }}px;
     --page-margin-desktop: {{ settings.page_margin_desktop | default: 48 }}px;
@@ -115,6 +137,8 @@
       --font-heading-md: {{ settings.heading_md_size_mobile | default: 24 }}px;
       --font-heading-sm: {{ settings.heading_sm_size_mobile | default: 20 }}px;
       --font-heading-xs: {{ settings.heading_xs_size_mobile | default: 18 }}px;
+      --button-height: var(--button-height-mobile);
+      --button-padding-inline-desktop: var(--button-padding-inline-mobile);
     }
   }
 
