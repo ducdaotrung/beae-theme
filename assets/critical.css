@@ -439,20 +439,32 @@ textarea[aria-invalid='true'] {
   opacity: 1;
 }
 
-.product-card__badges {
+.product-badges {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   left: 0.75rem;
   position: absolute;
   top: 0.75rem;
+  z-index: 1;
 }
 
-.product-card__badge {
-  background: var(--accent-color);
-  color: var(--background-color);
-  font-size: var(--font-body-xs);
-  padding: 0.35rem 0.5rem;
+.product-badge {
+  background: var(--badge-background, var(--accent-color));
+  border-radius: var(--badge-radius);
+  color: var(--badge-color, var(--background-color));
+  display: inline-flex;
+  font-family: var(--badge-font-family);
+  font-size: var(--badge-font-size);
+  letter-spacing: var(--badge-letter-spacing);
+  line-height: 1;
+  max-width: 100%;
+  padding: var(--badge-padding);
+  overflow-wrap: anywhere;
 }
+
+.product-badge--sale { --badge-price-color: var(--badge-sale-price); }
+.product-badge--sold-out { --badge-price-color: var(--badge-sold-out-color); }
 
 .product-card__quick-add,
 .product-card__quick-view {
