@@ -73,9 +73,104 @@ p:empty {
 
 /** Theme styles below */
 body {
-  font-family: var(--font-primary--family);
+  font-family: var(--font-body-family);
+  font-size: var(--font-body-md);
+  line-height: var(--font-body-line-height);
+  letter-spacing: var(--font-body-letter-spacing);
+  text-transform: var(--font-body-text-transform);
   background-color: var(--background-color);
   color: var(--body-color);
+}
+
+.heading-text,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading-family);
+  font-weight: 700;
+  letter-spacing: var(--font-heading-letter-spacing);
+  overflow-wrap: anywhere;
+}
+
+.heading-display,
+h1 {
+  font-size: var(--font-heading-display);
+  line-height: var(--font-heading-display-line-height);
+  text-transform: var(--font-heading-display-text-transform);
+}
+
+.heading-xl,
+h2 {
+  font-size: var(--font-heading-xl);
+  line-height: var(--font-heading-xl-line-height);
+  text-transform: var(--font-heading-xl-text-transform);
+}
+
+.heading-lg,
+h3 {
+  font-size: var(--font-heading-lg);
+  line-height: var(--font-heading-lg-line-height);
+  text-transform: var(--font-heading-lg-text-transform);
+}
+
+.heading-md,
+h4 {
+  font-size: var(--font-heading-md);
+  line-height: var(--font-heading-md-line-height);
+  text-transform: var(--font-heading-md-text-transform);
+}
+
+.heading-sm,
+h5 {
+  font-size: var(--font-heading-sm);
+  line-height: var(--font-heading-sm-line-height);
+  text-transform: var(--font-heading-sm-text-transform);
+}
+
+.heading-xs,
+h6 {
+  font-size: var(--font-heading-xs);
+  line-height: var(--font-heading-xs-line-height);
+  text-transform: var(--font-heading-xs-text-transform);
+}
+
+.body-text,
+p,
+input,
+textarea,
+select,
+button {
+  font-family: var(--font-body-family);
+  letter-spacing: var(--font-body-letter-spacing);
+  text-transform: var(--font-body-text-transform);
+}
+
+.body-xs,
+.body-sm,
+.body-md,
+.body-lg,
+.body-xl,
+.body-xxl {
+  line-height: var(--font-body-line-height);
+}
+
+.body-xs { font-size: var(--font-body-xs); }
+.body-sm { font-size: var(--font-body-sm); }
+.body-md { font-size: var(--font-body-md); }
+.body-lg { font-size: var(--font-body-lg); }
+.body-xl { font-size: var(--font-body-xl); }
+.body-xxl { font-size: var(--font-body-xxl); }
+
+.accent-text,
+.eyebrow-text {
+  font-family: var(--font-accent-family);
+  font-size: var(--font-eyebrow-size);
+  line-height: var(--font-eyebrow-line-height);
+  letter-spacing: var(--font-eyebrow-letter-spacing);
+  text-transform: var(--font-eyebrow-text-transform);
 }
 
 /** Section layout utilities */

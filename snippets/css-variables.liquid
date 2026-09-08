@@ -1,14 +1,69 @@
 {% style %}
-  {% # Loads all font variantions with display: swap %}
-  {{ settings.type_primary_font | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
-  {{ settings.type_primary_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {% if settings.type_heading_font != blank %}
+    {{ settings.type_heading_font | font_face: font_display: 'swap' }}
+    {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {% endif %}
+  {% if settings.type_body_font != blank %}
+    {{ settings.type_body_font | font_face: font_display: 'swap' }}
+    {{ settings.type_body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {% endif %}
+  {% if settings.type_accent_font != blank %}
+    {{ settings.type_accent_font | font_face: font_display: 'swap' }}
+    {{ settings.type_accent_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {% endif %}
 
   :root {
-    --font-primary--family: {{ settings.type_primary_font.family }}, {{ settings.type_primary_font.fallback_families }};
-    --font-primary--style: {{ settings.type_primary_font.style }};
-    --font-primary--weight: {{ settings.type_primary_font.weight }};
+    --font-heading-family: {{ settings.type_heading_font.family | default: 'Work Sans' }}, {{ settings.type_heading_font.fallback_families | default: 'Arial, sans-serif' }};
+    --font-body-family: {{ settings.type_body_font.family | default: 'Work Sans' }}, {{ settings.type_body_font.fallback_families | default: 'Arial, sans-serif' }};
+    --font-accent-family: {{ settings.type_accent_font.family | default: 'Work Sans' }}, {{ settings.type_accent_font.fallback_families | default: 'Arial, sans-serif' }};
+    --font-primary--family: var(--font-body-family);
+    --font-primary--style: {{ settings.type_body_font.style | default: 'normal' }};
+    --font-primary--weight: {{ settings.type_body_font.weight | default: 400 }};
+    --typography-line-height-tight: 1.1;
+    --typography-line-height-normal: 1.3;
+    --typography-line-height-relaxed: 1.5;
+    --typography-line-height-loose: 1.7;
+    --typography-letter-spacing-tight: 0em;
+    --typography-letter-spacing-normal: 0em;
+    --typography-letter-spacing-relaxed: 0.02em;
+    --typography-letter-spacing-loose: 0.04em;
+    --typography-letter-spacing-extra_loose: 0.08em;
+    --typography-case-original: none;
+    --typography-case-uppercase: uppercase;
+    --typography-case-capitalize: capitalize;
+    --font-body-base-size: {{ settings.paragraph_base_size | default: 14 }}px;
+    --font-body-xs: calc(var(--font-body-base-size) * 0.7142857);
+    --font-body-sm: calc(var(--font-body-base-size) * 0.8571428);
+    --font-body-md: var(--font-body-base-size);
+    --font-body-lg: calc(var(--font-body-base-size) * 1.1428571);
+    --font-body-xl: calc(var(--font-body-base-size) * 1.2857142);
+    --font-body-xxl: calc(var(--font-body-base-size) * 1.4285714);
+    --font-heading-display: {{ settings.heading_display_size_desktop | default: 72 }}px;
+    --font-heading-xl: {{ settings.heading_xl_size_desktop | default: 48 }}px;
+    --font-heading-lg: {{ settings.heading_lg_size_desktop | default: 40 }}px;
+    --font-heading-md: {{ settings.heading_md_size_desktop | default: 32 }}px;
+    --font-heading-sm: {{ settings.heading_sm_size_desktop | default: 24 }}px;
+    --font-heading-xs: {{ settings.heading_xs_size_desktop | default: 20 }}px;
+    --font-heading-display-line-height: var(--typography-line-height-{{ settings.heading_display_line_height | default: 'tight' }});
+    --font-heading-xl-line-height: var(--typography-line-height-{{ settings.heading_xl_line_height | default: 'tight' }});
+    --font-heading-lg-line-height: var(--typography-line-height-{{ settings.heading_lg_line_height | default: 'tight' }});
+    --font-heading-md-line-height: var(--typography-line-height-{{ settings.heading_md_line_height | default: 'tight' }});
+    --font-heading-sm-line-height: var(--typography-line-height-{{ settings.heading_sm_line_height | default: 'tight' }});
+    --font-heading-xs-line-height: var(--typography-line-height-{{ settings.heading_xs_line_height | default: 'tight' }});
+    --font-heading-display-text-transform: var(--typography-case-{{ settings.heading_display_text_case | default: 'original' }});
+    --font-heading-xl-text-transform: var(--typography-case-{{ settings.heading_xl_text_case | default: 'original' }});
+    --font-heading-lg-text-transform: var(--typography-case-{{ settings.heading_lg_text_case | default: 'original' }});
+    --font-heading-md-text-transform: var(--typography-case-{{ settings.heading_md_text_case | default: 'original' }});
+    --font-heading-sm-text-transform: var(--typography-case-{{ settings.heading_sm_text_case | default: 'original' }});
+    --font-heading-xs-text-transform: var(--typography-case-{{ settings.heading_xs_text_case | default: 'original' }});
+    --font-heading-letter-spacing: var(--typography-letter-spacing-{{ settings.heading_letter_spacing | default: 'normal' }});
+    --font-body-line-height: var(--typography-line-height-{{ settings.paragraph_line_height | default: 'loose' }});
+    --font-body-letter-spacing: var(--typography-letter-spacing-{{ settings.body_letter_spacing | default: 'normal' }});
+    --font-body-text-transform: var(--typography-case-{{ settings.body_text_case | default: 'original' }});
+    --font-eyebrow-size: {{ settings.eyebrow_font_size | default: 14 }}px;
+    --font-eyebrow-line-height: var(--typography-line-height-{{ settings.eyebrow_line_height | default: 'tight' }});
+    --font-eyebrow-letter-spacing: var(--typography-letter-spacing-{{ settings.eyebrow_letter_spacing | default: 'extra_loose' }});
+    --font-eyebrow-text-transform: var(--typography-case-{{ settings.eyebrow_text_case | default: 'uppercase' }});
     --page-width: {{ settings.page_width | default: 1600 }}px;
     --page-margin-min: {{ settings.page_margin_min | default: 16 }}px;
     --page-margin-desktop: {{ settings.page_margin_desktop | default: 48 }}px;
@@ -50,6 +105,17 @@
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
     --logo-width: {{ settings.logo_width | default: 140 }}px;
     --logo-width-mobile: {{ settings.logo_width_mobile | default: 120 }}px;
+  }
+
+  @media screen and (max-width: 749px) {
+    :root {
+      --font-heading-display: {{ settings.heading_display_size_mobile | default: 44 }}px;
+      --font-heading-xl: {{ settings.heading_xl_size_mobile | default: 32 }}px;
+      --font-heading-lg: {{ settings.heading_lg_size_mobile | default: 28 }}px;
+      --font-heading-md: {{ settings.heading_md_size_mobile | default: 24 }}px;
+      --font-heading-sm: {{ settings.heading_sm_size_mobile | default: 20 }}px;
+      --font-heading-xs: {{ settings.heading_xs_size_mobile | default: 18 }}px;
+    }
   }
 
   {% for scheme in settings.color_schemes %}
