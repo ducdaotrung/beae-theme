@@ -8,5 +8,74 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#FFFFFF",
+          "heading": "#1C1B1A",
+          "heading_highlight": "#A67C52",
+          "body": "#1C1B1A",
+          "accent": "#1C1B1A",
+          "border": "#1C1B1A",
+          "shadow": "#1C1B1A",
+          "sale_price": "#9A3D32",
+          "button_primary_background": "#1C1B1A",
+          "button_primary_text": "#FFFFFF",
+          "button_primary_border": "#1C1B1A",
+          "button_primary_hover_border": "#1C1B1A",
+          "button_primary_hover_background": "rgba(0,0,0,0)",
+          "button_primary_hover_text": "#1C1B1A",
+          "button_secondary_background": "#FFFFFF",
+          "button_secondary_text": "#1C1B1A",
+          "button_secondary_border": "#1C1B1A",
+          "button_secondary_hover_border": "#1C1B1A",
+          "button_secondary_hover_background": "rgba(0,0,0,0)",
+          "button_secondary_hover_text": "#1C1B1A",
+          "button_tertiary_background": "rgba(0,0,0,0)",
+          "button_tertiary_text": "#1C1B1A",
+          "button_tertiary_border": "rgba(0,0,0,0)",
+          "button_tertiary_hover_border": "#1C1B1A",
+          "button_tertiary_hover_background": "rgba(0,0,0,0)",
+          "button_tertiary_hover_text": "#1C1B1A"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#1C1B1A",
+          "heading": "#FFFFFF",
+          "heading_highlight": "#E2B98A",
+          "body": "#FFFFFF",
+          "accent": "#FFFFFF",
+          "border": "#FFFFFF",
+          "shadow": "#000000",
+          "sale_price": "#FF8A7A",
+          "button_primary_background": "#FFFFFF",
+          "button_primary_text": "#1C1B1A",
+          "button_primary_border": "#FFFFFF",
+          "button_primary_hover_border": "#FFFFFF",
+          "button_primary_hover_background": "rgba(0,0,0,0)",
+          "button_primary_hover_text": "#FFFFFF",
+          "button_secondary_background": "rgba(0,0,0,0)",
+          "button_secondary_text": "#FFFFFF",
+          "button_secondary_border": "#FFFFFF",
+          "button_secondary_hover_border": "#FFFFFF",
+          "button_secondary_hover_background": "#FFFFFF",
+          "button_secondary_hover_text": "#1C1B1A",
+          "button_tertiary_background": "rgba(0,0,0,0)",
+          "button_tertiary_text": "#FFFFFF",
+          "button_tertiary_border": "rgba(0,0,0,0)",
+          "button_tertiary_hover_border": "#FFFFFF",
+          "button_tertiary_hover_background": "rgba(0,0,0,0)",
+          "button_tertiary_hover_text": "#FFFFFF"
+        }
+      }
+    },
+    "status_sale": "#9A3D32",
+    "status_sold_out": "#6B6B6B",
+    "status_error": "#B42318",
+    "status_success": "#16794C",
+    "status_warning": "#A15C00"
+  },
+  "presets": {}
 }
