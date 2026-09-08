@@ -7,7 +7,9 @@
 
 <div class="product-images">
   {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
+    <div class="product-image" data-product-media="{{ image.id }}">
+      {{ image | image_url: width: 1200 | image_tag: loading: 'lazy' }}
+    </div>
   {% endfor %}
 </div>
 
@@ -21,18 +23,7 @@
   {% form 'product', product %}
     {% assign current_variant = product.selected_or_first_available_variant %}
 
-    <select class="form__control" name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
-      {% endfor %}
-    </select>
+    {% render 'variant-picker', product: product %}
 
     <input class="form__control" type="text" name="quantity" min="1" value="1">
 
