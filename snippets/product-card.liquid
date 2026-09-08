@@ -64,7 +64,7 @@
       {% if settings.product_card_show_vendor %}<p class="product-card__vendor">{{ product.vendor | escape }}</p>{% endif %}
       {% if settings.product_card_show_type and product.type != blank %}<p class="product-card__type">{{ product.type | escape }}</p>{% endif %}
       <h3 class="product-card__title{% if title_limit != 'none' %} product-card__title--limit-{{ title_limit }}{% endif %}"><a href="{{ product.url }}">{{ product.title | escape }}</a></h3>
-      <div class="product-card__price{% if product.compare_at_price > product.price %} product-card__price--sale{% endif %}">
+      <div class="product-card__price{% if selected_variant.compare_at_price > selected_variant.price %} product-card__price--sale{% endif %}">
         {% render 'price', product: product, variant: selected_variant, context: 'product_card' %}
       </div>
     </div>

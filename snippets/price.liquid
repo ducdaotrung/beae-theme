@@ -23,7 +23,7 @@
   endif
 %}
 
-<div class="price{% if is_sale %} price--sale{% else %} price--regular{% endif %}" data-price data-price-context="{{ price_context }}" data-price-variant-id="{{ price_variant.id }}" data-sale-first="{{ settings.price_sale_first }}">
+<div class="price{% if is_sale %} price--sale{% else %} price--regular{% endif %}" data-price data-price-context="{{ price_context }}" data-price-variant-id="{{ price_variant.id }}" data-sale-first="{{ settings.price_sale_first }}" aria-live="polite">
   <span class="price__current" data-price-current{% if is_sale %} aria-label="Sale price"{% endif %}>{% if use_currency_code %}{{ current_price | money_with_currency }}{% else %}{{ current_price | money }}{% endif %}</span>
   <s class="price__compare" data-price-compare aria-label="Original price"{% unless is_sale %} hidden{% endunless %}>{% if is_sale %}{% if use_currency_code %}{{ compare_at_price | money_with_currency }}{% else %}{{ compare_at_price | money }}{% endif %}{% endif %}</s>
 
