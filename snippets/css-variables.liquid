@@ -86,6 +86,19 @@
     --button-tertiary-text-transform: var(--typography-case-{{ settings.button_tertiary_text_case | default: 'uppercase' }});
     --button-tertiary-underline-offset: {{ settings.button_tertiary_underline_offset | default: 3 }}px;
     --button-tertiary-show-underline: {% if settings.button_tertiary_show_underline == false %}none{% else %}underline{% endif %};
+    --input-height: {{ settings.input_height_desktop | default: 48 }}px;
+    --input-height-mobile: {{ settings.input_height_mobile | default: 44 }}px;
+    --input-radius: {{ settings.input_radius | default: 8 }}px;
+    --input-border-width: {{ settings.input_border_width | default: 1 }}px;
+    --input-background-color: {% if settings.form_input_style == 'solid' %}{{ settings.input_background_color | default: '#FFFFFF' }}{% else %}transparent{% endif %};
+    --input-text-color: var(--body-color);
+    --input-border-color: var(--border-color);
+    --input-focus-color: var(--accent-color);
+    --input-error-color: var(--status-error-color);
+    --form-label-font-family: var(--font-{{ settings.form_label_typography | default: 'body' }}-family);
+    --form-input-font-family: var(--font-{{ settings.form_input_typography | default: 'body' }}-family);
+    --form-helper-font-family: var(--font-{{ settings.form_helper_typography | default: 'body' }}-family);
+    --form-error-font-family: var(--font-{{ settings.form_error_typography | default: 'body' }}-family);
     --page-width: {{ settings.page_width | default: 1600 }}px;
     --page-margin-min: {{ settings.page_margin_min | default: 16 }}px;
     --page-margin-desktop: {{ settings.page_margin_desktop | default: 48 }}px;
@@ -124,7 +137,7 @@
     --status-warning-color: {{ settings.status_warning | default: '#A15C00' }};
     --color-background: var(--background-color);
     --color-foreground: var(--body-color);
-    --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    --style-border-radius-inputs: var(--input-radius);
     --logo-width: {{ settings.logo_width | default: 140 }}px;
     --logo-width-mobile: {{ settings.logo_width_mobile | default: 120 }}px;
   }
@@ -139,6 +152,7 @@
       --font-heading-xs: {{ settings.heading_xs_size_mobile | default: 18 }}px;
       --button-height: var(--button-height-mobile);
       --button-padding-inline-desktop: var(--button-padding-inline-mobile);
+      --input-height: var(--input-height-mobile);
     }
   }
 
