@@ -1315,10 +1315,11 @@
         "id": "product_card_swatch_type",
         "label": "Swatch type",
         "options": [
+          { "value": "inherit", "label": "Use global setting" },
           { "value": "color", "label": "Color" },
           { "value": "variant_image", "label": "Variant image" }
         ],
-        "default": "color"
+        "default": "inherit"
       },
       {
         "type": "range",
@@ -1741,6 +1742,36 @@
         "id": "social_show_icons",
         "label": "Show social icons",
         "default": true
+      },
+      {
+        "type": "url",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "url",
+        "id": "social_pinterest",
+        "label": "Pinterest URL"
+      },
+      {
+        "type": "url",
+        "id": "social_linkedin",
+        "label": "LinkedIn URL"
       }
     ]
   },

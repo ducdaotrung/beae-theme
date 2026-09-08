@@ -108,7 +108,7 @@
     "product_card_show_type": false,
     "product_card_show_swatches": false,
     "product_card_swatch_position": "bottom",
-    "product_card_swatch_type": "color",
+    "product_card_swatch_type": "inherit",
     "product_card_swatch_limit": 4,
     "product_card_swatch_gap": 8,
     "product_card_swatch_width_desktop": 30,
