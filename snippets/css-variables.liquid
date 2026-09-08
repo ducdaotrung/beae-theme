@@ -116,6 +116,9 @@
     --pcard-swatch-width-mobile: {{ settings.product_card_swatch_width_mobile | default: 30 }}px;
     --pcard-swatch-height-ratio: {% case settings.product_card_swatch_height_ratio %}{% when '3_2' %}66.6667%{% when '2_1' %}50%{% when '3_1' %}33.3333%{% else %}100%{% endcase %};
     --pcard-swatch-selected-style: {{ settings.product_card_swatch_selected_style | default: 'border' }};
+    --pcard-swatch-selected-border: {% if settings.product_card_swatch_selected_style == 'underline' %}0 2px 0 0 var(--accent-color){% else %}0 0 0 1px var(--accent-color){% endif %};
+    --pcard-quick-add-mobile-display: {% if settings.product_card_quick_add_mobile %}block{% else %}none{% endif %};
+    --pcard-quick-view-mobile-display: {% if settings.product_card_quick_view_mobile %}block{% else %}none{% endif %};
     --page-width: {{ settings.page_width | default: 1600 }}px;
     --page-margin-min: {{ settings.page_margin_min | default: 16 }}px;
     --page-margin-desktop: {{ settings.page_margin_desktop | default: 48 }}px;
