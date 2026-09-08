@@ -24,13 +24,8 @@
 %}
 
 <div class="price{% if is_sale %} price--sale{% else %} price--regular{% endif %}" data-price data-price-context="{{ price_context }}" data-price-variant-id="{{ price_variant.id }}" data-sale-first="{{ settings.price_sale_first }}">
-  {% if is_sale and settings.price_sale_first %}
-    <span class="price__current" data-price-current aria-label="Sale price">{% if use_currency_code %}{{ current_price | money_with_currency }}{% else %}{{ current_price | money }}{% endif %}</span>
-    <s class="price__compare" data-price-compare aria-label="Original price">{% if use_currency_code %}{{ compare_at_price | money_with_currency }}{% else %}{{ compare_at_price | money }}{% endif %}</s>
-  {% else %}
-    {% if is_sale %}<s class="price__compare" data-price-compare aria-label="Original price">{% if use_currency_code %}{{ compare_at_price | money_with_currency }}{% else %}{{ compare_at_price | money }}{% endif %}</s>{% endif %}
-    <span class="price__current" data-price-current{% if is_sale %} aria-label="Sale price"{% endif %}>{% if use_currency_code %}{{ current_price | money_with_currency }}{% else %}{{ current_price | money }}{% endif %}</span>
-  {% endif %}
+  <span class="price__current" data-price-current{% if is_sale %} aria-label="Sale price"{% endif %}>{% if use_currency_code %}{{ current_price | money_with_currency }}{% else %}{{ current_price | money }}{% endif %}</span>
+  <s class="price__compare" data-price-compare aria-label="Original price"{% unless is_sale %} hidden{% endunless %}>{% if is_sale %}{% if use_currency_code %}{{ compare_at_price | money_with_currency }}{% else %}{{ compare_at_price | money }}{% endif %}{% endif %}</s>
 
   <span class="price__unit" data-price-unit{% unless price_variant.unit_price and price_variant.unit_price_measurement %} hidden{% endunless %}>
     {% if price_variant.unit_price and price_variant.unit_price_measurement %}

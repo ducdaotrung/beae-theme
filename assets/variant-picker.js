@@ -57,6 +57,7 @@ class VariantPicker extends HTMLElement {
     });
     this.idInput.dispatchEvent(new Event('change', { bubbles: true }));
     this.syncMedia(selected);
+    this.dispatchEvent(new CustomEvent('variant:change', { bubbles: true, detail: { variant: selected } }));
   }
 
   syncMedia(variant) {
@@ -69,3 +70,31 @@ class VariantPicker extends HTMLElement {
 }
 
 customElements.define('variant-picker', VariantPicker);
+
+document.addEventListener('variant:change', (event) => {
+  const price = document.querySelector('[data-price-context="product_page"]');
+  const dataElement = price?.querySelector('[data-price-variants]');
+  const variant = event.detail?.variant;
+  if (!price || !dataElement || !variant) return;
+
+  const variantData = JSON.parse(dataElement.textContent || '{}')[String(variant.id)];
+  if (!variantData) return;
+
+  const current = price.querySelector('[data-price-current]');
+  const compare = price.querySelector('[data-price-compare]');
+  const unit = price.querySelector('[data-price-unit]');
+  const status = price.querySelector('[data-price-status]');
+  const isSale = variantData.compare_at_price !== '';
+
+  current.textContent = variantData.price;
+  current.toggleAttribute('aria-label', isSale);
+  if (isSale) current.setAttribute('aria-label', 'Sale price');
+  compare.textContent = variantData.compare_at_price;
+  compare.hidden = !isSale;
+  unit.textContent = variantData.unit_price ? `${variantData.unit_price} / ${variantData.unit_reference === 1 ? '' : variantData.unit_reference}${variantData.unit}` : '';
+  unit.hidden = !variantData.unit_price;
+  status.hidden = variantData.available;
+  price.dataset.priceVariantId = String(variant.id);
+  price.classList.toggle('price--sale', isSale);
+  price.classList.toggle('price--regular', !isSale);
+});

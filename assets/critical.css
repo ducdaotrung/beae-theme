@@ -548,8 +548,25 @@ textarea[aria-invalid='true'] {
   justify-content: var(--pcard-alignment);
 }
 
-.product-card__price--sale > span { color: var(--badge-sale-price); }
-.product-card__price s { color: var(--body-color); opacity: 0.65; }
+.price {
+  align-items: baseline;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.price__current { order: 1; }
+.price__compare { color: var(--body-color); opacity: 0.65; order: 2; }
+.price[data-sale-first='false'] .price__compare { order: 1; }
+.price[data-sale-first='false'] .price__current { order: 2; }
+.price--sale .price__current { color: var(--sale-price-color); }
+.price__unit,
+.price__status {
+  color: var(--body-color);
+  font-size: var(--font-body-sm);
+  order: 3;
+}
+.price__status { color: var(--status-sold-out-color); }
 
 .product-card__swatches {
   display: flex;
