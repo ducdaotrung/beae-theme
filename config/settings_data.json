@@ -122,6 +122,11 @@
     "variant_label_spacing": 12,
     "variant_item_gap": 8,
     "variant_only_selected_media": false,
+    "swatch_style": "color",
+    "swatch_width_desktop": 40,
+    "swatch_width_mobile": 40,
+    "swatch_height_ratio": "3_1",
+    "swatch_selected_style": "underline",
     "color_schemes": {
       "scheme-1": {
         "settings": {

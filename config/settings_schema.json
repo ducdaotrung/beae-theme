@@ -1472,23 +1472,56 @@
     "settings": [
       {
         "type": "select",
-        "id": "swatch_shape",
-        "label": "Swatch shape",
+        "id": "swatch_style",
+        "label": "Swatch style",
         "options": [
-          { "value": "circle", "label": "Circle" },
-          { "value": "square", "label": "Square" }
+          { "value": "color", "label": "Color" },
+          { "value": "variant_image", "label": "Variant image" }
         ],
-        "default": "circle"
+        "default": "color",
+        "info": "Configure swatches for product cards in Product cards settings."
       },
       {
         "type": "range",
-        "id": "swatch_size",
-        "min": 24,
-        "max": 56,
-        "step": 2,
+        "id": "swatch_width_desktop",
+        "min": 16,
+        "max": 64,
+        "step": 1,
         "unit": "px",
-        "label": "Swatch size",
-        "default": 36
+        "label": "Desktop width",
+        "default": 40
+      },
+      {
+        "type": "range",
+        "id": "swatch_width_mobile",
+        "min": 16,
+        "max": 64,
+        "step": 1,
+        "unit": "px",
+        "label": "Mobile width",
+        "default": 40
+      },
+      {
+        "type": "select",
+        "id": "swatch_height_ratio",
+        "label": "Height ratio",
+        "options": [
+          { "value": "1_1", "label": "1:1" },
+          { "value": "3_2", "label": "3:2" },
+          { "value": "2_1", "label": "2:1" },
+          { "value": "3_1", "label": "3:1" }
+        ],
+        "default": "3_1"
+      },
+      {
+        "type": "select",
+        "id": "swatch_selected_style",
+        "label": "Selected variant style",
+        "options": [
+          { "value": "border", "label": "Border" },
+          { "value": "underline", "label": "Underline" }
+        ],
+        "default": "underline"
       }
     ]
   },
