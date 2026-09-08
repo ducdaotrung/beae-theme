@@ -25,11 +25,7 @@
       {% endif %}
     </a>
 
-    {% if settings.product_card_show_sale_badge and product.compare_at_price > product.price %}
-      <span class="product-card__badges"><span class="product-card__badge">Sale</span></span>
-    {% elsif settings.product_card_show_sold_out_badge and product.available == false %}
-      <span class="product-card__badges"><span class="product-card__badge">Sold out</span></span>
-    {% endif %}
+    {% render 'product-badges', product: product %}
 
     {% if settings.product_card_enable_quick_add and selected_variant.available %}
       <form class="product-card__quick-add" action="{{ routes.cart_add_url }}" method="post" data-quick-add>
