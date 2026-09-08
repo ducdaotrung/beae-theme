@@ -42,6 +42,8 @@
       {{ 'icon-cart.svg' | inline_asset_content }}
     </a>
   </div>
+
+  {% render 'social-links', wrapper_class: 'header__social' %}
 </header>
 
 {% stylesheet %}
@@ -79,7 +81,8 @@
     width: 2rem;
   }
   header .header__menu,
-  header .header__icons {
+  header .header__icons,
+  header .header__social {
     display: flex;
     gap: 1rem;
   }

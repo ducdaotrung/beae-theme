@@ -22,16 +22,7 @@
     {% endif %}
   </div>
 
-  {% if settings.social_show_icons %}
-    <nav class="footer__social" aria-label="Social media">
-      {% if settings.social_facebook != blank %}<a href="{{ settings.social_facebook }}" rel="noopener" target="_blank">Facebook</a>{% endif %}
-      {% if settings.social_instagram != blank %}<a href="{{ settings.social_instagram }}" rel="noopener" target="_blank">Instagram</a>{% endif %}
-      {% if settings.social_youtube != blank %}<a href="{{ settings.social_youtube }}" rel="noopener" target="_blank">YouTube</a>{% endif %}
-      {% if settings.social_tiktok != blank %}<a href="{{ settings.social_tiktok }}" rel="noopener" target="_blank">TikTok</a>{% endif %}
-      {% if settings.social_pinterest != blank %}<a href="{{ settings.social_pinterest }}" rel="noopener" target="_blank">Pinterest</a>{% endif %}
-      {% if settings.social_linkedin != blank %}<a href="{{ settings.social_linkedin }}" rel="noopener" target="_blank">LinkedIn</a>{% endif %}
-    </nav>
-  {% endif %}
+  {% render 'social-links', wrapper_class: 'footer__social' %}
 </footer>
 
 {% stylesheet %}
