@@ -24,6 +24,7 @@
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     <script src="{{ 'variant-picker.js' | asset_url }}" defer></script>
     <script src="{{ 'motion.js' | asset_url }}" defer></script>
+    <script src="{{ 'overlay.js' | asset_url }}" defer></script>
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}

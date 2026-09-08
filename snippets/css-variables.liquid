@@ -1,3 +1,13 @@
+{% liquid
+  assign overlay_scheme = settings.color_schemes.first
+  for scheme in settings.color_schemes
+    if scheme.id == settings.overlay_color_scheme
+      assign overlay_scheme = scheme
+      break
+    endif
+  endfor
+%}
+
 {% style %}
   {% if settings.type_heading_font != blank %}
     {{ settings.type_heading_font | font_face: font_display: 'swap' }}
@@ -57,8 +67,20 @@
     --tag-radius: var(--radius-{{ settings.shape_tags | default: 'square' }});
     --overlay-drawer-radius: var(--radius-{{ settings.shape_overlay_drawers | default: 'square' }});
     --overlay-bottom-sheet-radius: var(--radius-{{ settings.shape_overlay_bottom_sheets | default: 'slight' }});
-    --overlay-color: {{ settings.overlay_color | default: '#000000' }};
-    --overlay-opacity: {{ settings.overlay_opacity | default: 50 | divided_by: 100.0 }};
+    --overlay-color-scheme: {{ settings.overlay_color_scheme | default: 'scheme-1' }};
+    --overlay-background-color: {{ overlay_scheme.settings.background | default: '#FFFFFF' }};
+    --overlay-foreground-color: {{ overlay_scheme.settings.body | default: '#1C1B1A' }};
+    --overlay-border: {{ settings.popover_border_thickness | default: 0 }}px solid {{ overlay_scheme.settings.border | default: '#1C1B1A' }};
+    --overlay-backdrop-color: rgb(0 0 0 / 50%);
+    --overlay-backdrop-blur: {{ settings.overlay_backdrop_blur | default: 20 }}px;
+    --overlay-title-size: var(--font-{{ settings.overlay_title_size | default: 'heading-md' }});
+    --overlay-shadow: {% case settings.popover_shadow %}{% when 'extra-small' %}0 1px 4px rgb(0 0 0 / 8%){% when 'small' %}0 2px 8px rgb(0 0 0 / 12%){% when 'large' %}0 12px 32px rgb(0 0 0 / 20%){% when 'medium' %}0 6px 20px rgb(0 0 0 / 16%){% else %}none{% endcase %};
+    --drawer-padding-desktop: {% if settings.drawer_enable_padding_desktop == false %}0px{% else %}var(--page-margin){% endif %};
+    --drawer-padding-mobile: {% if settings.drawer_enable_padding_mobile == false %}0px{% else %}var(--page-margin){% endif %};
+    --overlay-z-backdrop: 100;
+    --overlay-z-popover: 110;
+    --overlay-z-drawer: 120;
+    --overlay-z-modal: 130;
     --font-body-base-size: {{ settings.paragraph_base_size | default: 14 }}px;
     --font-body-xs: calc(var(--font-body-base-size) * 0.7142857);
     --font-body-sm: calc(var(--font-body-base-size) * 0.8571428);

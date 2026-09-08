@@ -40,8 +40,8 @@ select {
 }
 
 dialog {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+  background-color: var(--overlay-background-color, var(--color-background));
+  color: var(--overlay-foreground-color, var(--color-foreground));
 }
 
 p {
@@ -177,6 +177,8 @@ button {
   animation: motion-block-enter var(--motion-duration-slow) var(--motion-ease-emphasized) both;
 }
 
+.motion-block { border-radius: var(--block-radius); }
+
 .accent-text,
 .eyebrow-text {
   font-family: var(--font-accent-family);
@@ -311,13 +313,38 @@ input[type='button'] {
   white-space: normal;
 }
 
-html[data-icon-style='filled'] svg {
-  stroke-width: var(--icon-stroke-width);
+.overlay {
+  background-color: var(--overlay-backdrop-color);
+  backdrop-filter: blur(var(--overlay-backdrop-blur));
+  inset: 0;
+  position: fixed;
+  z-index: var(--overlay-z-backdrop);
 }
 
-.overlay {
-  background-color: var(--overlay-color);
-  opacity: var(--overlay-opacity);
+dialog[data-overlay] {
+  border: var(--overlay-border);
+  box-shadow: var(--overlay-shadow);
+  color: var(--overlay-foreground-color);
+  max-height: min(90svh, 48rem);
+  max-width: min(calc(100% - 2 * var(--page-margin)), 48rem);
+  padding: var(--drawer-padding-desktop);
+  z-index: var(--overlay-z-modal);
+}
+
+dialog[data-overlay]::backdrop {
+  background: var(--overlay-backdrop-color);
+  backdrop-filter: blur(var(--overlay-backdrop-blur));
+}
+
+.overlay__title { font-size: var(--overlay-title-size); }
+.popover { border: var(--overlay-border); box-shadow: var(--overlay-shadow); z-index: var(--overlay-z-popover); }
+.drawer { padding: var(--drawer-padding-desktop); z-index: var(--overlay-z-drawer); }
+.bottom-sheet { padding: var(--drawer-padding-desktop); z-index: var(--overlay-z-drawer); }
+
+@media screen and (max-width: 749px) {
+  dialog[data-overlay],
+  .drawer,
+  .bottom-sheet { padding: var(--drawer-padding-mobile); }
 }
 
 .form__wrapper,
@@ -612,6 +639,14 @@ textarea[aria-invalid='true'] {
 
 .social-links__icon svg { display: block; height: 100%; width: 100%; }
 .social-links__item:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+.icon {
+  color: currentColor;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.icon svg { display: block; max-width: 100%; }
 
 .eyebrow-text,
 .subheading { border-radius: var(--subheading-radius); }
