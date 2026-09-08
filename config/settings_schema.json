@@ -1056,6 +1056,215 @@
     "name": "Product cards",
     "settings": [
       {
+        "type": "select",
+        "id": "product_card_style",
+        "label": "Style",
+        "options": [
+          { "value": "standard", "label": "Standard" },
+          { "value": "card", "label": "Card" }
+        ],
+        "default": "standard"
+      },
+      {
+        "type": "range",
+        "id": "product_card_border_width",
+        "label": "Border thickness",
+        "min": 0,
+        "max": 3,
+        "step": 1,
+        "unit": "px",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "product_card_shadow",
+        "label": "Shadow",
+        "options": [
+          { "value": "none", "label": "None" },
+          { "value": "subtle", "label": "Subtle" },
+          { "value": "strong", "label": "Strong" }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "color_scheme",
+        "id": "product_card_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "select",
+        "id": "product_card_title_font",
+        "label": "Product title font",
+        "options": [
+          { "value": "display", "label": "Display" },
+          { "value": "heading", "label": "Heading" },
+          { "value": "body", "label": "Body" }
+        ],
+        "default": "display"
+      },
+      {
+        "type": "range",
+        "id": "product_card_title_size_desktop",
+        "label": "Product title size",
+        "min": 12,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "product_card_title_size_mobile",
+        "label": "Product title size (mobile)",
+        "min": 12,
+        "max": 28,
+        "step": 1,
+        "unit": "px",
+        "default": 18
+      },
+      {
+        "type": "select",
+        "id": "product_card_alignment",
+        "label": "Alignment",
+        "options": [
+          { "value": "left", "label": "Left" },
+          { "value": "center", "label": "Center" },
+          { "value": "right", "label": "Right" }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "select",
+        "id": "product_card_title_line_limit",
+        "label": "Title line limit",
+        "options": [
+          { "value": "none", "label": "No limit" },
+          { "value": "1", "label": "1 line" },
+          { "value": "2", "label": "2 lines" },
+          { "value": "3", "label": "3 lines" }
+        ],
+        "default": "none"
+      },
+      {
+        "type": "select",
+        "id": "product_card_image_ratio",
+        "label": "Image ratio",
+        "options": [
+          { "value": "original", "label": "Original" },
+          { "value": "1_1", "label": "1:1" },
+          { "value": "3_2", "label": "3:2" },
+          { "value": "2_1", "label": "2:1" }
+        ],
+        "default": "original"
+      },
+      {
+        "type": "range",
+        "id": "product_card_content_spacing_desktop",
+        "label": "Content spacing (desktop)",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "product_card_content_spacing_mobile",
+        "label": "Content spacing (mobile)",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "product_card_content_gap_desktop",
+        "label": "Content gap (desktop)",
+        "min": 0,
+        "max": 32,
+        "step": 1,
+        "unit": "px",
+        "default": 14
+      },
+      {
+        "type": "range",
+        "id": "product_card_content_gap_mobile",
+        "label": "Content gap (mobile)",
+        "min": 0,
+        "max": 24,
+        "step": 1,
+        "unit": "px",
+        "default": 14
+      },
+      {
+        "type": "range",
+        "id": "product_card_info_gap_desktop",
+        "label": "Product info gap (desktop)",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "product_card_info_gap_mobile",
+        "label": "Product info gap (mobile)",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "default": 4
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_enable_quick_add",
+        "label": "Enable quick add",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_quick_add_mobile",
+        "label": "Enable quick add on mobile",
+        "default": false
+      },
+      {
+        "type": "color_scheme",
+        "id": "product_card_quick_add_color_scheme",
+        "label": "Button color scheme",
+        "default": "scheme-1"
+      },
+      {
+        "type": "select",
+        "id": "product_card_quick_add_desktop_style",
+        "label": "Desktop button style",
+        "options": [
+          { "value": "icon", "label": "Icon" },
+          { "value": "text", "label": "Text" }
+        ],
+        "default": "text"
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_quick_add_full_width",
+        "label": "Full width button",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_enable_quick_view",
+        "label": "Enable quick view",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_quick_view_mobile",
+        "label": "Enable quick view on mobile",
+        "default": false
+      },
+      {
         "type": "checkbox",
         "id": "product_card_show_vendor",
         "label": "Show vendor",
@@ -1066,6 +1275,111 @@
         "id": "product_card_show_secondary_image",
         "label": "Show secondary image",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_sale_badge",
+        "label": "Show sale badge",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_sold_out_badge",
+        "label": "Show sold out badge",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_type",
+        "label": "Show type",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "product_card_show_swatches",
+        "label": "Show swatches",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "product_card_swatch_position",
+        "label": "Swatch position",
+        "options": [
+          { "value": "top", "label": "Top" },
+          { "value": "bottom", "label": "Bottom" }
+        ],
+        "default": "bottom"
+      },
+      {
+        "type": "select",
+        "id": "product_card_swatch_type",
+        "label": "Swatch type",
+        "options": [
+          { "value": "color", "label": "Color" },
+          { "value": "variant_image", "label": "Variant image" }
+        ],
+        "default": "color"
+      },
+      {
+        "type": "range",
+        "id": "product_card_swatch_limit",
+        "label": "Swatch limit",
+        "min": 2,
+        "max": 6,
+        "step": 1,
+        "default": 4
+      },
+      {
+        "type": "range",
+        "id": "product_card_swatch_gap",
+        "label": "Swatch item gap",
+        "min": 0,
+        "max": 16,
+        "step": 1,
+        "unit": "px",
+        "default": 8
+      },
+      {
+        "type": "range",
+        "id": "product_card_swatch_width_desktop",
+        "label": "Swatch desktop width",
+        "min": 16,
+        "max": 48,
+        "step": 1,
+        "unit": "px",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "product_card_swatch_width_mobile",
+        "label": "Swatch mobile width",
+        "min": 16,
+        "max": 48,
+        "step": 1,
+        "unit": "px",
+        "default": 30
+      },
+      {
+        "type": "select",
+        "id": "product_card_swatch_height_ratio",
+        "label": "Swatch height ratio",
+        "options": [
+          { "value": "1_1", "label": "1:1" },
+          { "value": "3_2", "label": "3:2" },
+          { "value": "2_1", "label": "2:1" },
+          { "value": "3_1", "label": "3:1" }
+        ],
+        "default": "1_1"
+      },
+      {
+        "type": "select",
+        "id": "product_card_swatch_selected_style",
+        "label": "Selected variant style",
+        "options": [
+          { "value": "border", "label": "Border" },
+          { "value": "underline", "label": "Underline" }
+        ],
+        "default": "border"
       }
     ]
   },
