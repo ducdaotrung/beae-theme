@@ -35,13 +35,13 @@
       <form class="product-card__quick-add" action="{{ routes.cart_add_url }}" method="post" data-quick-add>
         <input type="hidden" name="id" value="{{ selected_variant.id }}">
         <button class="btn btn--primary{% if settings.product_card_quick_add_full_width %} product-card__quick-add-button--full{% endif %}" type="submit">
-          {% if settings.product_card_quick_add_desktop_style == 'icon' %}<span aria-hidden="true">+</span><span class="visually-hidden">Add {{ product.title | escape }} to cart</span>{% else %}{{ 'products.product.add_to_cart' | t | default: 'Add to cart' }}{% endif %}
+          {% if settings.product_card_quick_add_desktop_style == 'icon' %}<span aria-hidden="true">+</span><span class="visually-hidden">Add {{ product.title | escape }} to cart</span>{% else %}Add to cart{% endif %}
         </button>
       </form>
     {% endif %}
 
     {% if settings.product_card_enable_quick_view %}
-      <a class="product-card__quick-view btn btn--tertiary" href="{{ product.url }}" data-quick-view>{{ 'products.product.quick_view' | t | default: 'Quick view' }}</a>
+      <a class="product-card__quick-view btn btn--tertiary" href="{{ product.url }}" data-quick-view>Quick view</a>
     {% endif %}
   </div>
 
