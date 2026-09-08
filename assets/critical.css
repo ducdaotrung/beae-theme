@@ -189,8 +189,10 @@ input[type='button'] {
   cursor: pointer;
   display: inline-flex;
   flex: 0 0 auto;
+  font-size: var(--button-font-size);
   gap: 0.5rem;
   justify-content: center;
+  letter-spacing: var(--button-letter-spacing);
   line-height: 1;
   min-height: var(--button-height);
   padding: 0 var(--button-padding-inline-desktop);
@@ -206,6 +208,7 @@ input[type='button'] {
   border-width: var(--button-primary-border-width);
   border-color: var(--button-primary-border);
   color: var(--button-primary-text);
+  --button-loading-color: var(--button-primary-text);
   font-family: var(--button-primary-font-family);
   text-transform: var(--button-primary-text-transform);
 }
@@ -215,6 +218,7 @@ input[type='button'] {
   border-width: var(--button-secondary-border-width);
   border-color: var(--button-secondary-border);
   color: var(--button-secondary-text);
+  --button-loading-color: var(--button-secondary-text);
   font-family: var(--button-secondary-font-family);
   text-transform: var(--button-secondary-text-transform);
 }
@@ -223,6 +227,7 @@ input[type='button'] {
   background: var(--button-tertiary-background);
   border-color: var(--button-tertiary-border);
   color: var(--button-tertiary-text);
+  --button-loading-color: var(--button-tertiary-text);
   font-family: var(--button-tertiary-font-family);
   text-transform: var(--button-tertiary-text-transform);
   text-decoration-line: var(--button-tertiary-show-underline);
@@ -267,7 +272,7 @@ input[type='button'] {
 .btn.is-loading::after,
 .btn[aria-busy='true']::after {
   animation: button-spinner 700ms linear infinite;
-  border: 2px solid currentcolor;
+  border: 2px solid var(--button-loading-color, currentcolor);
   border-right-color: transparent;
   border-radius: 50%;
   content: '';
