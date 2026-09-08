@@ -1867,14 +1867,14 @@
     "name": "Icons",
     "settings": [
       {
-        "type": "select",
-        "id": "icon_style",
-        "label": "Icon style",
-        "options": [
-          { "value": "outline", "label": "Outline" },
-          { "value": "filled", "label": "Filled" }
-        ],
-        "default": "outline"
+        "type": "range",
+        "id": "icon_thickness",
+        "label": "Icon thickness",
+        "min": 50,
+        "max": 200,
+        "step": 5,
+        "unit": "%",
+        "default": 120
       }
     ]
   },

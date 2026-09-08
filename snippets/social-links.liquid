@@ -27,9 +27,9 @@
       {% assign social_url = settings[social_id] %}
       {% if social_url != blank %}
       <a class="social-links__item" href="{{ social_url | escape }}" target="_blank" rel="noopener noreferrer" aria-label="{{ social_label | escape }}">
-        <span class="social-links__icon" data-icon-key="{{ icon_key }}" aria-hidden="true">
+        <span class="icon social-links__icon" data-icon-key="{{ icon_key }}" aria-hidden="true">
           <svg viewBox="0 0 24 24" focusable="false" role="presentation">
-            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5" />
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="var(--icon-stroke-width)" />
             <text x="12" y="15" text-anchor="middle" fill="currentColor" font-size="7" font-family="Arial, sans-serif">{{ icon_key | replace: '-', ' ' | truncate: 3, '' }}</text>
           </svg>
         </span>

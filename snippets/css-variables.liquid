@@ -37,7 +37,8 @@
     --motion-ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
     --motion-distance-sm: 8px;
     --motion-distance-md: 16px;
-    --icon-stroke-width: {% if settings.icon_style == 'filled' %}2.5{% else %}1.5{% endif %};
+    --icon-thickness: {{ settings.icon_thickness | default: 120 }}%;
+    --icon-stroke-width: {{ settings.icon_thickness | default: 120 | times: 0.015 }};
     --radius-square: 0px;
     --radius-slight: 4px;
     --radius-rounded: 8px;
