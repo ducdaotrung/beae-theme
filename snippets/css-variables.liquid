@@ -128,7 +128,7 @@
     --variant-border-width: var(--input-border-width);
     --swatch-width: {{ settings.swatch_width_desktop | default: 40 }}px;
     --swatch-width-mobile: {{ settings.swatch_width_mobile | default: 40 }}px;
-    --swatch-height-ratio: {% case settings.swatch_height_ratio %}{% when '3_2' %}66.6667%{% when '2_1' %}50%{% when '3_1' %}33.3333%{% else %}100%{% endcase %};
+    --swatch-height-ratio: {% case settings.swatch_height_ratio %}{% when '3_2' %}3 / 2{% when '2_1' %}2 / 1{% when '3_1' %}3 / 1{% else %}1 / 1{% endcase %};
     --swatch-selected-style: {{ settings.swatch_selected_style | default: 'underline' }};
     --swatch-radius: {{ settings.global_corner_radius | default: 4 }}px;
     --page-width: {{ settings.page_width | default: 1600 }}px;

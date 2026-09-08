@@ -540,10 +540,11 @@ textarea[aria-invalid='true'] {
 .product-card__swatches--bottom { order: 1; }
 
 .product-card__swatch {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: var(--pcard-swatch-height-ratio);
   background-position: center;
   background-size: cover;
   border: 1px solid transparent;
+  border-radius: var(--swatch-radius);
   display: block;
   height: var(--pcard-swatch-width);
   outline-offset: 2px;
