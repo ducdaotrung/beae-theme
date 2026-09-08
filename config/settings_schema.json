@@ -1882,20 +1882,75 @@
     "name": "Overlay & Layering",
     "settings": [
       {
-        "type": "color",
-        "id": "overlay_color",
-        "default": "#000000",
-        "label": "Overlay color"
+        "type": "color_scheme",
+        "id": "overlay_color_scheme",
+        "label": "Color scheme",
+        "default": "scheme-1"
       },
       {
         "type": "range",
-        "id": "overlay_opacity",
+        "id": "overlay_backdrop_blur",
         "min": 0,
-        "max": 100,
-        "step": 5,
-        "unit": "%",
-        "label": "Overlay opacity",
-        "default": 50
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Backdrop blur",
+        "default": 20
+      },
+      {
+        "type": "select",
+        "id": "overlay_title_size",
+        "label": "Title size",
+        "options": [
+          { "value": "heading-lg", "label": "Heading 3" },
+          { "value": "heading-md", "label": "Heading 4" },
+          { "value": "heading-sm", "label": "Heading 5" },
+          { "value": "heading-xs", "label": "Heading 6" }
+        ],
+        "default": "heading-md"
+      },
+      {
+        "type": "header",
+        "content": "Popovers"
+      },
+      {
+        "type": "range",
+        "id": "popover_border_thickness",
+        "min": 0,
+        "max": 4,
+        "step": 1,
+        "unit": "px",
+        "label": "Border thickness",
+        "default": 0
+      },
+      {
+        "type": "select",
+        "id": "popover_shadow",
+        "label": "Shadow",
+        "options": [
+          { "value": "none", "label": "None" },
+          { "value": "extra-small", "label": "Extra small" },
+          { "value": "small", "label": "Small" },
+          { "value": "medium", "label": "Medium" },
+          { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+      },
+      {
+        "type": "header",
+        "content": "Drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "drawer_enable_padding_desktop",
+        "label": "Enable padding on desktop",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "drawer_enable_padding_mobile",
+        "label": "Enable padding on mobile",
+        "default": false
       }
     ]
   }
