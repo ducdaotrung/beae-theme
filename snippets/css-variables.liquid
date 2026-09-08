@@ -112,11 +112,11 @@
     --pcard-info-gap: {{ settings.product_card_info_gap_desktop | default: 4 }}px;
     --pcard-info-gap-mobile: {{ settings.product_card_info_gap_mobile | default: 4 }}px;
     --pcard-swatch-gap: {{ settings.product_card_swatch_gap | default: 8 }}px;
-    --pcard-swatch-width: {{ settings.product_card_swatch_width_desktop | default: 30 }}px;
-    --pcard-swatch-width-mobile: {{ settings.product_card_swatch_width_mobile | default: 30 }}px;
-    --pcard-swatch-height-ratio: {% case settings.product_card_swatch_height_ratio %}{% when '3_2' %}66.6667%{% when '2_1' %}50%{% when '3_1' %}33.3333%{% else %}100%{% endcase %};
-    --pcard-swatch-selected-style: {{ settings.product_card_swatch_selected_style | default: 'border' }};
-    --pcard-swatch-selected-border: {% if settings.product_card_swatch_selected_style == 'underline' %}0 2px 0 0 var(--accent-color){% else %}0 0 0 1px var(--accent-color){% endif %};
+    --pcard-swatch-width: var(--swatch-width);
+    --pcard-swatch-width-mobile: var(--swatch-width-mobile);
+    --pcard-swatch-height-ratio: var(--swatch-height-ratio);
+    --pcard-swatch-selected-style: var(--swatch-selected-style);
+    --pcard-swatch-selected-border: {% if settings.swatch_selected_style == 'underline' %}0 2px 0 0 var(--accent-color){% else %}0 0 0 1px var(--accent-color){% endif %};
     --pcard-quick-add-mobile-display: {% if settings.product_card_quick_add_mobile %}block{% else %}none{% endif %};
     --pcard-quick-view-mobile-display: {% if settings.product_card_quick_view_mobile %}block{% else %}none{% endif %};
     --variant-height: {{ settings.variant_height_desktop | default: 44 }}px;
@@ -126,6 +126,11 @@
     --variant-item-gap: {{ settings.variant_item_gap | default: 8 }}px;
     --variant-radius: var(--input-radius);
     --variant-border-width: var(--input-border-width);
+    --swatch-width: {{ settings.swatch_width_desktop | default: 40 }}px;
+    --swatch-width-mobile: {{ settings.swatch_width_mobile | default: 40 }}px;
+    --swatch-height-ratio: {% case settings.swatch_height_ratio %}{% when '3_2' %}66.6667%{% when '2_1' %}50%{% when '3_1' %}33.3333%{% else %}100%{% endcase %};
+    --swatch-selected-style: {{ settings.swatch_selected_style | default: 'underline' }};
+    --swatch-radius: {{ settings.global_corner_radius | default: 4 }}px;
     --page-width: {{ settings.page_width | default: 1600 }}px;
     --page-margin-min: {{ settings.page_margin_min | default: 16 }}px;
     --page-margin-desktop: {{ settings.page_margin_desktop | default: 48 }}px;
@@ -185,6 +190,7 @@
       --pcard-content-gap: var(--pcard-content-gap-mobile);
       --pcard-info-gap: var(--pcard-info-gap-mobile);
       --pcard-swatch-width: var(--pcard-swatch-width-mobile);
+      --swatch-width: var(--swatch-width-mobile);
       --variant-height: var(--variant-height-mobile);
     }
   }
