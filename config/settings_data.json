@@ -150,6 +150,9 @@
     "badge_tag_2_background": "#1C1B1A",
     "badge_tag_2_color": "#FFFFFF",
     "badge_tag_2_priority": 2,
+    "price_sale_first": true,
+    "price_product_card_currency_code": false,
+    "price_product_page_currency_code": false,
     "color_schemes": {
       "scheme-1": {
         "settings": {
