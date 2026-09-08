@@ -68,6 +68,16 @@
     "button_tertiary_text_case": "uppercase",
     "button_tertiary_show_underline": true,
     "button_tertiary_underline_offset": 3,
+    "form_input_style": "outline",
+    "input_height_desktop": 48,
+    "input_height_mobile": 44,
+    "input_radius": 8,
+    "input_border_width": 1,
+    "input_background_color": "#FFFFFF",
+    "form_label_typography": "body",
+    "form_input_typography": "body",
+    "form_helper_typography": "body",
+    "form_error_typography": "body",
     "color_schemes": {
       "scheme-1": {
         "settings": {

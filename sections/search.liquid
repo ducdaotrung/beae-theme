@@ -7,8 +7,8 @@
 
 <h1>{{ 'search.title' | t }}</h1>
 
-<form action="{{ routes.search_url }}" method="get" role="search">
-  <input
+<form class="form__wrapper" action="{{ routes.search_url }}" method="get" role="search">
+  <input class="form__control"
     type="search"
     size="50"
     name="q"
