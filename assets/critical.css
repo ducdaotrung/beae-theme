@@ -773,9 +773,9 @@ textarea[aria-invalid='true'] {
     scroll-behavior: auto;
   }
 
-  .btn,
-  .btn.is-loading::after,
-  .btn[aria-busy='true']::after {
+  html[data-respect-reduced-motion='true'] .btn,
+  html[data-respect-reduced-motion='true'] .btn.is-loading::after,
+  html[data-respect-reduced-motion='true'] .btn[aria-busy='true']::after {
     animation: none;
     transition: none;
   }
