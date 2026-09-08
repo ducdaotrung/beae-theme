@@ -421,9 +421,13 @@
         "default": "normal"
       },
       {
+        "type": "header",
+        "content": "H1 (display)"
+      },
+      {
         "type": "range",
         "id": "heading_display_size_desktop",
-        "label": "H1 (display) - Font size (desktop)",
+        "label": "Font size (desktop)",
         "min": 20,
         "max": 120,
         "step": 1,
@@ -433,7 +437,7 @@
       {
         "type": "range",
         "id": "heading_display_size_mobile",
-        "label": "H1 (display) - Font size (mobile)",
+        "label": "Font size (mobile)",
         "min": 16,
         "max": 72,
         "step": 1,
@@ -443,7 +447,7 @@
       {
         "type": "select",
         "id": "heading_display_line_height",
-        "label": "H1 (display) - Line height",
+        "label": "Line height",
         "options": [
           { "value": "tight", "label": "Tight" },
           { "value": "normal", "label": "Normal" },
@@ -454,7 +458,7 @@
       {
         "type": "select",
         "id": "heading_display_text_case",
-        "label": "H1 (display) - Text case",
+        "label": "Text case",
         "options": [
           { "value": "original", "label": "Original" },
           { "value": "uppercase", "label": "Uppercase" },
@@ -463,9 +467,13 @@
         "default": "original"
       },
       {
+        "type": "header",
+        "content": "H2 (xl)"
+      },
+      {
         "type": "range",
         "id": "heading_xl_size_desktop",
-        "label": "H2 (xl) - Font size (desktop)",
+        "label": "Font size (desktop)",
         "min": 16,
         "max": 80,
         "step": 1,
@@ -475,7 +483,7 @@
       {
         "type": "range",
         "id": "heading_xl_size_mobile",
-        "label": "H2 (xl) - Font size (mobile)",
+        "label": "Font size (mobile)",
         "min": 14,
         "max": 56,
         "step": 1,
@@ -485,7 +493,7 @@
       {
         "type": "select",
         "id": "heading_xl_line_height",
-        "label": "H2 (xl) - Line height",
+        "label": "Line height",
         "options": [
           { "value": "tight", "label": "Tight" },
           { "value": "normal", "label": "Normal" },
@@ -496,7 +504,7 @@
       {
         "type": "select",
         "id": "heading_xl_text_case",
-        "label": "H2 (xl) - Text case",
+        "label": "Text case",
         "options": [
           { "value": "original", "label": "Original" },
           { "value": "uppercase", "label": "Uppercase" },
@@ -505,9 +513,13 @@
         "default": "original"
       },
       {
+        "type": "header",
+        "content": "H3 (lg)"
+      },
+      {
         "type": "range",
         "id": "heading_lg_size_desktop",
-        "label": "H3 (lg) - Font size (desktop)",
+        "label": "Font size (desktop)",
         "min": 16,
         "max": 64,
         "step": 1,
@@ -517,7 +529,7 @@
       {
         "type": "range",
         "id": "heading_lg_size_mobile",
-        "label": "H3 (lg) - Font size (mobile)",
+        "label": "Font size (mobile)",
         "min": 14,
         "max": 48,
         "step": 1,
@@ -527,7 +539,7 @@
       {
         "type": "select",
         "id": "heading_lg_line_height",
-        "label": "H3 (lg) - Line height",
+        "label": "Line height",
         "options": [
           { "value": "tight", "label": "Tight" },
           { "value": "normal", "label": "Normal" },
@@ -538,7 +550,7 @@
       {
         "type": "select",
         "id": "heading_lg_text_case",
-        "label": "H3 (lg) - Text case",
+        "label": "Text case",
         "options": [
           { "value": "original", "label": "Original" },
           { "value": "uppercase", "label": "Uppercase" },
@@ -547,9 +559,13 @@
         "default": "original"
       },
       {
+        "type": "header",
+        "content": "H4 (md)"
+      },
+      {
         "type": "range",
         "id": "heading_md_size_desktop",
-        "label": "H4 (md) - Font size (desktop)",
+        "label": "Font size (desktop)",
         "min": 14,
         "max": 52,
         "step": 1,
@@ -559,7 +575,7 @@
       {
         "type": "range",
         "id": "heading_md_size_mobile",
-        "label": "H4 (md) - Font size (mobile)",
+        "label": "Font size (mobile)",
         "min": 12,
         "max": 40,
         "step": 1,
@@ -569,7 +585,7 @@
       {
         "type": "select",
         "id": "heading_md_line_height",
-        "label": "H4 (md) - Line height",
+        "label": "Line height",
         "options": [
           { "value": "tight", "label": "Tight" },
           { "value": "normal", "label": "Normal" },
@@ -580,7 +596,7 @@
       {
         "type": "select",
         "id": "heading_md_text_case",
-        "label": "H4 (md) - Text case",
+        "label": "Text case",
         "options": [
           { "value": "original", "label": "Original" },
           { "value": "uppercase", "label": "Uppercase" },
@@ -589,9 +605,13 @@
         "default": "original"
       },
       {
+        "type": "header",
+        "content": "H5 (sm)"
+      },
+      {
         "type": "range",
         "id": "heading_sm_size_desktop",
-        "label": "H5 (sm) - Font size (desktop)",
+        "label": "Font size (desktop)",
         "min": 12,
         "max": 40,
         "step": 1,
@@ -601,7 +621,7 @@
       {
         "type": "range",
         "id": "heading_sm_size_mobile",
-        "label": "H5 (sm) - Font size (mobile)",
+        "label": "Font size (mobile)",
         "min": 12,
         "max": 32,
         "step": 1,
@@ -611,7 +631,7 @@
       {
         "type": "select",
         "id": "heading_sm_line_height",
-        "label": "H5 (sm) - Line height",
+        "label": "Line height",
         "options": [
           { "value": "tight", "label": "Tight" },
           { "value": "normal", "label": "Normal" },
@@ -622,7 +642,7 @@
       {
         "type": "select",
         "id": "heading_sm_text_case",
-        "label": "H5 (sm) - Text case",
+        "label": "Text case",
         "options": [
           { "value": "original", "label": "Original" },
           { "value": "uppercase", "label": "Uppercase" },
@@ -631,9 +651,13 @@
         "default": "original"
       },
       {
+        "type": "header",
+        "content": "H6 (xs)"
+      },
+      {
         "type": "range",
         "id": "heading_xs_size_desktop",
-        "label": "H6 (xs) - Font size (desktop)",
+        "label": "Font size (desktop)",
         "min": 10,
         "max": 32,
         "step": 1,
@@ -643,7 +667,7 @@
       {
         "type": "range",
         "id": "heading_xs_size_mobile",
-        "label": "H6 (xs) - Font size (mobile)",
+        "label": "Font size (mobile)",
         "min": 10,
         "max": 28,
         "step": 1,
@@ -653,7 +677,7 @@
       {
         "type": "select",
         "id": "heading_xs_line_height",
-        "label": "H6 (xs) - Line height",
+        "label": "Line height",
         "options": [
           { "value": "tight", "label": "Tight" },
           { "value": "normal", "label": "Normal" },
@@ -664,7 +688,7 @@
       {
         "type": "select",
         "id": "heading_xs_text_case",
-        "label": "H6 (xs) - Text case",
+        "label": "Text case",
         "options": [
           { "value": "original", "label": "Original" },
           { "value": "uppercase", "label": "Uppercase" },
