@@ -15,8 +15,8 @@
 
 <div class="product-info">
   <h1>{{ product.title }}</h1>
-  <div class="product__price{% if product.compare_at_price > product.price %} product__price--sale{% endif %}">
-    {% render 'price', product: product %}
+  <div class="product__price{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %} product__price--sale{% endif %}">
+    {% render 'price', product: product, variant: product.selected_or_first_available_variant, context: 'product_page' %}
   </div>
   <p>{{ product.description }}</p>
 </div>
