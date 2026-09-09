@@ -1,0 +1,25 @@
+{% assign line = cart.items.first %}
+{% assign line_quantity_id = 'CartLineQuantity-' | append: line.index %}
+{% if line != blank %}
+  <li class="cart-line-item-block" {{ block.shopify_attributes }}>
+    {% if line.image != blank %}{{ line.image | image_url: width: 160 | image_tag: loading: 'lazy', alt: line.title }}{% endif %}
+    <div class="cart-line-item-block__content">
+      <a href="{{ line.url }}">{{ line.product.title | escape }}</a>
+      {% if line.variant.title != 'Default Title' %}<p>{{ line.variant.title | escape }}</p>{% endif %}
+      <p>{{ line.final_line_price | money }}</p>
+      {% render 'quantity-selector', id: line_quantity_id, name: 'updates[]', value: line.quantity, min: 0, label: 'Quantity' %}
+      <a href="{{ line.url_to_remove }}">{{ 'cart.remove' | t }}</a>
+    </div>
+  </li>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Cart Line Item",
+  "settings": [
+    { "type": "checkbox", "id": "show_variant", "label": "Show variant", "default": true },
+    { "type": "checkbox", "id": "show_vendor", "label": "Show vendor", "default": false }
+  ],
+  "presets": [{ "name": "Cart Line Item", "category": "Commerce" }]
+}
+{% endschema %}

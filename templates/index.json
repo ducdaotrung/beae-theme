@@ -11,7 +11,35 @@
   "sections": {
     "main": {
       "type": "image-with-text",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "eyebrow": {
+          "type": "eyebrow",
+          "settings": {}
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "text": "<p>Image with text</p>"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand or product with your customers.</p>"
+          }
+        },
+        "buttons": {
+          "type": "buttons",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "heading",
+        "text",
+        "buttons"
+      ]
     }
   },
   "order": [

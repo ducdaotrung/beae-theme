@@ -1,0 +1,22 @@
+{% liquid
+  assign price_product = block.settings.product | default: product
+  assign price_variant = price_product.selected_or_first_available_variant
+  assign price_context = block.settings.context | default: 'product_card'
+%}
+{% if price_variant != blank and price_variant.price != blank %}
+  <div class="product-price-block product-price-block--{{ block.settings.display_mode | default: 'current' }}" {{ block.shopify_attributes }}>
+    {% render 'price', product: price_product, variant: price_variant, context: price_context %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Product Price",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product (optional)" },
+    { "type": "select", "id": "display_mode", "label": "Display mode", "options": [{ "value": "current", "label": "Current price" }, { "value": "compare", "label": "Compare-at price" }, { "value": "range", "label": "Price range" }, { "value": "unit", "label": "Unit price" }], "default": "current" },
+    { "type": "select", "id": "context", "label": "Context", "options": [{ "value": "product_card", "label": "Product card" }, { "value": "product_page", "label": "Product page" }], "default": "product_card" }
+  ],
+  "presets": [{ "name": "Product Price", "category": "Commerce" }]
+}
+{% endschema %}

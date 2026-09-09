@@ -17,7 +17,15 @@
   {% assign button_2_valid = true %}
 {% endif %}
 
-{% if button_1_valid or button_2_valid %}
+{% assign show_editor_placeholder = false %}
+{% if request.design_mode and block.settings.button_1_label != blank and block.settings.button_1_link == blank %}
+  {% assign show_editor_placeholder = true %}
+{% endif %}
+{% if request.design_mode and block.settings.button_2_label != blank and block.settings.button_2_link == blank %}
+  {% assign show_editor_placeholder = true %}
+{% endif %}
+
+{% if button_1_valid or button_2_valid or show_editor_placeholder %}
   {% assign buttons_direction = block.settings.direction | default: 'row' %}
   {% assign buttons_mobile_direction = block.settings.mobile_stacking | default: 'stack' %}
   {% assign buttons_width = block.settings.width | default: 'fit' %}
@@ -49,10 +57,10 @@
     "
     {{ block.shopify_attributes }}
   >
-    {% if button_1_valid %}
+    {% if button_1_valid or show_editor_placeholder and block.settings.button_1_label != blank %}
       <a
-        class="btn btn--{{ block.settings.button_1_style | default: 'primary' }} buttons-block__button"
-        href="{{ block.settings.button_1_link }}"
+        class="btn btn--{{ block.settings.button_1_style | default: 'primary' }} buttons-block__button{% unless button_1_valid %} buttons-block__button--placeholder{% endunless %}"
+        {% if button_1_valid %}href="{{ block.settings.button_1_link }}"{% else %}href="#" aria-disabled="true"{% endif %}
         {% if block.settings.button_1_open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
       >
         <span class="buttons-block__label">{{ block.settings.button_1_label | escape }}</span>
@@ -62,10 +70,10 @@
       </a>
     {% endif %}
 
-    {% if button_2_valid %}
+    {% if button_2_valid or show_editor_placeholder and block.settings.button_2_label != blank %}
       <a
-        class="btn btn--{{ block.settings.button_2_style | default: 'secondary' }} buttons-block__button"
-        href="{{ block.settings.button_2_link }}"
+        class="btn btn--{{ block.settings.button_2_style | default: 'secondary' }} buttons-block__button{% unless button_2_valid %} buttons-block__button--placeholder{% endunless %}"
+        {% if button_2_valid %}href="{{ block.settings.button_2_link }}"{% else %}href="#" aria-disabled="true"{% endif %}
         {% if block.settings.button_2_open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
       >
         <span class="buttons-block__label">{{ block.settings.button_2_label | escape }}</span>
@@ -114,6 +122,12 @@
     stroke-width: var(--icon-stroke-width, 1.8);
     fill: none;
     width: 1em;
+  }
+
+  .buttons-block__button--placeholder {
+    cursor: not-allowed;
+    opacity: 0.55;
+    pointer-events: none;
   }
 
   @media screen and (max-width: 767.98px) {

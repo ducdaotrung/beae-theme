@@ -1,0 +1,13 @@
+{% liquid
+  assign quantity_label = label | default: 'Quantity'
+  assign quantity_name = name | default: 'quantity'
+  assign quantity_value = value | default: 1
+  assign quantity_min = min | default: 1
+  assign quantity_max = max
+  assign quantity_step = step | default: 1
+  assign quantity_id = id | default: 'Quantity'
+%}
+<div class="quantity-selector{% if compact %} quantity-selector--compact{% endif %}">
+  <label class="form__label" for="{{ quantity_id }}">{{ quantity_label | escape }}</label>
+  <input id="{{ quantity_id }}" class="form__control" type="number" name="{{ quantity_name }}" value="{{ quantity_value }}" min="{{ quantity_min }}" step="{{ quantity_step }}"{% if quantity_max != blank %} max="{{ quantity_max }}"{% endif %} inputmode="numeric">
+</div>

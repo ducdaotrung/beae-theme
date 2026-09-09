@@ -1,0 +1,17 @@
+{% assign quantity_id = 'BlockQuantity-' | append: block.id %}
+{% render 'quantity-selector', id: quantity_id, label: block.settings.label, min: block.settings.min, max: block.settings.max, step: block.settings.step, value: block.settings.default_value, compact: block.settings.compact %}
+
+{% schema %}
+{
+  "name": "Quantity Selector",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Quantity" },
+    { "type": "range", "id": "min", "label": "Minimum", "min": 0, "max": 100, "step": 1, "default": 1 },
+    { "type": "range", "id": "max", "label": "Maximum", "min": 1, "max": 100, "step": 1, "default": 10 },
+    { "type": "range", "id": "step", "label": "Increment", "min": 1, "max": 10, "step": 1, "default": 1 },
+    { "type": "range", "id": "default_value", "label": "Default value", "min": 1, "max": 10, "step": 1, "default": 1 },
+    { "type": "checkbox", "id": "compact", "label": "Compact layout", "default": false }
+  ],
+  "presets": [{ "name": "Quantity Selector", "category": "Commerce" }]
+}
+{% endschema %}
