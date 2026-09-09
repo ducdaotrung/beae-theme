@@ -1,0 +1,129 @@
+{% doc %}
+  Renders intentional space inside a composition flow.
+
+  Spacer owns only its own block-size. It does not add margins, content or
+  interactive elements, and can be hidden on mobile without changing desktop.
+
+  @example
+  {% content_for 'block', type: 'spacer', id: 'spacer' %}
+{% enddoc %}
+
+{% assign spacer_unit_desktop = block.settings.unit_desktop | default: 'pixel' %}
+{% assign spacer_unit_mobile = block.settings.unit_mobile | default: 'pixel' %}
+{% assign spacer_size_desktop_px = block.settings.size_desktop_px | default: 100 %}
+{% assign spacer_size_desktop_percent = block.settings.size_desktop_percent | default: 25 %}
+{% assign spacer_size_mobile_px = block.settings.size_mobile_px | default: 52 %}
+{% assign spacer_size_mobile_percent = block.settings.size_mobile_percent | default: 25 %}
+
+<div
+  class="block-spacer{% if block.settings.custom_spacing %} block-spacer--custom{% endif %}{% unless block.settings.show_on_mobile %} block-spacer--hide-mobile{% endunless %}"
+  style="
+    --block-spacer-size: {% if spacer_unit_desktop == 'percent' %}{{ spacer_size_desktop_percent }}%{% else %}{{ spacer_size_desktop_px }}px{% endif %};
+    --block-spacer-size-mobile: {% if spacer_unit_mobile == 'percent' %}{{ spacer_size_mobile_percent }}%{% else %}{{ spacer_size_mobile_px }}px{% endif %};
+  "
+  aria-hidden="true"
+  {{ block.shopify_attributes }}
+></div>
+
+{% stylesheet %}
+  .block-spacer {
+    block-size: var(--block-spacer-size, 100px);
+    display: block;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    min-block-size: 0;
+    min-inline-size: 0;
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .block-spacer {
+      block-size: var(--block-spacer-size-mobile, 52px);
+    }
+
+    .block-spacer--hide-mobile {
+      block-size: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Spacer",
+  "settings": [
+    { "type": "header", "content": "Desktop" },
+    {
+      "type": "select",
+      "id": "unit_desktop",
+      "label": "Unit",
+      "options": [
+        { "value": "pixel", "label": "Pixel" },
+        { "value": "percent", "label": "Percent" }
+      ],
+      "default": "pixel"
+    },
+    {
+      "type": "range",
+      "id": "size_desktop_px",
+      "label": "Size",
+      "visible_if": "{{ block.settings.unit_desktop == 'pixel' }}",
+      "min": 0,
+      "max": 400,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "size_desktop_percent",
+      "label": "Size",
+      "visible_if": "{{ block.settings.unit_desktop == 'percent' }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 25
+    },
+    { "type": "header", "content": "Mobile" },
+    { "type": "checkbox", "id": "show_on_mobile", "label": "Show on mobile", "default": true },
+    {
+      "type": "select",
+      "id": "unit_mobile",
+      "label": "Unit",
+      "visible_if": "{{ block.settings.show_on_mobile }}",
+      "options": [
+        { "value": "pixel", "label": "Pixel" },
+        { "value": "percent", "label": "Percent" }
+      ],
+      "default": "pixel"
+    },
+    {
+      "type": "range",
+      "id": "size_mobile_px",
+      "label": "Size",
+      "visible_if": "{{ block.settings.show_on_mobile and block.settings.unit_mobile == 'pixel' }}",
+      "min": 0,
+      "max": 400,
+      "step": 4,
+      "unit": "px",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "size_mobile_percent",
+      "label": "Size",
+      "visible_if": "{{ block.settings.show_on_mobile and block.settings.unit_mobile == 'percent' }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 25
+    },
+    { "type": "header", "content": "Advanced settings" },
+    { "type": "checkbox", "id": "custom_spacing", "label": "Custom spacing", "default": false }
+  ],
+  "presets": [
+    { "name": "Spacer", "category": "Layout" }
+  ]
+}
+{% endschema %}

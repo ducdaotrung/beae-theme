@@ -1,0 +1,330 @@
+{% doc %}
+  Renders a Button Foundation action.
+
+  The block owns label, destination, variant, icon choice and local layout.
+  Typography, height, horizontal foundation padding and visual states come
+  from the shared Button Foundation.
+
+  @example
+  {% content_for 'block', type: 'button', id: 'button' %}
+{% enddoc %}
+
+{% assign button_label = block.settings.button_label | default: '' | strip %}
+
+{% if button_label != blank %}
+  {% assign button_style = block.settings.button_style | default: 'primary' %}
+  {% assign button_width = block.settings.width | default: 'fit' %}
+  {% assign button_width_mobile = block.settings.width_mobile | default: 'fit' %}
+  {% assign button_icon = block.settings.icon | default: 'arrow' %}
+  {% assign button_icon_position = block.settings.icon_position | default: 'end' %}
+  {% assign button_icon_size = block.settings.icon_size | default: 'inherit' %}
+
+  {% capture button_icon_markup %}
+    {% if block.settings.show_icon %}
+      <svg class="button-block__icon button-block__icon--{{ button_icon_size }}" aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+        {% case button_icon %}
+          {% when 'plus' %}
+            <path d="M12 4v16M4 12h16" />
+          {% when 'chevron' %}
+            <path d="m9 5 7 7-7 7" />
+          {% when 'external' %}
+            <path d="M14 4h6v6M20 4l-9 9M19 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" />
+          {% else %}
+            <path d="M4 12h15M13 6l6 6-6 6" />
+        {% endcase %}
+      </svg>
+    {% endif %}
+  {% endcapture %}
+
+  {% capture button_content %}
+    {% if button_icon_position == 'start' %}{{ button_icon_markup }}{% endif %}
+    <span class="button-block__label">{{ button_label | escape }}</span>
+    {% if button_icon_position == 'end' %}{{ button_icon_markup }}{% endif %}
+  {% endcapture %}
+
+  {% assign button_attributes = '' %}
+  {% if block.settings.button_link != blank %}
+    {% assign button_attributes = 'href="' | append: block.settings.button_link | escape | append: '"' %}
+    {% if block.settings.button_open_in_new_tab %}
+      {% assign button_attributes = button_attributes | append: ' target="_blank" rel="noopener noreferrer"' %}
+    {% endif %}
+    {% assign button_tag = 'a' %}
+  {% else %}
+    {% assign button_tag = 'button' %}
+  {% endif %}
+
+  <{{ button_tag }}
+    class="btn btn--{{ button_style }} button-block button-block--icon-{{ button_icon_position }}"
+    {{ button_attributes }}
+    {% if button_tag == 'button' %}type="button"{% endif %}
+    style="
+      --button-block-width: {% if button_width == 'fit' %}fit-content{% else %}100%{% endif %};
+      --button-block-width-mobile: {% if button_width_mobile == 'fit' %}fit-content{% else %}100%{% endif %};
+      --button-block-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+      --button-block-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+      --button-block-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+      --button-block-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+      --button-block-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--button-block-padding-top){% endif %};
+      --button-block-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--button-block-padding-bottom){% endif %};
+      --button-block-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--button-block-padding-left){% endif %};
+      --button-block-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--button-block-padding-right){% endif %};
+      --button-block-icon-size: {% if button_icon_size == 'custom' %}{{ block.settings.custom_icon_size | default: 20 }}px{% else %}1em{% endif %};
+    "
+    {{ block.shopify_attributes }}
+  >{{ button_content }}</{{ button_tag }}>
+{% endif %}
+
+{% stylesheet %}
+  .button-block {
+    align-self: flex-start;
+    display: flex;
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    padding-block: var(--button-block-padding-top) var(--button-block-padding-bottom);
+    padding-inline: var(--button-block-padding-left) var(--button-block-padding-right);
+    white-space: normal;
+    width: var(--button-block-width);
+  }
+
+  .button-block__label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .button-block__icon {
+    display: block;
+    flex: 0 0 auto;
+    height: var(--button-block-icon-size);
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: var(--icon-stroke-width, 1.8);
+    fill: none;
+    width: var(--button-block-icon-size);
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .button-block {
+      padding-block: var(--button-block-padding-top-mobile) var(--button-block-padding-bottom-mobile);
+      padding-inline: var(--button-block-padding-left-mobile) var(--button-block-padding-right-mobile);
+      width: var(--button-block-width-mobile);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Button",
+  "settings": [
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "tertiary", "label": "Tertiary" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_open_in_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Show icon",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "visible_if": "{{ block.settings.show_icon }}",
+      "options": [
+        { "value": "arrow", "label": "Arrow" },
+        { "value": "plus", "label": "Plus" },
+        { "value": "chevron", "label": "Chevron" },
+        { "value": "external", "label": "External link" }
+      ],
+      "default": "arrow"
+    },
+    {
+      "type": "select",
+      "id": "icon_position",
+      "label": "Icon position",
+      "visible_if": "{{ block.settings.show_icon }}",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "end"
+    },
+    {
+      "type": "select",
+      "id": "icon_size",
+      "label": "Icon size",
+      "visible_if": "{{ block.settings.show_icon }}",
+      "options": [
+        { "value": "inherit", "label": "Inherit" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "range",
+      "id": "custom_icon_size",
+      "label": "Custom icon size",
+      "visible_if": "{{ block.settings.show_icon and block.settings.icon_size == 'custom' }}",
+      "min": 10,
+      "max": 60,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "fit", "label": "Fit" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "fit"
+    },
+    {
+      "type": "select",
+      "id": "width_mobile",
+      "label": "Width mobile",
+      "options": [
+        { "value": "fit", "label": "Fit" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "fit"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "label": "Left padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "label": "Right padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "customize_mobile_padding",
+      "label": "Customize mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "label": "Left padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "label": "Right padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Button",
+      "category": "Basic"
+    }
+  ]
+}
+{% endschema %}

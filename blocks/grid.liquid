@@ -1,0 +1,150 @@
+{% doc %}
+  Renders a controlled responsive grid for approved item blocks.
+
+  Grid owns columns, gaps, alignment, item height, responsive collapse and
+  padding. Child blocks retain their content and local appearance.
+
+  @example
+  {% content_for 'block', type: 'grid', id: 'grid' %}
+{% enddoc %}
+
+{% assign grid_collapse = block.settings.collapse_breakpoint | default: 'tablet' %}
+{% assign grid_stacking = block.settings.stacking_behavior | default: 'stack' %}
+{% assign grid_item_alignment = block.settings.item_alignment | default: 'stretch' %}
+{% assign grid_item_height = block.settings.item_height | default: 'auto' %}
+
+<div
+  class="block-grid block-grid--collapse-{{ grid_collapse }} block-grid--stack-{{ grid_stacking }} block-grid--align-{{ grid_item_alignment }} block-grid--height-{{ grid_item_height }}"
+  style="
+    --block-grid-columns-desktop: {{ block.settings.columns_desktop | default: 4 }};
+    --block-grid-columns-tablet: {{ block.settings.columns_tablet | default: 3 }};
+    --block-grid-columns-mobile: {{ block.settings.columns_mobile | default: 1 }};
+    --block-grid-column-gap: {{ block.settings.column_gap | default: 24 }}px;
+    --block-grid-row-gap: {{ block.settings.row_gap | default: 24 }}px;
+    --block-grid-mobile-gap: {{ block.settings.mobile_gap | default: 16 }}px;
+    --block-grid-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+    --block-grid-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+    --block-grid-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+    --block-grid-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+    --block-grid-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--block-grid-padding-top){% endif %};
+    --block-grid-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--block-grid-padding-bottom){% endif %};
+    --block-grid-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--block-grid-padding-left){% endif %};
+    --block-grid-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--block-grid-padding-right){% endif %};
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .block-grid {
+    align-items: var(--block-grid-item-align, stretch);
+    box-sizing: border-box;
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(var(--block-grid-columns-desktop, 4), minmax(0, 1fr));
+    min-width: 0;
+    padding-block: var(--block-grid-padding-top) var(--block-grid-padding-bottom);
+    padding-inline: var(--block-grid-padding-left) var(--block-grid-padding-right);
+    column-gap: var(--block-grid-column-gap);
+    row-gap: var(--block-grid-row-gap);
+    width: 100%;
+  }
+
+  .block-grid--align-stretch { --block-grid-item-align: stretch; }
+  .block-grid--align-start { --block-grid-item-align: start; }
+  .block-grid--align-center { --block-grid-item-align: center; }
+
+  .block-grid--height-equal { grid-auto-rows: minmax(0, 1fr); }
+
+  .block-grid > * {
+    align-self: var(--block-grid-item-align, stretch);
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .block-grid--align-center > * { justify-self: center; }
+  .block-grid--align-start > * { justify-self: start; }
+  .block-grid--align-stretch > * { justify-self: stretch; }
+
+  @media screen and (min-width: 768px) and (max-width: 1149.98px) {
+    .block-grid--collapse-tablet {
+      grid-template-columns: repeat(var(--block-grid-columns-tablet, 3), minmax(0, 1fr));
+    }
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .block-grid {
+      column-gap: var(--block-grid-mobile-gap);
+      grid-template-columns: repeat(var(--block-grid-columns-mobile, 1), minmax(0, 1fr));
+      padding-block: var(--block-grid-padding-top-mobile) var(--block-grid-padding-bottom-mobile);
+      padding-inline: var(--block-grid-padding-left-mobile) var(--block-grid-padding-right-mobile);
+      row-gap: var(--block-grid-mobile-gap);
+    }
+
+    .block-grid--stack-stack { grid-template-columns: minmax(0, 1fr); }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Grid",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "button" },
+    { "type": "image" },
+    { "type": "video" },
+    { "type": "icon" },
+    { "type": "header" },
+    { "type": "buttons" }
+  ],
+  "settings": [
+    { "type": "header", "content": "Columns" },
+    { "type": "select", "id": "columns_desktop", "label": "Desktop columns", "options": [
+      { "value": "1", "label": "1" }, { "value": "2", "label": "2" }, { "value": "3", "label": "3" },
+      { "value": "4", "label": "4" }, { "value": "5", "label": "5" }, { "value": "6", "label": "6" }
+    ], "default": "4" },
+    { "type": "select", "id": "columns_tablet", "label": "Tablet columns", "options": [
+      { "value": "1", "label": "1" }, { "value": "2", "label": "2" }, { "value": "3", "label": "3" },
+      { "value": "4", "label": "4" }, { "value": "5", "label": "5" }, { "value": "6", "label": "6" }
+    ], "default": "3" },
+    { "type": "select", "id": "columns_mobile", "label": "Mobile columns", "options": [
+      { "value": "1", "label": "1" }, { "value": "2", "label": "2" }, { "value": "3", "label": "3" }
+    ], "default": "1" },
+    { "type": "header", "content": "Gap" },
+    { "type": "range", "id": "column_gap", "label": "Column gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 24 },
+    { "type": "range", "id": "row_gap", "label": "Row gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 24 },
+    { "type": "range", "id": "mobile_gap", "label": "Mobile gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 16 },
+    { "type": "header", "content": "Alignment" },
+    { "type": "select", "id": "item_alignment", "label": "Item alignment", "options": [
+      { "value": "stretch", "label": "Stretch" }, { "value": "start", "label": "Start" }, { "value": "center", "label": "Center" }
+    ], "default": "stretch" },
+    { "type": "select", "id": "item_height", "label": "Item height", "options": [
+      { "value": "auto", "label": "Auto" }, { "value": "equal", "label": "Equal" }
+    ], "default": "auto" },
+    { "type": "header", "content": "Responsive" },
+    { "type": "select", "id": "collapse_breakpoint", "label": "Collapse breakpoint", "options": [
+      { "value": "tablet", "label": "Tablet" }, { "value": "mobile", "label": "Mobile" }
+    ], "default": "tablet" },
+    { "type": "select", "id": "stacking_behavior", "label": "Stacking behavior", "options": [
+      { "value": "stack", "label": "Stack" }, { "value": "preserve", "label": "Preserve columns" }
+    ], "default": "stack" },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left", "label": "Left padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right", "label": "Right padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "checkbox", "id": "customize_mobile_padding", "label": "Customize mobile padding", "default": false },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top padding (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom padding (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left_mobile", "label": "Left padding (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right_mobile", "label": "Right padding (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [
+    { "name": "Grid", "category": "Layout" }
+  ]
+}
+{% endschema %}

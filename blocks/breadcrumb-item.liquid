@@ -1,0 +1,22 @@
+{% doc %}
+  Renders one manually configured breadcrumb item.
+{% enddoc %}
+
+<li class="breadcrumbs-block__item{% if block.settings.current %} breadcrumbs-block__item--current{% endif %}"{% if block.settings.current %} aria-current="page"{% endif %} {{ block.shopify_attributes }}>
+  {% if block.settings.current or block.settings.link == blank %}
+    {{ block.settings.label | escape }}
+  {% else %}
+    <a href="{{ block.settings.link }}">{{ block.settings.label | escape }}</a>
+  {% endif %}
+</li>
+
+{% schema %}
+{
+  "name": "Breadcrumb item",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Page" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "checkbox", "id": "current", "label": "Current item", "default": false }
+  ]
+}
+{% endschema %}

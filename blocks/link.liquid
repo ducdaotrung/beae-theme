@@ -1,0 +1,23 @@
+{% doc %}
+  Renders one repeatable link inside the Link List block.
+{% enddoc %}
+
+<li class="link-list-block__item" {{ block.shopify_attributes }}>
+  {% if block.settings.link != blank %}
+    <a class="link-list-block__link" href="{{ block.settings.link }}"{% if block.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}>
+      {{ block.settings.label | default: block.settings.link | escape }}{% if block.settings.external_indicator %}<span class="link-list-block__external" aria-hidden="true">↗</span>{% endif %}
+    </a>
+  {% endif %}
+</li>
+
+{% schema %}
+{
+  "name": "Link",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "Link" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "checkbox", "id": "open_in_new_tab", "label": "Open in new tab", "default": false },
+    { "type": "checkbox", "id": "external_indicator", "label": "External link indicator", "default": false }
+  ]
+}
+{% endschema %}

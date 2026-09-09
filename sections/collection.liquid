@@ -10,17 +10,16 @@
 <div class="collection-products product-grid">
   {% paginate collection.products by 20 %}
     {% for product in collection.products %}
-      {% render 'product-card', product: product %}
     {% endfor %}
 
-    {{ paginate | default_pagination }}
+    {% content_for 'blocks' %}
   {% endpaginate %}
 </div>
 
 {% stylesheet %}
   .collection-products {
     display: grid;
-    gap: var(--pcard-content-spacing);
+    gap: 1rem;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
   }
 {% endstylesheet %}
@@ -28,6 +27,7 @@
 {% schema %}
 {
   "name": "t:general.collection",
+  "blocks": [{ "type": "pagination" }],
   "settings": []
 }
 {% endschema %}

@@ -1,0 +1,133 @@
+{% doc %}
+  Renders pagination controls from the paginate object owned by a parent section.
+{% enddoc %}
+
+{% # theme-check-disable UndefinedObject %}
+{% liquid
+  assign alignment = block.settings.alignment | default: 'start'
+  assign flow = block.settings.flow | default: 'inline'
+  assign gap = block.settings.gap | default: 8
+  assign has_pages = false
+  if paginate.pages > 1
+    assign has_pages = true
+  endif
+%}
+
+{% if has_pages %}
+  <nav
+    class="pagination-block pagination-block--align-{{ alignment }} pagination-block--{{ flow }}{% if block.settings.mobile_compact %} pagination-block--mobile-compact{% endif %}"
+    aria-label="Pagination"
+    style="
+      --pagination-gap: {{ gap }}px;
+      --pagination-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+      --pagination-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+      --pagination-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+      --pagination-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+      --pagination-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--pagination-padding-top){% endif %};
+      --pagination-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--pagination-padding-bottom){% endif %};
+      --pagination-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--pagination-padding-left){% endif %};
+      --pagination-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--pagination-padding-right){% endif %};
+    "
+    {{ block.shopify_attributes }}
+  >
+    <ol class="pagination-block__list" role="list">
+      {% if block.settings.previous_control and paginate.previous %}
+        <li class="pagination-block__item pagination-block__item--previous">
+          <a class="pagination-block__control" href="{{ paginate.previous.url }}" aria-label="Previous page">{{ block.settings.previous_label | default: 'Previous' }}</a>
+        </li>
+      {% elsif block.settings.previous_control %}
+        <li class="pagination-block__item pagination-block__item--disabled"><span class="pagination-block__control" aria-disabled="true">{{ block.settings.previous_label | default: 'Previous' }}</span></li>
+      {% endif %}
+
+      {% if block.settings.first_last_controls and paginate.parts.size > 0 %}
+        {% assign first_part = paginate.parts.first %}
+        {% if first_part.title != '1' and first_part.url != blank %}<li class="pagination-block__item"><a class="pagination-block__control" href="{{ first_part.url }}" aria-label="First page">1</a></li>{% endif %}
+      {% endif %}
+
+      {% if block.settings.page_numbers %}
+        {% for part in paginate.parts %}
+          {% if part.is_link %}
+            <li class="pagination-block__item"><a class="pagination-block__control" href="{{ part.url }}" aria-label="Page {{ part.title }}">{{ part.title }}</a></li>
+          {% else %}
+            <li class="pagination-block__item{% if part.title == paginate.current_page %} pagination-block__item--current{% endif %}">
+              {% if part.title == paginate.current_page %}<span class="pagination-block__control" aria-current="page">{{ part.title }}</span>{% else %}<span class="pagination-block__control" aria-hidden="true">{{ part.title }}</span>{% endif %}
+            </li>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      {% if block.settings.first_last_controls and paginate.parts.size > 0 %}
+        {% assign last_part = paginate.parts.last %}
+        {% if last_part.title != paginate.pages and last_part.url != blank %}<li class="pagination-block__item"><a class="pagination-block__control" href="{{ paginate.parts.last.url }}" aria-label="Last page">{{ paginate.pages }}</a></li>{% endif %}
+      {% endif %}
+
+      {% if block.settings.next_control and paginate.next %}
+        <li class="pagination-block__item pagination-block__item--next">
+          <a class="pagination-block__control" href="{{ paginate.next.url }}" aria-label="Next page">{{ block.settings.next_label | default: 'Next' }}</a>
+        </li>
+      {% elsif block.settings.next_control %}
+        <li class="pagination-block__item pagination-block__item--disabled"><span class="pagination-block__control" aria-disabled="true">{{ block.settings.next_label | default: 'Next' }}</span></li>
+      {% endif %}
+    </ol>
+  </nav>
+{% endif %}
+{% # theme-check-enable UndefinedObject %}
+
+{% stylesheet %}
+  .pagination-block { box-sizing: border-box; min-width: 0; padding: var(--pagination-padding-top) var(--pagination-padding-right) var(--pagination-padding-bottom) var(--pagination-padding-left); }
+  .pagination-block--align-start { margin-inline-end: auto; }
+  .pagination-block--align-center { margin-inline: auto; }
+  .pagination-block--align-end { margin-inline-start: auto; }
+  .pagination-block__list { align-items: center; display: flex; flex-wrap: wrap; gap: var(--pagination-gap); list-style: none; margin: 0; padding: 0; }
+  .pagination-block--align-center .pagination-block__list { justify-content: center; }
+  .pagination-block--align-end .pagination-block__list { justify-content: flex-end; }
+  .pagination-block__item { min-width: 0; }
+  .pagination-block__control { align-items: center; border: 1px solid transparent; color: inherit; display: inline-flex; justify-content: center; min-height: 2.5rem; min-width: 2.5rem; padding-inline: 0.5rem; text-decoration: none; }
+  .pagination-block__item:not(.pagination-block__item--disabled):not(.pagination-block__item--current) .pagination-block__control:hover { border-color: currentColor; text-decoration: underline; text-underline-offset: 0.2em; }
+  .pagination-block__item--current .pagination-block__control { background: var(--accent-color); border-color: var(--accent-color); color: var(--background-color); }
+  .pagination-block__item--disabled .pagination-block__control { cursor: not-allowed; opacity: 0.45; }
+  .pagination-block--wrap .pagination-block__list { flex-wrap: wrap; }
+  @media screen and (max-width: 767.98px) {
+    .pagination-block { padding: var(--pagination-padding-top-mobile) var(--pagination-padding-right-mobile) var(--pagination-padding-bottom-mobile) var(--pagination-padding-left-mobile); }
+    .pagination-block--mobile-compact .pagination-block__control { min-height: 2rem; min-width: 2rem; padding-inline: 0.35rem; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Pagination",
+  "settings": [
+    { "type": "header", "content": "Data" },
+    { "type": "select", "id": "data_source", "label": "Data source", "options": [{ "value": "paginate", "label": "Paginate object" }], "default": "paginate" },
+    { "type": "checkbox", "id": "page_numbers", "label": "Page numbers", "default": true },
+    { "type": "checkbox", "id": "first_last_controls", "label": "First / last controls", "default": false },
+    { "type": "header", "content": "Controls" },
+    { "type": "checkbox", "id": "previous_control", "label": "Previous control", "default": true },
+    { "type": "checkbox", "id": "next_control", "label": "Next control", "default": true },
+    { "type": "select", "id": "ellipsis_behavior", "label": "Ellipsis behavior", "options": [{ "value": "auto", "label": "Auto" }], "default": "auto" },
+    { "type": "header", "content": "Labels" },
+    { "type": "text", "id": "previous_label", "label": "Previous label", "default": "Previous" },
+    { "type": "text", "id": "next_label", "label": "Next label", "default": "Next" },
+    { "type": "select", "id": "aria_labels", "label": "Aria labels", "options": [{ "value": "localized", "label": "Localized" }], "default": "localized" },
+    { "type": "header", "content": "Appearance" },
+    { "type": "select", "id": "control_variant", "label": "Control variant", "options": [{ "value": "link", "label": "Link" }], "default": "link" },
+    { "type": "select", "id": "current_state", "label": "Current state", "options": [{ "value": "filled", "label": "Filled" }], "default": "filled" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "options": [{ "value": "start", "label": "Start" }, { "value": "center", "label": "Center" }, { "value": "end", "label": "End" }], "default": "start" },
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "flow", "label": "Flow", "options": [{ "value": "inline", "label": "Inline / wrap" }, { "value": "wrap", "label": "Wrap" }], "default": "inline" },
+    { "type": "checkbox", "id": "mobile_compact", "label": "Mobile compact mode", "default": true },
+    { "type": "range", "id": "gap", "label": "Gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 8 },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "label": "Top", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left", "label": "Left", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right", "label": "Right", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "checkbox", "id": "customize_mobile_padding", "label": "Custom padding mobile", "default": false },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left_mobile", "label": "Left (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right_mobile", "label": "Right (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "Pagination", "category": "Navigation" }]
+}
+{% endschema %}

@@ -3,11 +3,11 @@
 
   @param {product} product - Product whose price should be rendered
   @param {variant} variant - Optional variant to display
-  @param {string} context - product_card or product_page
+  @param {string} context - product_page
 {% enddoc %}
 
 {% liquid
-  assign price_context = context | default: 'product_card'
+  assign price_context = context | default: 'product_page'
   assign price_variant = variant | default: product.selected_or_first_available_variant
   assign current_price = price_variant.price | default: product.price
   assign compare_at_price = price_variant.compare_at_price
@@ -17,8 +17,6 @@
   endif
   assign use_currency_code = false
   if price_context == 'product_page' and settings.price_product_page_currency_code
-    assign use_currency_code = true
-  elsif price_context == 'product_card' and settings.price_product_card_currency_code
     assign use_currency_code = true
   endif
 %}

@@ -1,0 +1,29 @@
+<dialog id="cart-drawer" class="drawer global-cart" data-overlay data-backdrop-close="true" aria-labelledby="cart-drawer-title">
+  <div class="global-cart__header">
+    <h2 id="cart-drawer-title" class="overlay__title">{{ 'cart.title' | t }}</h2>
+    <button class="btn btn--icon btn--unstyled" type="button" data-overlay-close aria-label="Close cart">&times;</button>
+  </div>
+  {% if cart.item_count == 0 %}
+    <p>{{ 'cart.empty' | t }}</p>
+    <a class="btn btn--secondary" href="{{ routes.root_url }}">{{ 'cart.continue_shopping' | t }}</a>
+  {% else %}
+    <form action="{{ routes.cart_url }}" method="post">
+      <ul class="global-cart__items" role="list">
+        {% for item in cart.items %}
+          <li class="global-cart__item">
+            {% if item.image %}{{ item.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: item.title }}{% endif %}
+            <div>
+              <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+              <p>{{ item.final_line_price | money }}</p>
+              <label class="form__label" for="CartDrawerQuantity-{{ item.index }}">{{ 'cart.quantity' | t }}</label>
+              <input id="CartDrawerQuantity-{{ item.index }}" class="form__control" type="number" min="0" name="updates[]" value="{{ item.quantity }}">
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+      <p class="global-cart__total"><strong>{{ 'cart.total' | t }}:</strong> {{ cart.total_price | money }}</p>
+      <button class="btn btn--secondary" type="submit" name="update">{{ 'cart.update' | t }}</button>
+      <button class="btn btn--primary" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button>
+    </form>
+  {% endif %}
+</dialog>

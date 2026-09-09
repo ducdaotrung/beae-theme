@@ -1,0 +1,43 @@
+{% comment %}
+  Shared navigation renderer. The parent surface owns presentation; this snippet
+  owns hierarchy, current state, and disclosure semantics.
+{% endcomment %}
+{% assign navigation_menu = menu | default: linklists.main-menu %}
+{% assign navigation_label = label | default: 'Main navigation' %}
+
+<nav class="navigation navigation--{{ presentation | default: 'inline' }}" aria-label="{{ navigation_label | escape }}">
+  {% if navigation_menu != blank and navigation_menu.links != blank %}
+    <ul class="navigation__list" role="list">
+      {% for link in navigation_menu.links %}
+        <li class="navigation__item{% if link.active or link.child_active %} is-active{% endif %}">
+          {% if link.links != blank and presentation == 'drawer' %}
+            <details class="navigation__disclosure">
+              <summary class="navigation__summary">
+                <span>{{ link.title | escape }}</span>
+                <span aria-hidden="true">+</span>
+              </summary>
+              <ul class="navigation__sublist" role="list">
+                {% for child_link in link.links %}
+                  <li class="navigation__item{% if child_link.active or child_link.child_active %} is-active{% endif %}">
+                    <a class="navigation__link" href="{{ child_link.url }}"{% if child_link.current %} aria-current="page"{% endif %}>{{ child_link.title | escape }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </details>
+          {% else %}
+            <a class="navigation__link" href="{{ link.url }}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+            {% if link.links != blank and presentation != 'footer' %}
+              <ul class="navigation__sublist" role="list">
+                {% for child_link in link.links %}
+                  <li class="navigation__item{% if child_link.active or child_link.child_active %} is-active{% endif %}">
+                    <a class="navigation__link" href="{{ child_link.url }}"{% if child_link.current %} aria-current="page"{% endif %}>{{ child_link.title | escape }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</nav>

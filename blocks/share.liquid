@@ -1,0 +1,121 @@
+{% doc %}
+  Shares the current page through native share, copy link, email or social channels.
+{% enddoc %}
+
+{% liquid
+  assign share_url = canonical_url
+  if block.settings.target == 'custom' and block.settings.custom_url != blank
+    assign share_url = block.settings.custom_url
+  endif
+  assign share_title = page_title | default: shop.name
+  assign orientation = block.settings.orientation | default: 'inline'
+  assign alignment = block.settings.alignment | default: 'start'
+%}
+
+<div
+  class="share-block share-block--{{ orientation }} share-block--align-{{ alignment }}{% if block.settings.mobile_stack %} share-block--mobile-stack{% endif %}"
+  data-share-block
+  data-share-url="{{ share_url | escape }}"
+  data-share-title="{{ share_title | escape }}"
+  data-copied-label="{{ block.settings.copied_label | escape }}"
+  data-error-label="{{ block.settings.error_label | escape }}"
+  style="
+    --share-block-gap: {{ block.settings.gap | default: 8 }}px;
+    --share-block-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+    --share-block-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+    --share-block-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+    --share-block-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+    --share-block-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--share-block-padding-top){% endif %};
+    --share-block-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--share-block-padding-bottom){% endif %};
+    --share-block-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--share-block-padding-left){% endif %};
+    --share-block-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--share-block-padding-right){% endif %};
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="share-block__controls" role="group" aria-label="Share">
+    {% if block.settings.native_share %}<button class="btn btn--secondary share-block__button" type="button" data-share-native>{{ block.settings.visible_label | default: 'Share' }}</button>{% endif %}
+    {% if block.settings.copy_link %}<button class="btn btn--secondary share-block__button" type="button" data-share-copy>{{ block.settings.visible_label | default: 'Share' }}</button>{% endif %}
+    {% if block.settings.email %}<a class="btn btn--secondary share-block__button" href="mailto:?subject={{ share_title | url_encode }}&body={{ share_url | url_encode }}">{{ block.settings.visible_label | default: 'Share' }}</a>{% endif %}
+    {% if block.settings.facebook %}<a class="btn btn--secondary share-block__button" href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | url_encode }}" target="_blank" rel="noopener noreferrer">Facebook</a>{% endif %}
+    {% if block.settings.x_twitter %}<a class="btn btn--secondary share-block__button" href="https://twitter.com/intent/tweet?url={{ share_url | url_encode }}&text={{ share_title | url_encode }}" target="_blank" rel="noopener noreferrer">X</a>{% endif %}
+  </div>
+  <p class="share-block__status" data-share-status aria-live="polite" hidden></p>
+</div>
+
+{% stylesheet %}
+  .share-block { box-sizing: border-box; min-width: 0; padding: var(--share-block-padding-top) var(--share-block-padding-right) var(--share-block-padding-bottom) var(--share-block-padding-left); }
+  .share-block--align-start { margin-inline-end: auto; }
+  .share-block--align-center { margin-inline: auto; }
+  .share-block--align-end { margin-inline-start: auto; }
+  .share-block__controls { align-items: center; display: flex; flex-wrap: wrap; gap: var(--share-block-gap); }
+  .share-block--stack .share-block__controls { align-items: stretch; flex-direction: column; }
+  .share-block__button { text-decoration: none; }
+  .share-block__status { margin: 0.5rem 0 0; }
+  @media screen and (max-width: 767.98px) {
+    .share-block { padding: var(--share-block-padding-top-mobile) var(--share-block-padding-right-mobile) var(--share-block-padding-bottom-mobile) var(--share-block-padding-left-mobile); }
+    .share-block--mobile-stack .share-block__controls { flex-direction: column; }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const initShareBlock = (root) => {
+      if (root.dataset.shareInitialized === 'true') return;
+      root.dataset.shareInitialized = 'true';
+      const url = root.dataset.shareUrl || window.location.href;
+      const title = root.dataset.shareTitle || document.title;
+      const status = root.querySelector('[data-share-status]');
+      const announce = (message) => { status.textContent = message; status.hidden = !message; };
+      const copy = async () => {
+        try { await navigator.clipboard.writeText(url); announce(root.dataset.copiedLabel || 'Link copied'); }
+        catch { announce(root.dataset.errorLabel || 'Unable to copy'); }
+      };
+      root.querySelector('[data-share-copy]')?.addEventListener('click', copy);
+      root.querySelector('[data-share-native]')?.addEventListener('click', async () => {
+        if (navigator.share) { try { await navigator.share({ title, url }); } catch (error) { if (error.name !== 'AbortError') announce(root.dataset.errorLabel || 'Unable to share'); } }
+        else await copy();
+      });
+    };
+    document.querySelectorAll('[data-share-block]').forEach(initShareBlock);
+    document.addEventListener('shopify:section:load', (event) => event.target.querySelectorAll?.('[data-share-block]').forEach(initShareBlock));
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Share",
+  "settings": [
+    { "type": "header", "content": "Target" },
+    { "type": "select", "id": "target", "label": "URL", "options": [{ "value": "current", "label": "Current page" }, { "value": "custom", "label": "Custom target" }], "default": "current" },
+    { "type": "url", "id": "custom_url", "label": "Custom target URL", "visible_if": "{{ block.settings.target == 'custom' }}" },
+    { "type": "select", "id": "title", "label": "Title", "options": [{ "value": "current", "label": "Current page title" }], "default": "current" },
+    { "type": "header", "content": "Channels" },
+    { "type": "checkbox", "id": "native_share", "label": "Native share", "default": true },
+    { "type": "checkbox", "id": "copy_link", "label": "Copy link", "default": true },
+    { "type": "checkbox", "id": "email", "label": "Email", "default": false },
+    { "type": "checkbox", "id": "facebook", "label": "Facebook", "default": false },
+    { "type": "checkbox", "id": "x_twitter", "label": "X / Twitter", "default": false },
+    { "type": "header", "content": "Labels" },
+    { "type": "text", "id": "visible_label", "label": "Visible label", "default": "Share" },
+    { "type": "text", "id": "copied_label", "label": "Copied state", "default": "Link copied" },
+    { "type": "text", "id": "error_label", "label": "Error state", "default": "Unable to copy" },
+    { "type": "header", "content": "Appearance" },
+    { "type": "select", "id": "button_variant", "label": "Button variant", "options": [{ "value": "secondary", "label": "Secondary" }], "default": "secondary" },
+    { "type": "select", "id": "orientation", "label": "Orientation", "options": [{ "value": "inline", "label": "Inline" }, { "value": "stack", "label": "Stack" }], "default": "inline" },
+    { "type": "range", "id": "gap", "label": "Gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 8 },
+    { "type": "select", "id": "alignment", "label": "Alignment", "options": [{ "value": "start", "label": "Start" }, { "value": "center", "label": "Center" }, { "value": "end", "label": "End" }], "default": "start" },
+    { "type": "checkbox", "id": "mobile_stack", "label": "Mobile stack", "default": true },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "label": "Top", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left", "label": "Left", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right", "label": "Right", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "checkbox", "id": "customize_mobile_padding", "label": "Custom padding mobile", "default": false },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left_mobile", "label": "Left (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right_mobile", "label": "Right (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "Share", "category": "Navigation" }]
+}
+{% endschema %}

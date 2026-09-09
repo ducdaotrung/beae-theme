@@ -1,0 +1,161 @@
+{% doc %}
+  Renders a navigation link list from a Shopify menu or repeatable link blocks.
+
+  The section or parent composition owns the placement. This block owns only
+  the list presentation, link state and its local padding.
+{% enddoc %}
+
+{% liquid
+  assign link_source = block.settings.link_source | default: 'menu'
+  assign list_style = block.settings.list_style | default: 'vertical'
+  assign alignment = block.settings.alignment | default: 'start'
+  assign width = block.settings.width | default: 'content'
+  assign columns = block.settings.columns | default: 3
+  assign gap = block.settings.gap | default: 24
+  assign nested_levels = block.settings.nested_levels | default: 2 | plus: 0
+  assign menu = block.settings.menu
+  assign list_title = menu.title | default: 'Links'
+  assign has_links = false
+  if link_source == 'menu' and menu != blank and menu.links != blank
+    assign has_links = true
+  elsif link_source == 'repeatable' and block.blocks.size > 0
+    assign has_links = true
+  endif
+%}
+
+<nav
+  class="link-list-block link-list-block--{{ list_style }} link-list-block--align-{{ alignment }}{% if block.settings.divider %} link-list-block--divider{% endif %}{% if block.settings.mobile_stack %} link-list-block--mobile-stack{% endif %}{% if block.settings.mobile_collapse %} link-list-block--mobile-collapse{% endif %}"
+  style="
+    --link-list-columns: {{ columns }};
+    --link-list-gap: {{ gap }}px;
+    --link-list-width: {% if width == 'full' %}100%{% else %}max-content{% endif %};
+    --link-list-active-color: {{ block.settings.active_color | default: '#1C1B1A' }};
+    --link-list-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+    --link-list-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+    --link-list-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+    --link-list-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+    --link-list-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--link-list-padding-top){% endif %};
+    --link-list-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--link-list-padding-bottom){% endif %};
+    --link-list-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--link-list-padding-left){% endif %};
+    --link-list-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--link-list-padding-right){% endif %};
+  "
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.show_title and has_links %}
+    <p class="link-list-block__title">{{ list_title | escape }}</p>
+  {% endif %}
+
+  {% if block.settings.show_eyebrow and has_links %}
+    <p class="link-list-block__eyebrow">Navigation</p>
+  {% endif %}
+
+  {% if has_links %}
+    {% if block.settings.mobile_collapse %}<details class="link-list-block__details"><summary>{{ list_title | escape }}</summary>{% endif %}
+    {% if link_source == 'menu' %}
+      <ul class="link-list-block__list" role="list">
+        {% for link in menu.links %}
+          <li class="link-list-block__item{% if link.active or link.child_active %} is-active{% endif %}">
+            <a class="link-list-block__link" href="{{ link.url }}"{% if block.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}{% if link.current %} aria-current="page"{% endif %}>
+              {{ link.title | escape }}{% if block.settings.external_indicator and link.url contains '://' and link.url contains request.host %}{% else %}{% if block.settings.external_indicator and link.url contains '://' %}<span class="link-list-block__external" aria-hidden="true">↗</span>{% endif %}{% endif %}
+            </a>
+            {% if nested_levels > 1 and link.links != blank %}
+              <ul class="link-list-block__nested" role="list">
+                {% for child_link in link.links %}
+                  <li class="link-list-block__item{% if child_link.active or child_link.child_active %} is-active{% endif %}">
+                    <a class="link-list-block__link" href="{{ child_link.url }}"{% if block.settings.open_in_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}{% if child_link.current %} aria-current="page"{% endif %}>
+                      {{ child_link.title | escape }}{% if block.settings.external_indicator and child_link.url contains '://' %}<span class="link-list-block__external" aria-hidden="true">↗</span>{% endif %}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <ul class="link-list-block__list" role="list">
+        {% content_for 'blocks' %}
+      </ul>
+    {% endif %}
+    {% if block.settings.mobile_collapse %}</details>{% endif %}
+  {% else %}
+    <p class="link-list-block__empty">No links available.</p>
+  {% endif %}
+</nav>
+
+{% stylesheet %}
+  .link-list-block {
+    box-sizing: border-box;
+    min-width: 0;
+    padding: var(--link-list-padding-top) var(--link-list-padding-right) var(--link-list-padding-bottom) var(--link-list-padding-left);
+    text-align: start;
+    width: var(--link-list-width);
+  }
+
+  .link-list-block--align-start { margin-inline-end: auto; }
+  .link-list-block--align-center { margin-inline: auto; }
+  .link-list-block--align-end { margin-inline-start: auto; }
+  .link-list-block__title,
+  .link-list-block__eyebrow,
+  .link-list-block__empty { margin: 0 0 0.75rem; }
+  .link-list-block__eyebrow { color: var(--accent-color); font-size: var(--font-body-xs); }
+  .link-list-block__list { display: grid; gap: var(--link-list-gap); grid-template-columns: repeat(var(--link-list-columns), minmax(0, 1fr)); margin: 0; padding: 0; }
+  .link-list-block--inline .link-list-block__list { display: flex; flex-wrap: wrap; }
+  .link-list-block__item { min-width: 0; list-style: none; }
+  .link-list-block__link { color: inherit; overflow-wrap: anywhere; text-decoration: none; }
+  .link-list-block__link:hover,
+  .link-list-block__item.is-active > .link-list-block__link { color: var(--link-list-active-color); text-decoration: underline; text-underline-offset: 0.2em; }
+  .link-list-block__nested { display: grid; gap: 0.5rem; margin: 0.5rem 0 0; padding-inline-start: 1rem; }
+  .link-list-block--divider .link-list-block__item { border-block-end: 1px solid color-mix(in srgb, currentColor 18%, transparent); padding-block: 0.5rem; }
+  .link-list-block__external { display: inline-block; margin-inline-start: 0.25rem; }
+  .link-list-block__details summary { cursor: pointer; font-weight: 600; list-style: none; }
+  .link-list-block__details summary::-webkit-details-marker { display: none; }
+
+  @media screen and (max-width: 767.98px) {
+    .link-list-block { padding: var(--link-list-padding-top-mobile) var(--link-list-padding-right-mobile) var(--link-list-padding-bottom-mobile) var(--link-list-padding-left-mobile); }
+    .link-list-block--mobile-stack .link-list-block__list { display: grid; grid-template-columns: 1fr; }
+    .link-list-block--mobile-collapse .link-list-block__title { display: none; }
+    .link-list-block--mobile-collapse .link-list-block__details > .link-list-block__list { margin-block-start: 0.75rem; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Link List",
+  "blocks": [{ "type": "link" }],
+  "settings": [
+    { "type": "header", "content": "Source" },
+    { "type": "select", "id": "link_source", "label": "Link source", "options": [{ "value": "menu", "label": "Primary menu" }, { "value": "repeatable", "label": "Repeatable links" }], "default": "menu" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "visible_if": "{{ block.settings.link_source == 'menu' }}" },
+    { "type": "header", "content": "Content" },
+    { "type": "checkbox", "id": "show_title", "label": "Show title", "default": true },
+    { "type": "checkbox", "id": "show_eyebrow", "label": "Show eyebrow", "default": false },
+    { "type": "select", "id": "nested_levels", "label": "Nested levels", "options": [{ "value": "1", "label": "1 level" }, { "value": "2", "label": "2 levels" }], "default": "2" },
+    { "type": "header", "content": "Behavior" },
+    { "type": "checkbox", "id": "open_in_new_tab", "label": "Open in new tab", "default": false },
+    { "type": "checkbox", "id": "external_indicator", "label": "External link indicator", "default": true },
+    { "type": "checkbox", "id": "mobile_collapse", "label": "Mobile collapse", "default": false },
+    { "type": "header", "content": "Appearance" },
+    { "type": "select", "id": "list_style", "label": "List style", "options": [{ "value": "vertical", "label": "Vertical" }, { "value": "inline", "label": "Inline" }], "default": "vertical" },
+    { "type": "checkbox", "id": "divider", "label": "Divider", "default": false },
+    { "type": "color", "id": "active_color", "label": "Active color", "default": "#1C1B1A" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "options": [{ "value": "start", "label": "Start" }, { "value": "center", "label": "Center" }, { "value": "end", "label": "End" }], "default": "start" },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "columns", "label": "Columns", "min": 1, "max": 6, "step": 1, "unit": "col", "default": 3 },
+    { "type": "range", "id": "gap", "label": "Gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 24 },
+    { "type": "select", "id": "width", "label": "Width", "options": [{ "value": "content", "label": "Content" }, { "value": "full", "label": "Full" }], "default": "content" },
+    { "type": "checkbox", "id": "mobile_stack", "label": "Mobile stack", "default": true },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "label": "Top", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left", "label": "Left", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right", "label": "Right", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "checkbox", "id": "customize_mobile_padding", "label": "Custom padding mobile", "default": false },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left_mobile", "label": "Left (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right_mobile", "label": "Right (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "Link List", "category": "Navigation" }]
+}
+{% endschema %}

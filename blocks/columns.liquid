@@ -1,0 +1,190 @@
+{% doc %}
+  Renders a controlled two-column split layout.
+
+  Columns owns the left/right ratio, gap, alignment, stacking breakpoint,
+  mobile order and padding. It accepts approved content blocks only; section
+  or product data remains owned by the surrounding composition.
+
+  @example
+  {% content_for 'block', type: 'columns', id: 'columns' %}
+{% enddoc %}
+
+{% assign columns_ratio = block.settings.column_ratio | default: 'equal' %}
+{% assign columns_breakpoint = block.settings.stacking_breakpoint | default: 'tablet' %}
+{% assign columns_mobile_order = block.settings.mobile_order | default: 'left_first' %}
+
+{% capture columns_template %}
+  {% case columns_ratio %}
+    {% when 'one_two' %}1fr 2fr
+    {% when 'two_one' %}2fr 1fr
+    {% when 'custom' %}{{ block.settings.custom_left_ratio | default: 1 }}fr 1fr
+    {% else %}1fr 1fr
+  {% endcase %}
+{% endcapture %}
+
+<div
+  class="block-columns block-columns--stack-{{ columns_breakpoint }}{% if columns_mobile_order == 'right_first' %} block-columns--right-first{% endif %}"
+  style="
+    --block-columns-template: {{ columns_template | strip }};
+    --block-columns-gap: {{ block.settings.gap_desktop | default: 24 }}px;
+    --block-columns-gap-mobile: {{ block.settings.gap_mobile | default: 16 }}px;
+    --block-columns-cross-align: {{ block.settings.cross_axis_alignment | default: 'stretch' }};
+    --block-columns-vertical-align: {{ block.settings.vertical_alignment | default: 'start' }};
+    --block-columns-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+    --block-columns-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+    --block-columns-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+    --block-columns-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+    --block-columns-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--block-columns-padding-top){% endif %};
+    --block-columns-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--block-columns-padding-bottom){% endif %};
+    --block-columns-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--block-columns-padding-left){% endif %};
+    --block-columns-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--block-columns-padding-right){% endif %};
+  "
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% stylesheet %}
+  .block-columns {
+    align-items: var(--block-columns-vertical-align);
+    box-sizing: border-box;
+    column-gap: var(--block-columns-gap);
+    display: grid;
+    grid-template-columns: var(--block-columns-template, minmax(0, 1fr) minmax(0, 1fr));
+    min-width: 0;
+    padding-block: var(--block-columns-padding-top) var(--block-columns-padding-bottom);
+    padding-inline: var(--block-columns-padding-left) var(--block-columns-padding-right);
+    width: 100%;
+  }
+
+  .block-columns > * {
+    align-self: var(--block-columns-vertical-align);
+    box-sizing: border-box;
+    justify-self: var(--block-columns-cross-align);
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .block-columns--stack-tablet {
+    --block-columns-stack-at-tablet: 1;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1149.98px) {
+    .block-columns--stack-tablet {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--block-columns-gap-mobile);
+    }
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .block-columns {
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: var(--block-columns-padding-top-mobile) var(--block-columns-padding-bottom-mobile);
+      padding-inline: var(--block-columns-padding-left-mobile) var(--block-columns-padding-right-mobile);
+      row-gap: var(--block-columns-gap-mobile);
+    }
+
+    .block-columns--right-first > * { direction: rtl; }
+    .block-columns--right-first > * > * { direction: ltr; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Columns",
+  "blocks": [
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "eyebrow" },
+    { "type": "button" },
+    { "type": "image" },
+    { "type": "video" },
+    { "type": "icon" },
+    { "type": "header" },
+    { "type": "buttons" }
+  ],
+  "settings": [
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "column_ratio",
+      "label": "Column ratio",
+      "options": [
+        { "value": "equal", "label": "Equal" },
+        { "value": "one_two", "label": "1:2" },
+        { "value": "two_one", "label": "2:1" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "equal"
+    },
+    {
+      "type": "range",
+      "id": "custom_left_ratio",
+      "label": "Left column ratio",
+      "visible_if": "{{ block.settings.column_ratio == 'custom' }}",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 1
+    },
+    { "type": "range", "id": "gap_desktop", "label": "Desktop gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 24 },
+    { "type": "range", "id": "gap_mobile", "label": "Mobile gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 16 },
+    {
+      "type": "select",
+      "id": "cross_axis_alignment",
+      "label": "Cross-axis alignment",
+      "options": [
+        { "value": "stretch", "label": "Stretch" },
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "stretch"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "start"
+    },
+    { "type": "header", "content": "Stacking" },
+    {
+      "type": "select",
+      "id": "stacking_breakpoint",
+      "label": "Breakpoint",
+      "options": [
+        { "value": "tablet", "label": "Tablet" },
+        { "value": "mobile", "label": "Mobile" }
+      ],
+      "default": "tablet"
+    },
+    {
+      "type": "select",
+      "id": "mobile_order",
+      "label": "Mobile order",
+      "options": [
+        { "value": "left_first", "label": "Left-first" },
+        { "value": "right_first", "label": "Right-first" }
+      ],
+      "default": "left_first"
+    },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left", "label": "Left padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right", "label": "Right padding", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "checkbox", "id": "customize_mobile_padding", "label": "Customize mobile padding", "default": false },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top padding (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom padding (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left_mobile", "label": "Left padding (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right_mobile", "label": "Right padding (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [
+    { "name": "Columns", "category": "Layout" }
+  ]
+}
+{% endschema %}

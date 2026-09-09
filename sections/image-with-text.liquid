@@ -1,0 +1,119 @@
+{% liquid
+  assign section_scheme = section.settings.color_scheme | default: settings.color_schemes.first
+  assign section_scheme_number = section_scheme.id | remove: 'scheme-' | remove: 'scheme_'
+  assign media_position = section.settings.media_position | default: 'left'
+  assign mobile_image = section.settings.mobile_image | default: section.settings.image
+  assign image_alt = section.settings.image_alt | default: section.settings.image.alt | default: ''
+%}
+
+<section
+  id="ImageWithText-{{ section.id }}"
+  class="image-with-text scheme-{{ section_scheme_number }} image-with-text--media-{{ media_position }}"
+  style="--image-with-text-gap: {{ section.settings.gap | default: 48 }}px; --image-with-text-padding-top: {{ section.settings.padding_top | default: 64 }}px; --image-with-text-padding-bottom: {{ section.settings.padding_bottom | default: 64 }}px;"
+  {{ section.shopify_attributes }}
+>
+  <div class="image-with-text__inner">
+    <div class="image-with-text__media">
+      {% if section.settings.image != blank %}
+        <picture>
+          {% if section.settings.mobile_image != blank %}
+            <source media="(max-width: 767.98px)" srcset="{{ mobile_image | image_url: width: 1200 }}">
+          {% endif %}
+          {{ section.settings.image | image_url: width: 1600 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '480, 720, 960, 1200, 1600', sizes: '(min-width: 768px) 50vw, 100vw', alt: image_alt }}
+        </picture>
+      {% else %}
+        <div class="image-with-text__placeholder">{{ 'image' | placeholder_svg_tag }}</div>
+      {% endif %}
+    </div>
+
+    <div class="image-with-text__content image-with-text__content--{{ section.settings.content_alignment | default: 'start' }} image-with-text__content--vertical-{{ section.settings.vertical_alignment | default: 'center' }}">
+      {% if section.blocks.size > 0 %}
+        {% content_for 'blocks' %}
+      {% else %}
+        <p class="image-with-text__empty">Add content blocks to this section.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .image-with-text {
+    padding-block: var(--image-with-text-padding-top) var(--image-with-text-padding-bottom);
+  }
+
+  .image-with-text__inner {
+    align-items: stretch;
+    display: grid;
+    gap: var(--image-with-text-gap);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-inline: auto;
+    max-width: var(--page-width);
+    padding-inline: var(--page-margin);
+  }
+
+  .image-with-text--media-right .image-with-text__media { order: 2; }
+  .image-with-text--media-right .image-with-text__content { order: 1; }
+  .image-with-text__media,
+  .image-with-text__media picture,
+  .image-with-text__media img { min-width: 0; width: 100%; }
+  .image-with-text__media img { height: 100%; object-fit: cover; }
+  .image-with-text__placeholder { background: var(--background-color); min-height: 20rem; width: 100%; }
+  .image-with-text__content { align-items: var(--image-with-text-content-align, flex-start); display: flex; flex-direction: column; gap: 1rem; justify-content: center; min-width: 0; }
+  .image-with-text__content--start { --image-with-text-content-align: flex-start; text-align: start; }
+  .image-with-text__content--center { --image-with-text-content-align: center; text-align: center; }
+  .image-with-text__content--end { --image-with-text-content-align: flex-end; text-align: end; }
+  .image-with-text__content--vertical-start { justify-content: flex-start; }
+  .image-with-text__content--vertical-center { justify-content: center; }
+  .image-with-text__content--vertical-end { justify-content: flex-end; }
+  .image-with-text__empty { color: var(--body-color); }
+
+  @media screen and (max-width: 767.98px) {
+    .image-with-text { padding-block: var(--image-with-text-padding-top) var(--image-with-text-padding-bottom); }
+    .image-with-text__inner { grid-template-columns: minmax(0, 1fr); }
+    .image-with-text--media-right .image-with-text__media,
+    .image-with-text--media-right .image-with-text__content { order: initial; }
+    .image-with-text__content { text-align: start; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Image with text",
+  "tag": "section",
+  "class": "section image-with-text-section",
+  "settings": [
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Desktop image" },
+    { "type": "image_picker", "id": "mobile_image", "label": "Mobile image (optional)" },
+    { "type": "text", "id": "image_alt", "label": "Image alt text", "info": "Leave blank to use the image alt text." },
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "media_position", "label": "Media position", "options": [{ "value": "left", "label": "Left" }, { "value": "right", "label": "Right" }], "default": "left" },
+    { "type": "select", "id": "content_alignment", "label": "Content alignment", "options": [{ "value": "start", "label": "Start" }, { "value": "center", "label": "Center" }, { "value": "end", "label": "End" }], "default": "start" },
+    { "type": "select", "id": "vertical_alignment", "label": "Vertical alignment", "options": [{ "value": "start", "label": "Top" }, { "value": "center", "label": "Center" }, { "value": "end", "label": "Bottom" }], "default": "center" },
+    { "type": "range", "id": "gap", "label": "Media/content gap", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "header", "content": "Section spacing" },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 160, "step": 4, "unit": "px", "default": 64 }
+  ],
+  "blocks": [
+    { "type": "eyebrow" },
+    { "type": "heading" },
+    { "type": "text" },
+    { "type": "buttons" }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "Image with text",
+      "category": "Basic",
+      "blocks": [
+        { "type": "eyebrow" },
+        { "type": "heading", "settings": { "text": "<p>Image with text</p>" } },
+        { "type": "text", "settings": { "text": "<p>Share information about your brand or product with your customers.</p>" } },
+        { "type": "buttons" }
+      ]
+    }
+  ]
+}
+{% endschema %}

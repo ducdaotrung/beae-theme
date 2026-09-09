@@ -2,7 +2,7 @@
 {% assign header_scheme_number = header_scheme.id | remove: 'scheme-' | remove: 'scheme_' %}
 
 <header class="scheme-{{ header_scheme_number }}{% if section.settings.overlay %} header--overlay{% endif %}">
-  <h2 class="header__title">
+  <div class="header__title">
     <a href="{{ routes.root_url }}" class="header__logo-link">
       {% assign active_logo = settings.logo %}
       {% if section.settings.overlay and settings.logo_transparent != blank %}
@@ -19,22 +19,19 @@
         {% endif %}
       {% endif %}
     </a>
-  </h2>
-
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
   </div>
 
+  <div class="header__menu">{% render 'navigation', menu: section.settings.menu, presentation: 'inline', label: 'Main navigation' %}</div>
+
   <div class="header__icons">
+    <button class="btn btn--icon btn--unstyled header__search-trigger" type="button" data-overlay-open="#search-drawer" aria-label="{{ 'search.title' | t }}">⌕</button>
     {% if shop.customer_accounts_enabled %}
       <shopify-account menu="{{ section.settings.customer_account_menu }}" aria-label="Account">
         <span class="icon" aria-hidden="true">{{ 'icon-account.svg' | inline_asset_content }}</span>
       </shopify-account>
     {% endif %}
 
-    <a href="{{ routes.cart_url }}" aria-label="Cart">
+    <a href="{{ routes.cart_url }}" data-overlay-open="#cart-drawer" aria-label="{{ 'cart.title' | t }}">
       {% if cart.item_count > 0 %}
         <sup>{{ cart.item_count }}</sup>
       {% endif %}
@@ -43,7 +40,13 @@
     </a>
   </div>
 
-  {% render 'social-links', wrapper_class: 'header__social' %}
+  <button class="btn btn--icon btn--unstyled header__menu-trigger" type="button" data-overlay-open="#mobile-navigation" aria-label="Open navigation">☰</button>
+  {% render 'search-drawer' %}
+  {% render 'cart-drawer' %}
+  <dialog id="mobile-navigation" class="drawer mobile-navigation" data-overlay aria-labelledby="mobile-navigation-title">
+    <div class="global-search__header"><h2 id="mobile-navigation-title">Menu</h2><button class="btn btn--icon btn--unstyled" type="button" data-overlay-close aria-label="Close navigation">&times;</button></div>
+    {% render 'navigation', menu: section.settings.menu, presentation: 'drawer', label: 'Mobile navigation' %}
+  </dialog>
 </header>
 
 {% stylesheet %}
@@ -53,6 +56,7 @@
     align-items: center;
     justify-content: space-between;
   }
+  .header__title { margin: 0; }
   .header__logo {
     display: block;
     width: min(var(--logo-width), 100%);
@@ -90,6 +94,11 @@
   header .header__social {
     display: flex;
     gap: 1rem;
+  }
+  .header__menu-trigger { display: none; }
+  @media screen and (max-width: 767.98px) {
+    .header__menu { display: none; }
+    .header__menu-trigger { display: inline-flex; }
   }
 {% endstylesheet %}
 

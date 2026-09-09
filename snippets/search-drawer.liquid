@@ -1,0 +1,11 @@
+<dialog id="search-drawer" class="drawer global-search" data-overlay data-backdrop-close="true" aria-labelledby="search-drawer-title">
+  <div class="global-search__header">
+    <h2 id="search-drawer-title" class="overlay__title">{{ 'search.title' | t }}</h2>
+    <button class="btn btn--icon btn--unstyled" type="button" data-overlay-close aria-label="Close search">&times;</button>
+  </div>
+  <form class="form__wrapper" action="{{ routes.search_url }}" method="get" role="search">
+    <label class="form__label" for="GlobalSearchInput">{{ 'search.title' | t }}</label>
+    <input id="GlobalSearchInput" class="form__control" type="search" name="q" placeholder="{{ 'search.placeholder' | t | escape }}" autocomplete="off">
+    <button class="btn btn--primary" type="submit">{{ 'search.submit' | t }}</button>
+  </form>
+</dialog>

@@ -1,0 +1,299 @@
+{% doc %}
+  Renders a semantic heading block.
+
+  The HTML tag controls document semantics independently from heading_size,
+  which controls the visual typography profile.
+
+  @example
+  {% content_for 'block', type: 'heading', id: 'heading' %}
+{% enddoc %}
+
+{% assign heading_content = block.settings.text | default: '' | strip_html | strip %}
+
+{% if heading_content != blank %}
+  {% assign heading_tag = block.settings.html_tag | default: 'h2' %}
+  {% assign heading_size = block.settings.heading_size | default: 'lg' %}
+  {% assign heading_width = block.settings.width | default: 'fill' %}
+  {% assign heading_width_mobile = block.settings.width_mobile | default: 'fill' %}
+  {% assign heading_alignment = block.settings.alignment | default: 'start' %}
+  {% assign heading_alignment_mobile = heading_alignment %}
+
+  {% if block.settings.customize_mobile_alignment and heading_width_mobile == 'fill' %}
+    {% assign heading_alignment_mobile = block.settings.alignment_mobile | default: 'start' %}
+  {% endif %}
+
+  {% case heading_tag %}
+    {% when 'div' %}{% assign heading_tag = 'div' %}
+    {% when 'h1' %}{% assign heading_tag = 'h1' %}
+    {% when 'h2' %}{% assign heading_tag = 'h2' %}
+    {% when 'h3' %}{% assign heading_tag = 'h3' %}
+    {% when 'h4' %}{% assign heading_tag = 'h4' %}
+    {% when 'h5' %}{% assign heading_tag = 'h5' %}
+    {% when 'h6' %}{% assign heading_tag = 'h6' %}
+    {% else %}{% assign heading_tag = 'h2' %}
+  {% endcase %}
+
+  <{{ heading_tag }}
+    class="heading-text heading-{{ heading_size }} heading-block"
+    style="
+      --heading-block-color: {{ block.settings.text_color | default: 'var(--heading-color)' }};
+      --heading-custom-size: {{ block.settings.custom_heading_size | default: 32 }}px;
+      --heading-block-width: {% if heading_width == 'fit' %}fit-content{% else %}100%{% endif %};
+      --heading-block-width-mobile: {% if heading_width_mobile == 'fit' %}fit-content{% else %}100%{% endif %};
+      --heading-block-align: {{ heading_alignment }};
+      --heading-block-align-mobile: {{ heading_alignment_mobile }};
+      --heading-block-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+      --heading-block-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+      --heading-block-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+      --heading-block-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+      --heading-block-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--heading-block-padding-top){% endif %};
+      --heading-block-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--heading-block-padding-bottom){% endif %};
+      --heading-block-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--heading-block-padding-left){% endif %};
+      --heading-block-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--heading-block-padding-right){% endif %};
+    "
+    {{ block.shopify_attributes }}
+  >{{ block.settings.text }}</{{ heading_tag }}>
+{% endif %}
+
+{% stylesheet %}
+  .heading-block {
+    color: var(--heading-block-color, var(--heading-color));
+    display: block;
+    max-width: 100%;
+    min-width: 0;
+    padding-block: var(--heading-block-padding-top) var(--heading-block-padding-bottom);
+    padding-inline: var(--heading-block-padding-left) var(--heading-block-padding-right);
+    text-align: var(--heading-block-align);
+    width: var(--heading-block-width);
+  }
+
+  .heading-text.heading-custom {
+    font-size: var(--heading-custom-size, var(--font-heading-md));
+    line-height: var(--font-heading-md-line-height);
+    text-transform: var(--font-heading-md-text-transform);
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .heading-block {
+      padding-block: var(--heading-block-padding-top-mobile) var(--heading-block-padding-bottom-mobile);
+      padding-inline: var(--heading-block-padding-left-mobile) var(--heading-block-padding-right-mobile);
+      text-align: var(--heading-block-align-mobile);
+      width: var(--heading-block-width-mobile);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Heading",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Heading</p>"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "options": [
+        { "value": "display", "label": "Display" },
+        { "value": "xl", "label": "Extra large" },
+        { "value": "lg", "label": "Large" },
+        { "value": "md", "label": "Medium" },
+        { "value": "sm", "label": "Small" },
+        { "value": "xs", "label": "Extra small" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "lg"
+    },
+    {
+      "type": "range",
+      "id": "custom_heading_size",
+      "label": "Custom font size",
+      "visible_if": "{{ block.settings.heading_size == 'custom' }}",
+      "min": 12,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "select",
+      "id": "html_tag",
+      "label": "HTML tag",
+      "info": "Use headings in order (H1 → H2 → H3) for better SEO and readability. If unsure, choose Paragraph.",
+      "options": [
+        { "value": "div", "label": "Paragraph" },
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "fit", "label": "Fit" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "fill"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "visible_if": "{{ block.settings.width == 'fill' }}",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "checkbox",
+      "id": "customize_mobile_alignment",
+      "label": "Customize mobile alignment",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "width_mobile",
+      "label": "Width mobile",
+      "options": [
+        { "value": "fit", "label": "Fit" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "fill"
+    },
+    {
+      "type": "select",
+      "id": "alignment_mobile",
+      "label": "Mobile alignment",
+      "visible_if": "{{ block.settings.customize_mobile_alignment and block.settings.width_mobile == 'fill' }}",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "label": "Left padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "label": "Right padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "customize_mobile_padding",
+      "label": "Customize mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "label": "Left padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "label": "Right padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Heading",
+      "category": "Basic"
+    }
+  ]
+}
+{% endschema %}

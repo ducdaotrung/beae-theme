@@ -8,7 +8,8 @@
 <h1>{{ 'search.title' | t }}</h1>
 
 <form class="form__wrapper" action="{{ routes.search_url }}" method="get" role="search">
-  <input class="form__control"
+  <label class="form__label" for="SearchInput">{{ 'search.title' | t }}</label>
+  <input id="SearchInput" class="form__control"
     type="search"
     size="50"
     name="q"
@@ -28,16 +29,12 @@
       {% paginate search.results by 20 %}
         {% # Search result items may be an article, a page, or a product. %}
         {% for result in search.results %}
-          {% if result.object_type == 'product' %}
-            {% render 'product-card', product: result %}
-          {% else %}
-            <div class="search-result">
-              <div class="search-result__content"><p>{{ result.title | link_to: result.url }}</p></div>
-            </div>
-          {% endif %}
+          <div class="search-result">
+            <div class="search-result__content"><p>{{ result.title | link_to: result.url }}</p></div>
+          </div>
         {% endfor %}
 
-        {{ paginate | default_pagination }}
+        {% content_for 'blocks' %}
       {% endpaginate %}
     </div>
   {% endif %}
@@ -58,6 +55,7 @@
 {% schema %}
 {
   "name": "t:general.search",
+  "blocks": [{ "type": "pagination" }],
   "settings": []
 }
 {% endschema %}

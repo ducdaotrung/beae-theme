@@ -1,0 +1,360 @@
+{% doc %}
+  Renders a library or sanitized custom SVG icon.
+
+  Icons are visual primitives. They do not own layout or business meaning,
+  and a linked icon receives a generic accessible name when no context label
+  is available.
+
+  @example
+  {% content_for 'block', type: 'icon', id: 'icon' %}
+{% enddoc %}
+
+{% assign icon_source = block.settings.source | default: 'library' %}
+{% assign icon_name = block.settings.icon | default: 'arrow-right' %}
+{% assign icon_width = block.settings.icon_width | default: 24 %}
+{% assign icon_padding = block.settings.icon_padding | default: 0 %}
+{% assign icon_width_mobile = icon_width %}
+{% assign icon_padding_mobile = icon_padding %}
+
+{% if block.settings.custom_mobile %}
+  {% assign icon_width_mobile = block.settings.icon_width_mobile | default: icon_width %}
+  {% assign icon_padding_mobile = block.settings.icon_padding_mobile | default: icon_padding %}
+{% endif %}
+
+{% assign custom_icon = block.settings.custom_icon | default: '' | strip %}
+{% assign custom_icon_safe = false %}
+{% if icon_source == 'custom' and custom_icon contains '<svg' %}
+  {% unless custom_icon contains '<script' or custom_icon contains '<iframe' or custom_icon contains '<object' or custom_icon contains '<embed' or custom_icon contains 'javascript:' or custom_icon contains 'onerror' or custom_icon contains 'onclick' or custom_icon contains 'onload' %}
+    {% assign custom_icon_safe = true %}
+  {% endunless %}
+{% endif %}
+
+{% assign icon_is_available = true %}
+{% if icon_source == 'custom' and custom_icon_safe == false %}
+  {% assign icon_is_available = false %}
+{% endif %}
+
+{% if icon_is_available %}
+  {% if block.settings.icon_link != blank %}
+    {% assign icon_tag = 'a' %}
+  {% else %}
+    {% assign icon_tag = 'span' %}
+  {% endif %}
+
+  <{{ icon_tag }}
+    class="icon-block icon-block--{{ icon_source }}"
+    style="
+      --icon-block-width: {{ icon_width }}px;
+      --icon-block-padding: {{ icon_padding }}px;
+      --icon-block-width-mobile: {{ icon_width_mobile }}px;
+      --icon-block-padding-mobile: {{ icon_padding_mobile }}px;
+      --icon-block-outer-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+      --icon-block-outer-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+      --icon-block-outer-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+      --icon-block-outer-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+      --icon-block-outer-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--icon-block-outer-padding-top){% endif %};
+      --icon-block-outer-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--icon-block-outer-padding-bottom){% endif %};
+      --icon-block-outer-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--icon-block-outer-padding-left){% endif %};
+      --icon-block-outer-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--icon-block-outer-padding-right){% endif %};
+    "
+    {% if icon_tag == 'a' %}
+      href="{{ block.settings.icon_link }}"
+      aria-label="Icon link"
+      {% if block.settings.open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+    {% endif %}
+    {{ block.shopify_attributes }}
+  >
+    <span class="icon-block__inner">
+      {% if custom_icon_safe %}
+        {{ custom_icon }}
+      {% else %}
+        <svg class="icon-block__svg" aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+          {% case icon_name %}
+            {% when 'arrow-left' %}<path d="M20 12H4m6-6-6 6 6 6" />
+            {% when 'chevron-down' %}<path d="m5 9 7 7 7-7" />
+            {% when 'plus' %}<path d="M12 4v16M4 12h16" />
+            {% when 'close' %}<path d="m5 5 14 14M19 5 5 19" />
+            {% when 'play' %}<path d="m9 6 9 6-9 6V6Z" fill="currentColor" stroke="none" />
+            {% when 'search' %}<circle cx="10.8" cy="10.8" r="6.3" /><path d="m16 16 4.5 4.5" />
+            {% when 'menu' %}<path d="M4 6h16M4 12h16M4 18h16" />
+            {% else %}<path d="M4 12h15m-6-6 6 6-6 6" />
+          {% endcase %}
+        </svg>
+      {% endif %}
+    </span>
+  </{{ icon_tag }}>
+{% endif %}
+
+{% stylesheet %}
+  .icon-block {
+    align-items: center;
+    color: currentColor;
+    display: inline-flex;
+    flex: 0 0 auto;
+    justify-content: center;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    padding-block: var(--icon-block-outer-padding-top) var(--icon-block-outer-padding-bottom);
+    padding-inline: var(--icon-block-outer-padding-left) var(--icon-block-outer-padding-right);
+    text-decoration: none;
+  }
+
+  .icon-block__inner {
+    align-items: center;
+    display: inline-flex;
+    height: var(--icon-block-width);
+    justify-content: center;
+    max-width: 100%;
+    min-width: 0;
+    padding: var(--icon-block-padding);
+    width: var(--icon-block-width);
+  }
+
+  .icon-block__svg,
+  .icon-block--custom svg {
+    display: block;
+    height: 100%;
+    max-width: 100%;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: var(--icon-stroke-width, 1.8);
+    width: 100%;
+  }
+
+  .icon-block--custom > svg {
+    fill: currentColor;
+  }
+
+  .icon-block:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .icon-block {
+      padding-block: var(--icon-block-outer-padding-top-mobile) var(--icon-block-outer-padding-bottom-mobile);
+      padding-inline: var(--icon-block-outer-padding-left-mobile) var(--icon-block-outer-padding-right-mobile);
+    }
+
+    .icon-block__inner {
+      height: var(--icon-block-width-mobile);
+      padding: var(--icon-block-padding-mobile);
+      width: var(--icon-block-width-mobile);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Icon",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Source"
+    },
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Source",
+      "options": [
+        { "value": "library", "label": "Library" },
+        { "value": "custom", "label": "Custom" }
+      ],
+      "default": "library"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "visible_if": "{{ block.settings.source == 'library' }}",
+      "options": [
+        { "value": "arrow-right", "label": "Arrow right" },
+        { "value": "arrow-left", "label": "Arrow left" },
+        { "value": "chevron-down", "label": "Chevron down" },
+        { "value": "plus", "label": "Plus" },
+        { "value": "close", "label": "Close" },
+        { "value": "play", "label": "Play" },
+        { "value": "search", "label": "Search" },
+        { "value": "menu", "label": "Menu" }
+      ],
+      "default": "arrow-right"
+    },
+    {
+      "type": "html",
+      "id": "custom_icon",
+      "label": "Custom icon",
+      "info": "Paste a sanitized SVG only. Scripts, embedded content and event handlers are rejected.",
+      "visible_if": "{{ block.settings.source == 'custom' }}"
+    },
+    {
+      "type": "header",
+      "content": "Link"
+    },
+    {
+      "type": "url",
+      "id": "icon_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Size"
+    },
+    {
+      "type": "range",
+      "id": "icon_width",
+      "label": "Icon width",
+      "min": 8,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "icon_padding",
+      "label": "Icon padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "custom_mobile",
+      "label": "Custom for mobile",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "icon_width_mobile",
+      "label": "Icon width (mobile)",
+      "visible_if": "{{ block.settings.custom_mobile }}",
+      "min": 8,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "icon_padding_mobile",
+      "label": "Icon padding (mobile)",
+      "visible_if": "{{ block.settings.custom_mobile }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "label": "Left padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "label": "Right padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "customize_mobile_padding",
+      "label": "Custom padding mobile",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "label": "Left padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "label": "Right padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon",
+      "category": "Basic"
+    }
+  ]
+}
+{% endschema %}

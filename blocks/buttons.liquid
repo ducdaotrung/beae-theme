@@ -1,0 +1,396 @@
+{% doc %}
+  Renders up to two related CTA buttons in fixed slots.
+
+  The parent owns direction, gap, width, alignment and responsive stacking.
+  Each slot owns only its label, link, style and standard arrow icon toggle.
+
+  @example
+  {% content_for 'block', type: 'buttons', id: 'buttons' %}
+{% enddoc %}
+
+{% assign button_1_valid = false %}
+{% assign button_2_valid = false %}
+{% if block.settings.button_1_label != blank and block.settings.button_1_link != blank %}
+  {% assign button_1_valid = true %}
+{% endif %}
+{% if block.settings.button_2_label != blank and block.settings.button_2_link != blank %}
+  {% assign button_2_valid = true %}
+{% endif %}
+
+{% if button_1_valid or button_2_valid %}
+  {% assign buttons_direction = block.settings.direction | default: 'row' %}
+  {% assign buttons_mobile_direction = block.settings.mobile_stacking | default: 'stack' %}
+  {% assign buttons_width = block.settings.width | default: 'fit' %}
+  {% assign buttons_alignment = block.settings.alignment | default: 'start' %}
+  {% assign buttons_alignment_mobile = buttons_alignment %}
+
+  {% if block.settings.customize_mobile_alignment and buttons_width == 'fill' %}
+    {% assign buttons_alignment_mobile = block.settings.alignment_mobile | default: buttons_alignment %}
+  {% endif %}
+
+  <div
+    class="buttons-block"
+    style="
+      --buttons-block-direction: {% if buttons_direction == 'stack' %}column{% else %}row{% endif %};
+      --buttons-block-direction-mobile: {% if buttons_mobile_direction == 'stack' %}column{% else %}row{% endif %};
+      --buttons-block-gap: {{ block.settings.gap_desktop | default: 12 }}px;
+      --buttons-block-gap-mobile: {{ block.settings.gap_mobile | default: 8 }}px;
+      --buttons-block-width: {% if buttons_width == 'fill' %}100%{% else %}fit-content{% endif %};
+      --buttons-block-alignment: {{ buttons_alignment }};
+      --buttons-block-alignment-mobile: {{ buttons_alignment_mobile }};
+      --buttons-block-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+      --buttons-block-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+      --buttons-block-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+      --buttons-block-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+      --buttons-block-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--buttons-block-padding-top){% endif %};
+      --buttons-block-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--buttons-block-padding-bottom){% endif %};
+      --buttons-block-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--buttons-block-padding-left){% endif %};
+      --buttons-block-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--buttons-block-padding-right){% endif %};
+    "
+    {{ block.shopify_attributes }}
+  >
+    {% if button_1_valid %}
+      <a
+        class="btn btn--{{ block.settings.button_1_style | default: 'primary' }} buttons-block__button"
+        href="{{ block.settings.button_1_link }}"
+        {% if block.settings.button_1_open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+      >
+        <span class="buttons-block__label">{{ block.settings.button_1_label | escape }}</span>
+        {% if block.settings.button_1_show_icon %}
+          <svg class="buttons-block__icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
+        {% endif %}
+      </a>
+    {% endif %}
+
+    {% if button_2_valid %}
+      <a
+        class="btn btn--{{ block.settings.button_2_style | default: 'secondary' }} buttons-block__button"
+        href="{{ block.settings.button_2_link }}"
+        {% if block.settings.button_2_open_in_new_tab %}target="_blank" rel="noopener noreferrer"{% endif %}
+      >
+        <span class="buttons-block__label">{{ block.settings.button_2_label | escape }}</span>
+        {% if block.settings.button_2_show_icon %}
+          <svg class="buttons-block__icon" aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M4 12h15M13 6l6 6-6 6" /></svg>
+        {% endif %}
+      </a>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% stylesheet %}
+  .buttons-block {
+    align-items: center;
+    display: flex;
+    flex-direction: var(--buttons-block-direction);
+    flex-wrap: wrap;
+    gap: var(--buttons-block-gap);
+    justify-content: var(--buttons-block-alignment);
+    max-width: 100%;
+    min-width: 0;
+    padding-block: var(--buttons-block-padding-top) var(--buttons-block-padding-bottom);
+    padding-inline: var(--buttons-block-padding-left) var(--buttons-block-padding-right);
+    width: var(--buttons-block-width);
+  }
+
+  .buttons-block__button {
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .buttons-block__label {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .buttons-block__icon {
+    display: block;
+    flex: 0 0 auto;
+    height: 1em;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: var(--icon-stroke-width, 1.8);
+    fill: none;
+    width: 1em;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    .buttons-block {
+      flex-direction: var(--buttons-block-direction-mobile);
+      gap: var(--buttons-block-gap-mobile);
+      justify-content: var(--buttons-block-alignment-mobile);
+      padding-block: var(--buttons-block-padding-top-mobile) var(--buttons-block-padding-bottom-mobile);
+      padding-inline: var(--buttons-block-padding-left-mobile) var(--buttons-block-padding-right-mobile);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Buttons",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Button 1"
+    },
+    {
+      "type": "text",
+      "id": "button_1_label",
+      "label": "Label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_1_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_1_open_in_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_1_style",
+      "label": "Style",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "tertiary", "label": "Tertiary" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_1_show_icon",
+      "label": "Show icon",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Button 2"
+    },
+    {
+      "type": "text",
+      "id": "button_2_label",
+      "label": "Label",
+      "default": "Learn more"
+    },
+    {
+      "type": "url",
+      "id": "button_2_link",
+      "label": "Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_2_open_in_new_tab",
+      "label": "Open link in new tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_2_style",
+      "label": "Style",
+      "options": [
+        { "value": "primary", "label": "Primary" },
+        { "value": "secondary", "label": "Secondary" },
+        { "value": "tertiary", "label": "Tertiary" }
+      ],
+      "default": "secondary"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_2_show_icon",
+      "label": "Show icon",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Direction",
+      "options": [
+        { "value": "row", "label": "Row" },
+        { "value": "stack", "label": "Stack" }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "range",
+      "id": "gap_desktop",
+      "label": "Gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "gap_mobile",
+      "label": "Gap mobile",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "fit", "label": "Fit" },
+        { "value": "fill", "label": "Fill" }
+      ],
+      "default": "fit"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "visible_if": "{{ block.settings.width == 'fill' }}",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "mobile_stacking",
+      "label": "Mobile stacking",
+      "options": [
+        { "value": "row", "label": "Row" },
+        { "value": "stack", "label": "Stack" }
+      ],
+      "default": "stack"
+    },
+    {
+      "type": "checkbox",
+      "id": "customize_mobile_alignment",
+      "label": "Customize mobile alignment",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "alignment_mobile",
+      "label": "Mobile alignment",
+      "visible_if": "{{ block.settings.customize_mobile_alignment and block.settings.width == 'fill' }}",
+      "options": [
+        { "value": "start", "label": "Start" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "End" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left",
+      "label": "Left padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right",
+      "label": "Right padding",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "customize_mobile_padding",
+      "label": "Custom padding mobile",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Top padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Bottom padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_left_mobile",
+      "label": "Left padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_right_mobile",
+      "label": "Right padding (mobile)",
+      "visible_if": "{{ block.settings.customize_mobile_padding }}",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Buttons",
+      "category": "Basic"
+    }
+  ]
+}
+{% endschema %}

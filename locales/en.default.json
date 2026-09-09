@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "404": {
     "title": "404",
@@ -15,7 +24,11 @@
   },
   "cart": {
     "checkout": "Checkout",
+    "continue_shopping": "Continue shopping",
+    "empty": "Your cart is empty",
+    "quantity": "Quantity",
     "title": "Cart",
+    "total": "Total",
     "update": "Update",
     "remove": "Remove"
   },

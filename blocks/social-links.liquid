@@ -1,0 +1,108 @@
+{% doc %}
+  Renders configured social links from Theme Settings.
+{% enddoc %}
+
+{% liquid
+  assign social_links = 'social_facebook|Facebook|facebook,social_instagram|Instagram|instagram,social_youtube|YouTube|youtube,social_tiktok|TikTok|tiktok,social_x_twitter|X (Twitter)|x-twitter,social_threads|Threads|threads,social_linkedin|LinkedIn|linkedin,social_bluesky|Bluesky|bluesky,social_snapchat|Snapchat|snapchat,social_pinterest|Pinterest|pinterest,social_tumblr|Tumblr|tumblr,social_vimeo|Vimeo|vimeo' | split: ','
+  assign has_social_links = false
+  for social_link in social_links
+    assign social_id = social_link | split: '|' | first
+    if settings[social_id] != blank
+      assign has_social_links = true
+      break
+    endif
+  endfor
+  assign display = block.settings.display | default: 'icons'
+  assign flow = block.settings.flow | default: 'inline'
+  assign alignment = block.settings.alignment | default: 'start'
+%}
+
+{% if has_social_links %}
+  <nav
+    class="social-links-block social-links-block--{{ display }} social-links-block--{{ flow }} social-links-block--align-{{ alignment }} social-links-block--mobile-align-{{ block.settings.mobile_alignment | default: 'start' }}{% if block.settings.mobile_wrap %} social-links-block--mobile-wrap{% endif %}"
+    aria-label="Social media"
+    style="
+      --social-links-icon-size: {{ block.settings.icon_size | default: 20 }}px;
+      --social-links-gap: {{ block.settings.gap | default: 12 }}px;
+      --social-links-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+      --social-links-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+      --social-links-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+      --social-links-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+      --social-links-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--social-links-padding-top){% endif %};
+      --social-links-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--social-links-padding-bottom){% endif %};
+      --social-links-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--social-links-padding-left){% endif %};
+      --social-links-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--social-links-padding-right){% endif %};
+    "
+    {{ block.shopify_attributes }}
+  >
+    <ul class="social-links-block__list" role="list">
+      {% for social_link in social_links %}
+        {% assign social_parts = social_link | split: '|' %}
+        {% assign social_id = social_parts[0] %}
+        {% assign social_label = social_parts[1] %}
+        {% assign icon_key = social_parts[2] %}
+        {% assign social_url = settings[social_id] %}
+        {% if social_url != blank %}
+          <li class="social-links-block__item">
+            <a class="social-links-block__link" href="{{ social_url | escape }}"{% if block.settings.external_target %} target="_blank" rel="noopener noreferrer"{% endif %}{% if block.settings.accessible_labels %} aria-label="{{ social_label | escape }}"{% endif %}>
+              <span class="social-links-block__icon" data-icon-key="{{ icon_key }}" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" role="presentation"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="var(--icon-thickness, 1.5)" /><text x="12" y="15" text-anchor="middle" fill="currentColor" font-size="7" font-family="Arial, sans-serif">{{ icon_key | replace: '-', ' ' | truncate: 3, '' }}</text></svg></span>
+              {% if display == 'icons_labels' %}<span class="social-links-block__label">{{ social_label }}</span>{% endif %}
+            </a>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </nav>
+{% endif %}
+
+{% stylesheet %}
+  .social-links-block { box-sizing: border-box; min-width: 0; padding: var(--social-links-padding-top) var(--social-links-padding-right) var(--social-links-padding-bottom) var(--social-links-padding-left); }
+  .social-links-block--align-start { margin-inline-end: auto; }
+  .social-links-block--align-center { margin-inline: auto; }
+  .social-links-block--align-end { margin-inline-start: auto; }
+  .social-links-block__list { align-items: center; display: flex; gap: var(--social-links-gap); list-style: none; margin: 0; padding: 0; }
+  .social-links-block--wrap .social-links-block__list, .social-links-block--mobile-wrap .social-links-block__list { flex-wrap: wrap; }
+  .social-links-block--grid .social-links-block__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(2.75rem, max-content)); }
+  .social-links-block__link { align-items: center; color: currentColor; display: inline-flex; gap: 0.4rem; min-height: 2.75rem; min-width: 2.75rem; text-decoration: none; }
+  .social-links-block__link:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  .social-links-block__icon { align-items: center; display: inline-flex; height: var(--social-links-icon-size); justify-content: center; width: var(--social-links-icon-size); }
+  .social-links-block__icon svg { display: block; height: 100%; width: 100%; }
+  .social-links-block--icons .social-links-block__label { display: none; }
+  @media screen and (max-width: 767.98px) {
+    .social-links-block { padding: var(--social-links-padding-top-mobile) var(--social-links-padding-right-mobile) var(--social-links-padding-bottom-mobile) var(--social-links-padding-left-mobile); }
+    .social-links-block--mobile-align-start .social-links-block__list { justify-content: flex-start; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Social Links",
+  "settings": [
+    { "type": "header", "content": "Links" },
+    { "type": "select", "id": "link_source", "label": "Link source", "options": [{ "value": "theme_settings", "label": "Theme Settings" }], "default": "theme_settings" },
+    { "type": "range", "id": "icon_size", "label": "Icon size", "min": 12, "max": 48, "step": 1, "unit": "px", "default": 20 },
+    { "type": "checkbox", "id": "accessible_labels", "label": "Accessible labels", "default": true },
+    { "type": "checkbox", "id": "external_target", "label": "External target", "default": true },
+    { "type": "header", "content": "Appearance" },
+    { "type": "select", "id": "display", "label": "Display", "options": [{ "value": "icons", "label": "Icon only" }, { "value": "icons_labels", "label": "Icon + label" }], "default": "icons" },
+    { "type": "select", "id": "color_mode", "label": "Color mode", "options": [{ "value": "current", "label": "Current color" }], "default": "current" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "options": [{ "value": "start", "label": "Start" }, { "value": "center", "label": "Center" }, { "value": "end", "label": "End" }], "default": "start" },
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "flow", "label": "Flow", "options": [{ "value": "inline", "label": "Inline" }, { "value": "grid", "label": "Grid" }, { "value": "wrap", "label": "Wrap" }], "default": "inline" },
+    { "type": "range", "id": "gap", "label": "Gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 12 },
+    { "type": "select", "id": "mobile_alignment", "label": "Mobile alignment", "options": [{ "value": "start", "label": "Start" }], "default": "start" },
+    { "type": "checkbox", "id": "mobile_wrap", "label": "Mobile wrap", "default": true },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "label": "Top", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left", "label": "Left", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right", "label": "Right", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "checkbox", "id": "customize_mobile_padding", "label": "Custom padding mobile", "default": false },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left_mobile", "label": "Left (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right_mobile", "label": "Right (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "Social Links", "category": "Navigation" }]
+}
+{% endschema %}

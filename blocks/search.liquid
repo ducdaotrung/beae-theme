@@ -1,0 +1,179 @@
+{% doc %}
+  Renders a storefront search form with optional predictive search suggestions.
+{% enddoc %}
+
+{% liquid
+  assign input_label = block.settings.input_label | default: 'Search products'
+  assign placeholder = block.settings.placeholder | default: 'Search'
+  assign query_parameter = block.settings.query_parameter | default: 'q'
+  assign alignment = block.settings.alignment | default: 'start'
+  assign width = block.settings.width | default: 'full'
+  assign gap = block.settings.gap | default: 8
+  assign scheme = block.settings.color_scheme | default: 'scheme-1'
+  assign scheme_number = scheme.id | default: scheme | remove: 'scheme-' | remove: 'scheme_'
+%}
+
+<search-form
+  class="search-block search-block--align-{{ alignment }} search-block--{{ block.settings.radius | default: 'medium' }} scheme-{{ scheme_number }}"
+  data-search-block
+  data-predictive-search="{{ block.settings.predictive_search }}"
+  data-max-results="{{ block.settings.max_results | default: 8 }}"
+  data-result-products="{{ block.settings.result_products }}"
+  data-result-articles="{{ block.settings.result_articles }}"
+  data-result-pages="{{ block.settings.result_pages }}"
+  data-loading-feedback="{{ block.settings.loading_feedback }}"
+  data-no-result-message="{{ block.settings.no_result_message }}"
+  data-clear-button="{{ block.settings.clear_button }}"
+  data-escape-closes="{{ block.settings.escape_closes }}"
+  data-query-parameter="{{ query_parameter | escape }}"
+  style="
+    --search-block-width: {% if width == 'full' %}100%{% else %}max-content{% endif %};
+    --search-block-gap: {{ gap }}px;
+    --search-block-padding-top: {{ block.settings.padding_top | default: 0 }}px;
+    --search-block-padding-bottom: {{ block.settings.padding_bottom | default: 0 }}px;
+    --search-block-padding-left: {{ block.settings.padding_left | default: 0 }}px;
+    --search-block-padding-right: {{ block.settings.padding_right | default: 0 }}px;
+    --search-block-padding-top-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_top_mobile | default: 0 }}px{% else %}var(--search-block-padding-top){% endif %};
+    --search-block-padding-bottom-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_bottom_mobile | default: 0 }}px{% else %}var(--search-block-padding-bottom){% endif %};
+    --search-block-padding-left-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_left_mobile | default: 0 }}px{% else %}var(--search-block-padding-left){% endif %};
+    --search-block-padding-right-mobile: {% if block.settings.customize_mobile_padding %}{{ block.settings.padding_right_mobile | default: 0 }}px{% else %}var(--search-block-padding-right){% endif %};
+  "
+  {{ block.shopify_attributes }}
+>
+  <form class="search-block__form" action="{{ routes.search_url }}" method="get" role="search" data-search-form>
+    <label class="visually-hidden" for="Search-{{ block.id }}">{{ input_label }}</label>
+    <div class="search-block__controls">
+      <input class="search-block__input" id="Search-{{ block.id }}" type="search" name="{{ query_parameter }}" value="{{ search.terms | escape }}" placeholder="{{ placeholder | escape }}" autocomplete="off" data-search-input>
+      <button class="search-block__clear" type="button" aria-label="Clear search" hidden data-search-clear>×</button>
+      <button class="search-block__submit btn btn--primary" type="submit">
+        <span aria-hidden="true">⌕</span><span{% unless block.settings.submit_control == 'icon_label' %} class="visually-hidden"{% endunless %}>Search</span>
+      </button>
+    </div>
+    <p class="search-block__status" aria-live="polite" data-search-status hidden></p>
+    <div class="search-block__results" data-search-results hidden></div>
+  </form>
+</search-form>
+
+{% stylesheet %}
+  .search-block { box-sizing: border-box; display: block; min-width: 0; padding: var(--search-block-padding-top) var(--search-block-padding-right) var(--search-block-padding-bottom) var(--search-block-padding-left); width: var(--search-block-width); }
+  .search-block--align-start { margin-inline-end: auto; }
+  .search-block--align-center { margin-inline: auto; }
+  .search-block--align-end { margin-inline-start: auto; }
+  .search-block__form { max-width: 100%; position: relative; }
+  .search-block__controls { align-items: stretch; display: flex; gap: var(--search-block-gap); min-width: 0; }
+  .search-block__input { background: var(--background-color); border: 1px solid var(--border-color); border-radius: var(--radius-medium); color: var(--body-color); flex: 1 1 auto; min-width: 0; padding: 0.75rem 2.75rem 0.75rem 1rem; }
+  .search-block--small .search-block__input { border-radius: var(--radius-small); }
+  .search-block--large .search-block__input { border-radius: var(--radius-large); }
+  .search-block__clear { align-self: center; background: transparent; border: 0; color: inherit; cursor: pointer; font-size: 1.5rem; line-height: 1; margin-inline-start: -3.25rem; min-height: 2.75rem; min-width: 2.75rem; padding: 0; z-index: 1; }
+  .search-block__submit { flex: 0 0 auto; }
+  .search-block__status { margin: 0.5rem 0 0; }
+  .search-block__results { background: var(--background-color); border: 1px solid var(--border-color); border-radius: var(--radius-medium); margin-top: 0.5rem; overflow: hidden; position: absolute; width: 100%; z-index: 2; }
+  .search-block__result { border-block-end: 1px solid var(--border-color); display: block; padding: 0.75rem 1rem; text-decoration: none; }
+  .search-block__result:last-child { border-block-end: 0; }
+  .search-block__result:hover, .search-block__result:focus-visible { background: color-mix(in srgb, var(--accent-color) 8%, var(--background-color)); }
+  .search-block__result-type { color: var(--accent-color); display: block; font-size: var(--font-body-xs); }
+  @media screen and (max-width: 767.98px) {
+    .search-block { padding: var(--search-block-padding-top-mobile) var(--search-block-padding-right-mobile) var(--search-block-padding-bottom-mobile) var(--search-block-padding-left-mobile); }
+    .search-block--mobile-full .search-block__controls { width: 100%; }
+  }
+{% endstylesheet %}
+
+<script>
+  (() => {
+    const initSearchBlock = (root) => {
+      if (root.dataset.searchInitialized === 'true') return;
+      root.dataset.searchInitialized = 'true';
+      const form = root.querySelector('[data-search-form]');
+      const input = root.querySelector('[data-search-input]');
+      const clear = root.querySelector('[data-search-clear]');
+      const status = root.querySelector('[data-search-status]');
+      const results = root.querySelector('[data-search-results]');
+      if (!form || !input || !clear || !status || !results) return;
+      let controller;
+      let timer;
+      const closeResults = () => { results.hidden = true; results.replaceChildren(); };
+      const announce = (message) => { status.textContent = message; status.hidden = !message; };
+      const renderResults = (data) => {
+        const groups = data?.resources?.results || {};
+        const items = [...(groups.products || []), ...(groups.articles || []), ...(groups.pages || [])].slice(0, Number(root.dataset.maxResults) || 8);
+        results.replaceChildren();
+        if (!items.length) { if (root.dataset.noResultMessage === 'true') announce('No results found.'); else announce(''); closeResults(); return; }
+        items.forEach((item) => {
+          const link = document.createElement('a');
+          link.className = 'search-block__result'; link.href = item.url; link.textContent = item.title || item.handle || '';
+          results.append(link);
+        });
+        announce('Search suggestions available.'); results.hidden = false;
+      };
+      const fetchResults = () => {
+        if (root.dataset.predictiveSearch !== 'true' || input.value.trim().length < 1) { closeResults(); announce(''); return; }
+        window.clearTimeout(timer);
+        timer = window.setTimeout(async () => {
+          controller?.abort(); controller = new AbortController();
+          if (root.dataset.loadingFeedback === 'true') announce('Loading search suggestions.');
+          const types = ['product', 'article', 'page'].filter((type) => root.dataset[`result${type[0].toUpperCase()}${type.slice(1)}s`] === 'true').join(',');
+          const url = `${window.Shopify?.routes?.root || '/'}search/suggest.json?q=${encodeURIComponent(input.value.trim())}&resources[type]=${types}&resources[limit]=${root.dataset.maxResults || 8}`;
+          try { const response = await fetch(url, { signal: controller.signal, headers: { Accept: 'application/json' } }); if (!response.ok) throw new Error('Search failed'); renderResults(await response.json()); }
+          catch (error) { if (error.name !== 'AbortError') { closeResults(); announce('Unable to load search suggestions.'); } }
+        }, 180);
+      };
+      input.addEventListener('input', () => { clear.hidden = root.dataset.clearButton !== 'true' || input.value.length === 0; fetchResults(); });
+      clear.addEventListener('click', () => { input.value = ''; clear.hidden = true; closeResults(); announce(''); input.focus(); });
+      input.addEventListener('keydown', (event) => { if (root.dataset.escapeCloses === 'true' && event.key === 'Escape') { closeResults(); announce(''); } });
+      document.addEventListener('click', (event) => { if (!root.contains(event.target)) closeResults(); }, { passive: true });
+      form.addEventListener('submit', () => { closeResults(); });
+      clear.hidden = root.dataset.clearButton !== 'true' || input.value.length === 0;
+    };
+    document.querySelectorAll('[data-search-block]').forEach(initSearchBlock);
+    document.addEventListener('shopify:section:load', (event) => event.target.querySelectorAll?.('[data-search-block]').forEach(initSearchBlock));
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Search",
+  "settings": [
+    { "type": "header", "content": "Form" },
+    { "type": "text", "id": "input_label", "label": "Input label", "default": "Search products" },
+    { "type": "text", "id": "placeholder", "label": "Placeholder", "default": "Search" },
+    { "type": "select", "id": "submit_control", "label": "Submit control", "options": [{ "value": "icon_label", "label": "Icon + label" }, { "value": "icon", "label": "Icon" }], "default": "icon_label" },
+    { "type": "header", "content": "Source" },
+    { "type": "checkbox", "id": "predictive_search", "label": "Predictive search", "default": true },
+    { "type": "select", "id": "result_route", "label": "Result route", "options": [{ "value": "search", "label": "Search page" }], "default": "search" },
+    { "type": "text", "id": "query_parameter", "label": "Query parameter", "default": "q" },
+    { "type": "header", "content": "Suggestions" },
+    { "type": "range", "id": "max_results", "label": "Max results", "min": 1, "max": 8, "step": 1, "unit": "qty", "default": 8 },
+    { "type": "checkbox", "id": "result_products", "label": "Products", "default": true },
+    { "type": "checkbox", "id": "result_articles", "label": "Articles", "default": true },
+    { "type": "checkbox", "id": "result_pages", "label": "Pages", "default": true },
+    { "type": "select", "id": "empty_state", "label": "Empty state", "options": [{ "value": "no_results", "label": "No results" }], "default": "no_results" },
+    { "type": "header", "content": "Appearance" },
+    { "type": "select", "id": "input_variant", "label": "Input variant", "options": [{ "value": "outline", "label": "Outline" }], "default": "outline" },
+    { "type": "select", "id": "button_variant", "label": "Button variant", "options": [{ "value": "primary", "label": "Primary" }], "default": "primary" },
+    { "type": "select", "id": "icon", "label": "Icon", "options": [{ "value": "search", "label": "Search" }], "default": "search" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "Color scheme", "default": "scheme-1" },
+    { "type": "select", "id": "alignment", "label": "Alignment", "options": [{ "value": "start", "label": "Start" }, { "value": "center", "label": "Center" }, { "value": "end", "label": "End" }], "default": "start" },
+    { "type": "select", "id": "radius", "label": "Radius", "options": [{ "value": "small", "label": "Small" }, { "value": "medium", "label": "Medium" }, { "value": "large", "label": "Large" }], "default": "medium" },
+    { "type": "header", "content": "Behavior" },
+    { "type": "checkbox", "id": "loading_feedback", "label": "Loading feedback", "default": true },
+    { "type": "checkbox", "id": "no_result_message", "label": "No result message", "default": true },
+    { "type": "checkbox", "id": "clear_button", "label": "Clear button", "default": true },
+    { "type": "checkbox", "id": "escape_closes", "label": "Escape closes", "default": true },
+    { "type": "header", "content": "Layout" },
+    { "type": "select", "id": "width", "label": "Width", "options": [{ "value": "full", "label": "Full" }, { "value": "content", "label": "Content" }], "default": "full" },
+    { "type": "checkbox", "id": "mobile_full_width", "label": "Mobile full width", "default": true },
+    { "type": "range", "id": "gap", "label": "Gap", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 8 },
+    { "type": "header", "content": "Padding" },
+    { "type": "range", "id": "padding_top", "label": "Top", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left", "label": "Left", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right", "label": "Right", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "checkbox", "id": "customize_mobile_padding", "label": "Custom padding mobile", "default": false },
+    { "type": "range", "id": "padding_top_mobile", "label": "Top (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_bottom_mobile", "label": "Bottom (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_left_mobile", "label": "Left (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 },
+    { "type": "range", "id": "padding_right_mobile", "label": "Right (mobile)", "visible_if": "{{ block.settings.customize_mobile_padding }}", "min": 0, "max": 100, "step": 1, "unit": "px", "default": 0 }
+  ],
+  "presets": [{ "name": "Search", "category": "Navigation" }]
+}
+{% endschema %}
