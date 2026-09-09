@@ -1,0 +1,31 @@
+{% liquid
+  assign form_product = block.settings.product | default: product
+  assign form_variant = form_product.selected_or_first_available_variant
+  assign quantity_id = 'ProductQuantity-' | append: block.id
+%}
+{% if form_product != blank %}
+  {% assign form_id = 'ProductForm-' | append: block.id %}
+  {% form 'product', form_product, class: 'product-form-block', id: form_id %}
+    {% render 'variant-picker', product: form_product %}
+    {% render 'quantity-selector', id: quantity_id, label: 'Quantity', min: 1, value: 1 %}
+    <button class="btn btn--{{ block.settings.button_style | default: 'primary' }}" type="submit"{% unless form_variant.available %} disabled{% endunless %}>
+      {% if form_variant.available %}{{ block.settings.add_to_cart_label | default: 'Add to cart' | escape }}{% else %}{{ block.settings.sold_out_label | default: 'Sold out' | escape }}{% endif %}
+    </button>
+    {% if block.settings.show_dynamic_checkout %}{{ form | payment_button }}{% endif %}
+    <p class="product-form-block__feedback" role="status" aria-live="polite">{{ form.posted_successfully? | default: false }}</p>
+  {% endform %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Product Form",
+  "settings": [
+    { "type": "product", "id": "product", "label": "Product (optional)" },
+    { "type": "select", "id": "button_style", "label": "Button style", "options": [{ "value": "primary", "label": "Primary" }, { "value": "secondary", "label": "Secondary" }, { "value": "tertiary", "label": "Tertiary" }], "default": "primary" },
+    { "type": "text", "id": "add_to_cart_label", "label": "Add to cart label", "default": "Add to cart" },
+    { "type": "text", "id": "sold_out_label", "label": "Sold out label", "default": "Sold out" },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout", "default": true }
+  ],
+  "presets": [{ "name": "Product Form", "category": "Commerce" }]
+}
+{% endschema %}
